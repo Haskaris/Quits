@@ -4,7 +4,7 @@ Projet L3 - Quits
 ## Règles
 Sortir ses billes par le coin situé à l'opposé de ces dernières.
 
-### Mouvement possible
+### Mouvements possibles
 Une bille se déplace d'une case, en diagonale, soit à droite, à gauche ou en avançant.</br>
 Une bille ne peut pas se poser sur une case occupée ni sauter une autre bille.</br>
 La seule façon de déplacer une bille en arrière est de déplacer le terrain.</br>
