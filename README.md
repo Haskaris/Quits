@@ -20,26 +20,12 @@ Une bille sort du plateau dès qu'elle atteint la case située dans le coin oppo
 #### Préparation
 Chaques joueurs a 5 billes et les dispose dans un coin en laissant l'extremité libre.
 
-##### Exemple
-. . ♥ ♥ .</br>
-. . . ♥ ♥</br>
-♦ . . . ♥</br>
-♦ ♦ . . .</br>
-. ♦ ♦ . .</br>
-
 #### Fin de partie
 Le premier joueur à sortir 3 de ses billes par le coin opposé à son départ gagne la partie.
 
 ### 4 Joueurs
 #### Préparation
 Chaques joueurs a 3 billes et les dispose dans un coin en laissant l'extremité libre.
-
-##### Exemple
-. ♥ . ♠ .</br>
-♥ ♥ . ♠ ♠</br>
-. . . . .</br>
-♣ ♣ . ♦ ♦</br>
-. ♣ . ♦ .</br>
 
 #### Fin de partie
 Le premier joueur à sortir 1 de ses billes par le coin opposé à son départ gagne la partie.
