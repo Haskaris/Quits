@@ -22,10 +22,7 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-      
-  tests:
-    runs-on: ubuntu-latest
-    steps:
     - name: Verify with Maven
       run: mvn test
+ 
 
