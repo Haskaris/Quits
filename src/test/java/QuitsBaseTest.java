@@ -3,14 +3,13 @@ import Global.Properties;
 import Modele.GameManager;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class QuitsCI {
+class QuitsBaseTest {
 
     @Test
-    public void testConfiguration() {
+    public void TestConfiguration() {
         try{
             Properties.Load();
             assertNotNull(Configuration.Lis("Maximized"));
@@ -21,7 +20,7 @@ class QuitsCI {
     }
 
     @Test
-    public void testInstanciationModele() {
+    public void TestInstanciationModele() {
         GameManager.InstanceGame();
     }
 
