@@ -34,10 +34,10 @@ public class RedacteurNiveau {
 
 
     public static void PrintNiveau(Plateau p){
-        int[][] tab = p.GetGrille();
+        Tuile[][] tab = p.GetGrille();
         for(int i=0;i<tab.length;i++){
             for(int j=0;j<tab[0].length;j++)
-                System.out.print(tab[i][j]);
+                System.out.print(tab[i][j].CouleurBille());
             System.out.print('\n');
         }
         System.out.println("\n");
