@@ -27,5 +27,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Verify with Maven
-      run: mvn -B verify --file pom.xml
+      run: mvn test
 
