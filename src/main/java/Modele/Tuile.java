@@ -7,7 +7,7 @@ public class Tuile {
         return bille != null;
     }
 
-    public Bille OterBille(){
+    public Bille EnleverBille(){
         Bille btmp = bille;
         bille = null;
         return btmp;
