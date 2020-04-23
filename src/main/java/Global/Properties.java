@@ -1,22 +1,17 @@
 package Global;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import Global.Configuration;
-import Global.Tools;
+import java.io.*;
 
 
 public class Properties {
     //MACROS
-    final static String path = "resources/";
+    final static String path = "default.cfg";
 
 
     public static void Load()throws IOException{
-        BufferedReader in_stream = new BufferedReader(new FileReader(path + "default.cfg"));
+        InputStream is = Configuration.charge(path);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader in_stream = new BufferedReader(isr);
         String S; 
         while ((S = in_stream.readLine()) != null) {
             if(!S.startsWith("#")){
@@ -29,7 +24,7 @@ public class Properties {
     }
 
     public static void Store()throws IOException{
-        BufferedWriter out_stream = new BufferedWriter(new FileWriter(path + "default.cfg"));
+        BufferedWriter out_stream = new BufferedWriter(new FileWriter(path));
         out_stream.write("# Choix du niveau des warnings\n");
         out_stream.write("LogLevel="+ Configuration.Lis("LogLevel").toString() +"\n");
         out_stream.write("# Choix du plein ecran\n");

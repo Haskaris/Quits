@@ -36,9 +36,9 @@ public class GameManager {
 
 
     public static void InstanceGame(){
-        map = new int [(int)Configuration.Lis("Taille")][(int)Configuration.Lis("Taille")];
+        map = new int [(Integer)Configuration.Lis("Taille")][(Integer)Configuration.Lis("Taille")];
 
-        int nbjoueur = (int)Configuration.Lis("Joueurs");
+        int nbjoueur = (Integer)Configuration.Lis("Joueurs");
         if(nbjoueur == 2 )
             Init2Players();
         else
