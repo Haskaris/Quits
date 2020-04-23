@@ -17,11 +17,13 @@ class QuitsBaseTest {
         catch (Exception e){
             fail();
         }
+        System.out.println("Configuration OK");
     }
 
     @Test
     public void TestInstanciationModele() {
         GameManager.InstanceGame();
+        System.out.println("Modele Instanciation OK");
     }
 
 }
