@@ -1,7 +1,9 @@
 package Modele;
 
+import Controleur.Joueur;
 import Global.Configuration;
 import Global.Properties;
+import Vue.InterfaceGraphique;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,28 +32,22 @@ public class GameManager {
     /*
      * Ici la liste des Objets necessaire accessibles aux autres parties du jeu
      */
-    public static int[][] map;
-    public static Object interfacegraphique;
-    public static Object[] playercontroller;
+    public static Plateau plateau;
+    public static InterfaceGraphique interfacegraphique;
+    public static Joueur[] joueurs;
 
 
     public static void InstanceGame(){
-        map = new int [(Integer)Configuration.Lis("Taille")][(Integer)Configuration.Lis("Taille")];
+        plateau = new Plateau((Integer)Configuration.Lis("Taille"),(Integer)Configuration.Lis("Joueurs"));
 
-        int nbjoueur = (Integer)Configuration.Lis("Joueurs");
-        if(nbjoueur == 2 )
-            Init2Players();
-        else
-            Init4Players();
-
-        playercontroller = new Object[nbjoueur];
-        for (int i = 0; i < nbjoueur; i++) {
-            playercontroller[i] = new Object();
+        joueurs = new Joueur[(Integer)Configuration.Lis("Joueurs")];
+        for (int i = 0; i < joueurs.length; i++) {
+            joueurs[i] = new Joueur();
         }
 
-        interfacegraphique = new Object();
+        interfacegraphique = new InterfaceGraphique();
 
-        RedacteurNiveau.PrintNiveau(map);
+        RedacteurNiveau.PrintNiveau(plateau);
     }
 
     public static void EndTurn(){
@@ -69,34 +65,5 @@ public class GameManager {
 
 
 
-    public static void Init2Players(){
-        int l =  map.length;
-        boolean pair = l%2==0;
-        for (int i = 0; i < l; i++) {
-            for (int j = 0; j < l; j++) {
-                if((pair && (j == l/2 - i - 1 || j == l/2 - i - 2)) || (!pair && (j == l/2 - i || j == l/2 - i - 1)))
-                    map[i][j] = 1;
-                if(j == 3*l/2 - i || j == 3*l/2 - i - 1)
-                    map[i][j] = 2;
-            }
-        }
-    }
 
-    public static void Init4Players(){
-        int l =  map.length;
-        for (int i = 0; i < l; i++) {
-            if(i<l/2) {
-                map[0][i] = 1;
-                map[i][0] = 1;
-                map[l-1][i]=4;
-                map[i][l-1]=2;
-            }
-            if(i>l/2) {
-                map[0][i] = 2;
-                map[i][0] = 4;
-                map[l-1][i]=3;
-                map[i][l-1]=3;
-            }
-        }
-    }
 }
