@@ -47,7 +47,7 @@ public class GameManager {
 
         interfacegraphique = new InterfaceGraphique();
 
-        RedacteurNiveau.PrintNiveau(plateau);
+        LecteurRedacteur.PrintNiveau(plateau);
     }
 
     public static void EndTurn(){

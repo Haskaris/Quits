@@ -20,6 +20,7 @@ public class Plateau {
             Init4Players();
     }
 
+
     public void DeplacerBille(Bille bille, Tools.Dir direction){
         Point depart = bille.PositionGet();
         Point arrivee = new Point(depart.x + Tools.DirToPoint(direction).x,depart.y + Tools.DirToPoint(direction).y);
@@ -59,6 +60,13 @@ public class Plateau {
                 grille[rangee.x][grille.length - 1] = tmp;
             }
         }
+    }
+
+    public void PlacerBilleAt(int x, int y,int couleur){
+        grille[x][y].MettreBille(new Bille(couleur),new Point(x,y));
+    }
+    public void PlacerBilleAt(int x, int y,Bille bille){
+        grille[x][y].MettreBille(bille,new Point(x,y));
     }
 
     private void Init2Players(){
