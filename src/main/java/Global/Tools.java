@@ -55,6 +55,16 @@ public class Tools{
         return Dir.RIEN;
     }
 
+    public static Dir InverseDir(Dir d){
+        switch (d){
+            case NO: return Dir.SE;
+            case NE: return Dir.SO;
+            case SO: return Dir.NE;
+            case SE: return Dir.NO;
+        }
+        return Dir.RIEN;
+    }
+
     public static void Print(String S){
         System.out.println(S);
     }

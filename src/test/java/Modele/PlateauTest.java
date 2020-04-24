@@ -39,6 +39,7 @@ class PlateauTest {
         }catch (Exception e){
             fail();
         }
+        System.out.println("Plateau test 1 OK");
     }
 
     @Test
@@ -52,6 +53,7 @@ class PlateauTest {
         }catch (Exception e){
             fail();
         }
+        System.out.println("Plateau test 2 OK");
     }
 
 }
