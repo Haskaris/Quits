@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class QuitsBaseTest {
+class BaseTest {
 
     @Test
     public void TestConfiguration() {
@@ -18,12 +18,6 @@ class QuitsBaseTest {
             fail();
         }
         System.out.println("Configuration OK");
-    }
-
-    @Test
-    public void TestInstanciationModele() {
-        GameManager.InstanceGame();
-        System.out.println("Modele Instanciation OK");
     }
 
 }

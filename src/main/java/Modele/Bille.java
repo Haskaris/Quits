@@ -8,9 +8,8 @@ public class Bille {
     private int couleur;
     private Point position;
 
-    public Bille(int _couleur, Point _position){
+    public Bille(int _couleur){
         couleur = _couleur;
-        position = _position;
     }
 
     public int CouleurGet(){
@@ -20,7 +19,9 @@ public class Bille {
     public void PositionSet(Point _position){
         position = _position;
     }
-
+    public Point PositionGet(){
+        return position;
+    }
     public boolean EstSortie(){
         int t= (Integer)Configuration.Lis("Taille");
         return position.x < 0 || position.y < 0 || position.x > t  || position.y > t;
