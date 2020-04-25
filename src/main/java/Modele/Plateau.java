@@ -8,6 +8,10 @@ import java.awt.*;
 public class Plateau {
     private Tuile[][] grille;
 
+    /**
+     * Initialise un plateau avec le nombre de joueur et la taille précisé.
+     * Pour fonctionner pleinement avec le GameManager, ces deux chiffres doivent etre ceux de Configuration
+     */
     public Plateau(int nbjoueur, int taille){
         grille = new Tuile [taille][taille];
         for (int i = 0; i < taille; i++)
@@ -20,13 +24,18 @@ public class Plateau {
             Init4Players();
     }
 
-
+    /**
+     * Deplace la bille précisée, dans la direction précisé. Aucune vérification
+     */
     public void DeplacerBille(Bille bille, Tools.Dir direction){
         Point depart = bille.PositionGet();
         Point arrivee = new Point(depart.x + Tools.DirToPoint(direction).x,depart.y + Tools.DirToPoint(direction).y);
         grille[arrivee.x][arrivee.y].MettreBille(grille[depart.x][depart.y].EnleverBille(),arrivee);
     }
 
+    /**
+     * Deplace la rangee précisée, dans le sens précisé. Aucune vérification
+     */
     public void DeplacerRangee(Point rangee, boolean positif){
         if(rangee.x == -1){
             if(positif) {
@@ -62,13 +71,22 @@ public class Plateau {
         }
     }
 
+    /**
+     * Place une nouvelle bille de la couleur précisé, aux coordonnées précisées
+     */
     public void PlacerBilleAt(int x, int y,int couleur){
         grille[x][y].MettreBille(new Bille(couleur),new Point(x,y));
     }
+    /**
+     * Place une bille donnée, aux coordonnées précisées
+     */
     public void PlacerBilleAt(int x, int y,Bille bille){
         grille[x][y].MettreBille(bille,new Point(x,y));
     }
 
+    /**
+     * Initialise le plateau avec les règles 2 joueurs classiques
+     */
     private void Init2Players(){
         int l =  grille.length;
         boolean pair = l%2==0;
@@ -82,6 +100,10 @@ public class Plateau {
         }
     }
 
+
+    /**
+     * Initialise le plateau avec les règles 4 joueurs classiques
+     */
     private void Init4Players(){
         int l =  grille.length;
 

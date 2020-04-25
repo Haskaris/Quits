@@ -11,6 +11,9 @@ public class LecteurRedacteur {
         filepath = _filepath;
     }
 
+    /**
+     * Lis le contenu d'un plateau de jeu d'un fichier externe
+     */
     public Plateau LisNiveau()throws IOException{
         InputStream in_stream = ClassLoader.getSystemClassLoader().getResourceAsStream(filepath);
 
@@ -44,7 +47,9 @@ public class LecteurRedacteur {
     }
 
 
-
+    /**
+     * Ecris le contenu d'un plateau de jeu dans un fichier externe
+     */
     public void EcrisNiveau(Plateau p) throws IOException{
         File out = new File(filepath);
         OutputStream stream;
@@ -68,6 +73,10 @@ public class LecteurRedacteur {
  }
 
 
+    /**
+     * Permet d'afficher l'etat du jeu dans la sortie standard.
+     * Les 0 sont des cases vides, les chiffres sont les billes des joueurs
+     */
     public static void PrintNiveau(Plateau p){
         Tuile[][] tab = p.GetGrille();
         for(int i=0;i<tab.length;i++){
