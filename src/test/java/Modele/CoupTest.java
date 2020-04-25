@@ -8,7 +8,7 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HistoriqueCoupTest {
+class CoupTest {
     Bille b;
 
     @BeforeEach
@@ -53,5 +53,13 @@ class HistoriqueCoupTest {
         }
         System.out.println("Historique OK");
     }
+
+    @Test
+    public void TestEntreeController() {
+        GameManager.InstanceGame();
+        Coup c = new Coup(new Point(1,-1),true);
+        GameManager.JouerTour(c);
+    }
+
 
 }

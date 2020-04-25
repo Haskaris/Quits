@@ -39,7 +39,7 @@ public class GameManager {
     public static InterfaceGraphique interfacegraphique;
     public static Joueur[] joueurs;
     public static Historique historique;
-    public static int joueurcourant = 0;
+    public static int joueurcourant ;
 
     /**
      * Permet d'initialiser une partie. Les parametres de la partie sont definies dans Configuration
@@ -53,8 +53,9 @@ public class GameManager {
         }
 
         interfacegraphique = new InterfaceGraphique();
+        historique = new Historique();
+        joueurcourant = 0;
 
-        LecteurRedacteur.PrintNiveau(plateau);
     }
 
     /**
