@@ -37,7 +37,7 @@ public class GameManager {
      */
     public static Plateau plateau;
     public static InterfaceGraphique interfacegraphique;
-    public static Joueur[] joueurs;
+    public static Joueur_Interface[] joueurs = new Joueur_Interface[4];
     public static Historique historique;
     public static int joueurcourant ;
 
@@ -47,11 +47,6 @@ public class GameManager {
     public static void InstanceGame(){
         plateau = new Plateau((Integer)Configuration.Lis("Taille"),(Integer)Configuration.Lis("Joueurs"));
 
-        joueurs = new Joueur[(Integer)Configuration.Lis("Joueurs")];
-        for (int i = 0; i < joueurs.length; i++) {
-            joueurs[i] = new Joueur();
-        }
-
         interfacegraphique = new InterfaceGraphique();
         historique = new Historique();
         joueurcourant = 0;
@@ -59,33 +54,43 @@ public class GameManager {
     }
 
     /**
+     * Permet au manageur de connaitre les joueurs
+     */
+    public static void EnregistrerJoueur(Joueur_Interface joueur){
+        for (int i = 0; i < 4; i++) {
+            if(joueurs[i] == null){
+                joueurs[i] = joueur;
+            }
+        }
+    }
+
+    /**
      * Permet de jouer un coup. Ne doit etre utilisé que si joueurcourant est votre no de joueur. A voir si on rajoute une verification pour ca
      */
-    public static boolean JouerTour(Coup coup){
-        if(EstCoupValide(coup,joueurcourant)){
-            historique.Faire(coup);
-            FinTour();
-            return true;
+    public static void JouerTour(Coup coup){
+        while(FinTour()){
+            historique.Faire(joueurs[joueurcourant].Jouer(CoupsValide(joueurcourant)));
         }
-        else
-            return false;
     }
 
     /**
      * Clot un tour. Verifie les conditions de victoire et passe au joueur suivant
      */
-    private static void FinTour(){
+    private static boolean FinTour(){
         joueurcourant++;
         if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
             joueurcourant =0;
+        return true;
     }
 
     /**
-     * Verifie qu'un coup joué verifie bien les règles. Prend le coup et le numero de joueur en parametre
+     * Crée la liste de coup possible pour un joueur
      */
-    public static boolean EstCoupValide(Coup coup, int nojoueur){
-        return true;
+    public static Coup[] CoupsValide(int nojoueur){
+        Coup[] coups = new Coup[0];
+        return coups;
     }
+
 
     /**
      * Fermeture du jeu

@@ -123,6 +123,12 @@ public class Plateau {
         }
     }
 
+    public Bille[] BillesJoueur(int couleur){
+        Bille[] billes = new Bille[0];
+
+        return billes;
+    }
+
     public Tuile[][]GetGrille(){
         return grille;
     }
