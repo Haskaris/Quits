@@ -51,6 +51,7 @@ public class GameManager {
         historique = new Historique();
         joueurcourant = 0;
 
+        JouerTour();
     }
 
     /**
@@ -67,7 +68,7 @@ public class GameManager {
     /**
      * Permet de jouer un coup. Ne doit etre utilisé que si joueurcourant est votre no de joueur. A voir si on rajoute une verification pour ca
      */
-    public static void JouerTour(Coup coup){
+    public static void JouerTour(){
         while(FinTour()){
             historique.Faire(joueurs[joueurcourant].Jouer(CoupsPossible(joueurcourant)));
         }
