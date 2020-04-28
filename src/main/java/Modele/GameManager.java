@@ -69,7 +69,7 @@ public class GameManager {
      */
     public static void JouerTour(Coup coup){
         while(FinTour()){
-            historique.Faire(joueurs[joueurcourant].Jouer(CoupsValide(joueurcourant)));
+            historique.Faire(joueurs[joueurcourant].Jouer(CoupsPossible(joueurcourant)));
         }
     }
 
@@ -77,6 +77,17 @@ public class GameManager {
      * Clot un tour. Verifie les conditions de victoire et passe au joueur suivant
      */
     private static boolean FinTour(){
+        boolean estfini = true;
+        for (Bille bille:plateau.BillesJoueur(joueurcourant)) {
+            if(!bille.EstSortie())
+                estfini = false;
+        }
+
+        if(estfini){
+            System.out.println("Joueur " + joueurcourant + " a gagné");
+            return false;
+        }
+
         joueurcourant++;
         if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
             joueurcourant =0;
@@ -86,8 +97,10 @@ public class GameManager {
     /**
      * Crée la liste de coup possible pour un joueur
      */
-    public static Coup[] CoupsValide(int nojoueur){
+    public static Coup[] CoupsPossible(int nojoueur){
         Coup[] coups = new Coup[0];
+        Bille[] billes = plateau.BillesJoueur(nojoueur);
+
         return coups;
     }
 

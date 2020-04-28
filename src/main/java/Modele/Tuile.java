@@ -21,7 +21,7 @@ public class Tuile {
     }
     public int CouleurBille(){
         if(bille == null)
-            return 0;
+            return 9;
         return bille.CouleurGet();
     }
 }

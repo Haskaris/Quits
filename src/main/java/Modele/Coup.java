@@ -23,19 +23,19 @@ public class Coup extends Commande {
     /**
     * On veut jouer un deplacement de bille
     */
-    public Coup(Bille _bille, Dir _dir,Joueur_Interface _joueur) {
+    public Coup(Bille _bille, Dir _dir/*,Joueur_Interface _joueur*/) {
         bille = _bille;
         dir = _dir;
-        joueur = _joueur;
+        //joueur = _joueur;
     }
 
     /**
      * On veut jouer un deplacement de ligne
      */
-    public Coup(Point _rangee, Boolean _positif,Joueur_Interface _joueur) {
+    public Coup(Point _rangee, Boolean _positif/*,Joueur_Interface _joueur*/) {
         rangee = _rangee;
         positif = _positif;
-        joueur = _joueur;
+        //joueur = _joueur;
     }
 
     public void Execute() {

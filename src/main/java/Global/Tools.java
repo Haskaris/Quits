@@ -1,10 +1,13 @@
 package Global;
 
-import Modele.Coup;
-
 import java.awt.*;
 
 public class Tools{
+    public final static int JAUNE = 0;
+    public final static int ROUGE = 1;
+    public final static int BLANC = 2;
+    public final static int NOIR = 3;
+
     public static enum Dir {
         NO,
         NE,

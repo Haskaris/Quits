@@ -7,6 +7,7 @@ import java.awt.*;
 
 public class Plateau {
     private Tuile[][] grille;
+    private Bille[][] billes;
 
     /**
      * Initialise un plateau avec le nombre de joueur et la taille précisé.
@@ -18,6 +19,7 @@ public class Plateau {
             for (int j = 0; j < taille; j++)
                 grille[i][j]=new Tuile();
 
+        billes = new Bille[4][];
         if(nbjoueur == 2 )
             Init2Players();
         if(nbjoueur == 4)
@@ -90,12 +92,28 @@ public class Plateau {
     private void Init2Players(){
         int l =  grille.length;
         boolean pair = l%2==0;
+
+        for (int i = 0; i < billes.length; i++) {
+            if(pair)
+                billes[i]=new Bille[grille.length-1];
+            else
+                billes[i]=new Bille[grille.length];
+            for (int j = 0; j < billes[i].length; j++) {
+                billes[i][j] = new Bille(i);
+            }
+        }
+
+        int pos0 = 0, pos1 = 0;
         for (int i = 0; i < l; i++) {
             for (int j = 0; j < l; j++) {
-                if((pair && (j == l/2 - i - 1 || j == l/2 - i - 2)) || (!pair && (j == l/2 - i || j == l/2 - i - 1)))
-                    grille[i][j].MettreBille(new Bille(1),new Point(i,j));
-                if(j == 3*l/2 - i || j == 3*l/2 - i - 1)
-                    grille[i][j].MettreBille(new Bille(2),new Point(i,j));
+                if((pair && (j == l/2 - i - 1 || j == l/2 - i - 2)) || (!pair && (j == l/2 - i || j == l/2 - i - 1))) {
+                    PlacerBilleAt(i, j, billes[0][pos0]);
+                    pos0++;
+                }
+                if(j == 3*l/2 - i || j == 3*l/2 - i - 1){
+                    PlacerBilleAt(i,j,billes[1][pos1]);
+                    pos1++;
+                }
             }
         }
     }
@@ -106,27 +124,41 @@ public class Plateau {
      */
     private void Init4Players(){
         int l =  grille.length;
+        for (int i = 0; i < billes.length; i++) {
+            billes[i]=new Bille[grille.length/2*2-1];
+            for (int j = 0; j < billes[i].length; j++) {
+                billes[i][j] = new Bille(i);
+            }
+        }
 
+        int pos0 = 0, pos1 = 0, pos2 = 0,pos3 = 0;
         for (int i = 0; i < l; i++) {
+
             if(i<l/2) {
-                grille[0][i].MettreBille(new Bille(1),new Point(0,i));
-                grille[i][0].MettreBille(new Bille(1),new Point(i,0));
-                grille[l-1][i].MettreBille(new Bille(4),new Point(l-1,i));
-                grille[i][l-1].MettreBille(new Bille(2),new Point(i,l-1));
+                PlacerBilleAt(0,i,billes[0][pos0]);
+                pos0++;
+                if(i!=0){PlacerBilleAt(i,0,billes[0][pos0]);
+                pos0++;}
+                if(i!=0){PlacerBilleAt(l-1,1,billes[3][pos3]);
+                pos3++;}
+                PlacerBilleAt(i,l-1,billes[1][pos1]);
+                pos1++;
             }
             if(i>l/2) {
-                grille[0][i].MettreBille(new Bille(2),new Point(0,i));
-                grille[i][0].MettreBille(new Bille(4),new Point(i,0));
-                grille[l-1][i].MettreBille(new Bille(3),new Point(l-1,i));
-                grille[i][l-1].MettreBille(new Bille(3),new Point(i,l-1));
+                PlacerBilleAt(i,0,billes[3][pos3]);
+                pos3++;
+                if(i!=l-1){PlacerBilleAt(0,i,billes[1][pos1]);
+                pos1++;}
+                PlacerBilleAt(l-1,i,billes[2][pos2]);
+                pos2++;
+                if(i!=l-1){PlacerBilleAt(i,l-1,billes[2][pos2]);
+                pos2++;}
             }
         }
     }
 
     public Bille[] BillesJoueur(int couleur){
-        Bille[] billes = new Bille[0];
-
-        return billes;
+        return billes[couleur];
     }
 
     public Tuile[][]GetGrille(){
