@@ -20,7 +20,9 @@ class PlateauTest {
     void CreationPlateau(){
         try {
             plateau = new Plateau(2, 5);
+            LecteurRedacteur.PrintNiveau(plateau);
             plateau = new Plateau(4, 8);
+            LecteurRedacteur.PrintNiveau(plateau);
         }catch (Exception e){
             fail();
         }

@@ -10,6 +10,9 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 
 public class GameManager {
+    /**
+     * Les actions raccourcis claviers (elle viennent du Sokoban). A voir si on garde ou non
+     */
     public static KeyListener GameKeyListener=new KeyListener() {
         @Override
         public void keyTyped(KeyEvent keyEvent) {}
@@ -29,30 +32,83 @@ public class GameManager {
         public void keyReleased(KeyEvent keyEvent) {}
     };
 
-    /*
-     * Ici la liste des Objets necessaire accessibles aux autres parties du jeu
+    /**
+     * Ici la liste des Objets accessibles aux autres parties du jeu
      */
     public static Plateau plateau;
     public static InterfaceGraphique interfacegraphique;
-    public static Joueur[] joueurs;
+    public static Joueur_Interface[] joueurs = new Joueur_Interface[4];
+    public static Historique historique;
+    public static int joueurcourant ;
 
-
+    /**
+     * Permet d'initialiser une partie. Les parametres de la partie sont definies dans Configuration
+     */
     public static void InstanceGame(){
         plateau = new Plateau((Integer)Configuration.Lis("Taille"),(Integer)Configuration.Lis("Joueurs"));
 
-        joueurs = new Joueur[(Integer)Configuration.Lis("Joueurs")];
-        for (int i = 0; i < joueurs.length; i++) {
-            joueurs[i] = new Joueur();
+        interfacegraphique = new InterfaceGraphique();
+        historique = new Historique();
+        joueurcourant = 0;
+
+        JouerTour();
+    }
+
+    /**
+     * Permet au manageur de connaitre les joueurs
+     */
+    public static void EnregistrerJoueur(Joueur_Interface joueur){
+        for (int i = 0; i < 4; i++) {
+            if(joueurs[i] == null){
+                joueurs[i] = joueur;
+            }
+        }
+    }
+
+    /**
+     * Permet de jouer un coup. Ne doit etre utilisé que si joueurcourant est votre no de joueur. A voir si on rajoute une verification pour ca
+     */
+    public static void JouerTour(){
+        while(FinTour()){
+            historique.Faire(joueurs[joueurcourant].Jouer(CoupsPossible(joueurcourant)));
+        }
+    }
+
+    /**
+     * Clot un tour. Verifie les conditions de victoire et passe au joueur suivant
+     */
+    private static boolean FinTour(){
+        boolean estfini = true;
+        for (Bille bille:plateau.BillesJoueur(joueurcourant)) {
+            if(!bille.EstSortie())
+                estfini = false;
         }
 
-        interfacegraphique = new InterfaceGraphique();
+        if(estfini){
+            System.out.println("Joueur " + joueurcourant + " a gagné");
+            return false;
+        }
 
-        LecteurRedacteur.PrintNiveau(plateau);
+        joueurcourant++;
+        if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
+            joueurcourant =0;
+        return true;
     }
 
-    public static void EndTurn(){
+    /**
+     * Crée la liste de coup possible pour un joueur
+     */
+    public static Coup[] CoupsPossible(int nojoueur){
+        Coup[] coups = new Coup[0];
+        Bille[] billes = plateau.BillesJoueur(nojoueur);
+
+        return coups;
     }
 
+
+    /**
+     * Fermeture du jeu
+     */
     public static void Exit(){
         try {
             Properties.Store();
@@ -62,7 +118,6 @@ public class GameManager {
         }
         System.exit(0);
     }
-
 
 
 
