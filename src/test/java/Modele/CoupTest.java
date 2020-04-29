@@ -56,9 +56,7 @@ class CoupTest {
 
     @Test
     public void TestEntreeController() {
-        GameManager.InstanceGame();
-        Coup c = new Coup(new Point(1,-1),true);
-        GameManager.JouerTour(c);
+
     }
 
 
