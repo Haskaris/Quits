@@ -66,13 +66,13 @@ public class CalculateurCoup {
         private void DeplacementsBille(){
         for (Bille b:billes) {
             if(!b.EstSortie()){
-                if(joueurpos != NO && !TuileEstLibre(add(b.PositionGet(),DirToPoint(NO))))
+                if(joueurpos != NO && TuileEstLibre(add(b.PositionGet(),DirToPoint(NO))))
                     coups.add(new Coup(b,NO));
-                if(joueurpos != NE && !TuileEstLibre(add(b.PositionGet(),DirToPoint(NE))))
+                if(joueurpos != NE && TuileEstLibre(add(b.PositionGet(),DirToPoint(NE))))
                     coups.add(new Coup(b,NE));
-                if(joueurpos != SE && !TuileEstLibre(add(b.PositionGet(),DirToPoint(SE))))
+                if(joueurpos != SE && TuileEstLibre(add(b.PositionGet(),DirToPoint(SE))))
                     coups.add(new Coup(b,SE));
-                if(joueurpos != SO && !TuileEstLibre(add(b.PositionGet(),DirToPoint(SO))))
+                if(joueurpos != SO && TuileEstLibre(add(b.PositionGet(),DirToPoint(SO))))
                     coups.add(new Coup(b,SO));
             }
         }
@@ -81,12 +81,12 @@ public class CalculateurCoup {
     public boolean TuileEstLibre(Point coordonnee){
         if(coordonnee.x<0 || coordonnee.y < 0 || coordonnee.x > plateau.GetGrille().length-1 || coordonnee.y > plateau.GetGrille().length-1)
             return false;
-        return plateau.GetGrille()[coordonnee.x][coordonnee.y].ContientBille();
+        return !plateau.GetGrille()[coordonnee.x][coordonnee.y].ContientBille();
     }
     public boolean TuileEstLibre(int x,int y){
-        if(x<0 || y < 0 || x > plateau.GetGrille().length-1 || y > plateau.GetGrille().length-1)
+        if(x < 0 || y < 0 || x > plateau.GetGrille().length-1 || y > plateau.GetGrille().length-1)
             return false;
-        return plateau.GetGrille()[x][y].ContientBille();
+        return !plateau.GetGrille()[x][y].ContientBille();
     }
     private Point add(Point a, Point b){
         return new Point(a.x+b.x,a.y+b.y);

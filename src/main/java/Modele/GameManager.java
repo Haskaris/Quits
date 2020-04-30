@@ -4,7 +4,7 @@ import Global.Configuration;
 import Global.Properties;
 import Modele.Joueurs.Joueur;
 import Modele.Joueurs.JoueurHumain;
-import Modele.Joueurs.JoueurIA;
+import Modele.Joueurs.JoueurIAFacile;
 import Modele.Support.Bille;
 import Modele.Support.Plateau;
 import Vue.InterfaceGraphique;
@@ -50,16 +50,17 @@ public class GameManager {
      * Permet d'initialiser une partie. Les parametres de la partie sont definies dans Configuration
      */
     public static void InstanceGame(){
-        plateau = new Plateau((Integer)Configuration.Lis("Taille"),(Integer)Configuration.Lis("Joueurs"));
+        plateau = new Plateau((Integer)Configuration.Lis("Joueurs"),(Integer)Configuration.Lis("Taille"));
 
         for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
-                joueurs[i] = new JoueurHumain("Default",i);
+                joueurs[i] = new JoueurIAFacile("Default",i);
         }
 
         interfacegraphique = new InterfaceGraphique();
         historique = new Historique();
         joueurcourant = 0;
 
+        LecteurRedacteur.AffichePartie(plateau);
         JouerTour();
     }
 
@@ -69,7 +70,9 @@ public class GameManager {
     public static void JouerTour(){
         while(FinTour()){
             List<Coup> coupspossible = new CalculateurCoup(joueurcourant,plateau.BillesJoueur(joueurcourant)).CoupsPossible();
-            historique.Faire(joueurs[joueurcourant].Jouer(coupspossible));
+            Coup coup = joueurs[joueurcourant].Jouer(coupspossible);
+            historique.Faire(coup);
+            LecteurRedacteur.AffichePartie(plateau);
         }
     }
 
@@ -101,7 +104,7 @@ public class GameManager {
      */
     public static void ChargerPartie(){
         try {
-            LecteurRedacteur lr = new LecteurRedacteur("default");
+            LecteurRedacteur lr = new LecteurRedacteur("default.save");
             lr.LitPartie();
             plateau = lr.plateau;
             joueurs = lr.joueurs;
@@ -122,7 +125,7 @@ public class GameManager {
      */
     public static void EnregistrerPartie(){
         try {
-            new LecteurRedacteur("default",plateau,joueurs,joueurcourant).EcrisPartie();
+            new LecteurRedacteur("default.save",plateau,joueurs,joueurcourant).EcrisPartie();
         }
         catch (Exception e){
             System.out.println("Erreur d'enregistrement de la partie");

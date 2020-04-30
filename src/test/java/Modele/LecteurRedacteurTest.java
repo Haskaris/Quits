@@ -1,7 +1,7 @@
 package Modele;
 
 import Modele.Joueurs.Joueur;
-import Modele.Joueurs.JoueurIA;
+import Modele.Joueurs.JoueurIANormale;
 import Modele.Support.Plateau;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -26,8 +26,8 @@ class LecteurRedacteurTest {
         try {
             Plateau plateau = new Plateau(nbjoueurtest, tailletest);
             Joueur[] joueurs = new Joueur[2];
-            joueurs[0] = new JoueurIA(nomtest0, couleurtest0);
-            joueurs[1] = new JoueurIA(nomtest1, couleurtest1);
+            joueurs[0] = new JoueurIANormale(nomtest0, couleurtest0);
+            joueurs[1] = new JoueurIANormale(nomtest1, couleurtest1);
 
             LecteurRedacteur lr = new LecteurRedacteur(pathtest, plateau, joueurs, joueurcouranttest);
             lr.EcrisPartie();
