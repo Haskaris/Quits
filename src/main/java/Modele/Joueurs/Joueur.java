@@ -1,6 +1,10 @@
-package Modele;
+package Modele.Joueurs;
 
-public interface Joueur_Interface {
+import Modele.Coup;
+
+import java.util.List;
+
+public abstract class Joueur {
     /*
     * La classe joueur devra implémenter cette interface.
     * Au démarrage, chaque joueur devra appeler GameManager.EnregistrerJoueur(this)
@@ -9,10 +13,11 @@ public interface Joueur_Interface {
     * */
 
 
+
     /**
      * Le joueur devra à ce moment jouer (lancer l'ia ou récupérer l'entrée utilisateur)
      * @param coups_possibles la liste des coups jouable par le joueur
      * @return le coup choisi par le joueur
      */
-    Coup Jouer(Coup[] coups_possibles);
+    abstract public Coup Jouer(List<Coup> coups_possibles);
 }

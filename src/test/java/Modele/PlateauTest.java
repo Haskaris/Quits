@@ -1,6 +1,8 @@
 package Modele;
 
 import Global.Tools;
+import Modele.Support.Bille;
+import Modele.Support.Plateau;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

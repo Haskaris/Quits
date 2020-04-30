@@ -1,6 +1,8 @@
 package Modele;
 
 import Global.Configuration;
+import Modele.Support.Plateau;
+import Modele.Support.Tuile;
 
 import java.io.*;
 

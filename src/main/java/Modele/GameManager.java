@@ -1,13 +1,18 @@
 package Modele;
 
-import Controleur.Joueur;
 import Global.Configuration;
 import Global.Properties;
+import Modele.Joueurs.Joueur;
+import Modele.Joueurs.JoueurHumain;
+import Modele.Joueurs.JoueurIA;
+import Modele.Support.Bille;
+import Modele.Support.Plateau;
 import Vue.InterfaceGraphique;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.*;
 
 public class GameManager {
     /**
@@ -37,7 +42,7 @@ public class GameManager {
      */
     public static Plateau plateau;
     public static InterfaceGraphique interfacegraphique;
-    public static Joueur_Interface[] joueurs = new Joueur_Interface[4];
+    public static Joueur[] joueurs = new Joueur[4];
     public static Historique historique;
     public static int joueurcourant ;
 
@@ -47,6 +52,10 @@ public class GameManager {
     public static void InstanceGame(){
         plateau = new Plateau((Integer)Configuration.Lis("Taille"),(Integer)Configuration.Lis("Joueurs"));
 
+        for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
+                joueurs[i] = new JoueurHumain();
+        }
+
         interfacegraphique = new InterfaceGraphique();
         historique = new Historique();
         joueurcourant = 0;
@@ -55,22 +64,12 @@ public class GameManager {
     }
 
     /**
-     * Permet au manageur de connaitre les joueurs
-     */
-    public static void EnregistrerJoueur(Joueur_Interface joueur){
-        for (int i = 0; i < 4; i++) {
-            if(joueurs[i] == null){
-                joueurs[i] = joueur;
-            }
-        }
-    }
-
-    /**
      * Permet de jouer un coup. Ne doit etre utilisé que si joueurcourant est votre no de joueur. A voir si on rajoute une verification pour ca
      */
     public static void JouerTour(){
         while(FinTour()){
-            historique.Faire(joueurs[joueurcourant].Jouer(CoupsPossible(joueurcourant)));
+            List<Coup> coupspossible = new CalculateurCoup(joueurcourant,plateau.BillesJoueur(joueurcourant)).CoupsPossible();
+            historique.Faire(joueurs[joueurcourant].Jouer(coupspossible));
         }
     }
 
@@ -93,16 +92,6 @@ public class GameManager {
         if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
             joueurcourant =0;
         return true;
-    }
-
-    /**
-     * Crée la liste de coup possible pour un joueur
-     */
-    public static Coup[] CoupsPossible(int nojoueur){
-        Coup[] coups = new Coup[0];
-        Bille[] billes = plateau.BillesJoueur(nojoueur);
-
-        return coups;
     }
 
 

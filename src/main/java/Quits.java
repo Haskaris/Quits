@@ -1,5 +1,5 @@
 import Modele.LecteurRedacteur;
-import Modele.Plateau;
+import Modele.Support.Plateau;
 
 import java.io.IOException;
 

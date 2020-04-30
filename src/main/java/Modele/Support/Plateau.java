@@ -1,6 +1,5 @@
-package Modele;
+package Modele.Support;
 
-import Global.Configuration;
 import Global.Tools;
 
 import java.awt.*;
@@ -164,4 +163,6 @@ public class Plateau {
     public Tuile[][]GetGrille(){
         return grille;
     }
+
+
 }
