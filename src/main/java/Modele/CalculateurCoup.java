@@ -56,7 +56,7 @@ public class CalculateurCoup {
 
 
     private boolean SontCoupInverse(Coup c1, Coup c2){
-        if (c1.rangee == null || c2.rangee == null)
+        if (c1 == null || c2 == null || c1.rangee == null || c2.rangee == null)
             return false;
         return c1.rangee.equals(c2.rangee) && c1.positif != c2.positif;
 

@@ -149,8 +149,12 @@ public class LecteurRedacteur {
     public static void AffichePartie(Plateau p){
         Tuile[][] tab = p.GetGrille();
         for(int i=0;i<tab.length;i++){
-            for(int j=0;j<tab[0].length;j++)
-                System.out.print(tab[i][j].CouleurBille());
+            for(int j=0;j<tab[0].length;j++){
+                if(tab[i][j].CouleurBille() != 9)
+                    System.out.print(tab[i][j].CouleurBille());
+                else
+                    System.out.print(".");
+            }
             System.out.print('\n');
         }
         System.out.println("\n");
