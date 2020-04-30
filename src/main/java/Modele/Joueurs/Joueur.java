@@ -6,7 +6,7 @@ import java.util.List;
 
 public abstract class Joueur {
     public String nom;
-    public int couleur;
+    public Integer couleur;
 
     public Joueur(String _nom, int _couleur){
         nom = _nom;

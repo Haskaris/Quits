@@ -53,7 +53,7 @@ public class GameManager {
         plateau = new Plateau((Integer)Configuration.Lis("Taille"),(Integer)Configuration.Lis("Joueurs"));
 
         for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
-                joueurs[i] = new JoueurHumain();
+                joueurs[i] = new JoueurHumain("Default",i);
         }
 
         interfacegraphique = new InterfaceGraphique();
@@ -101,18 +101,18 @@ public class GameManager {
      */
     public static void ChargerPartie(){
         try {
-            plateau = new LecteurRedacteur("default").LitPartie();
+            LecteurRedacteur lr = new LecteurRedacteur("default");
+            lr.LitPartie();
+            plateau = lr.plateau;
+            joueurs = lr.joueurs;
+            joueurcourant = lr.joueurcourant;
         }
         catch (Exception e){
             System.out.println("Erreur de chargement de la partie");
         }
-        for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
-            joueurs[i] = new JoueurHumain();
-        }
 
         interfacegraphique = new InterfaceGraphique();
         historique = new Historique();
-        joueurcourant = 0;
 
         JouerTour();
     }
@@ -122,10 +122,10 @@ public class GameManager {
      */
     public static void EnregistrerPartie(){
         try {
-            new LecteurRedacteur("default").EcrisPartie(plateau);
+            new LecteurRedacteur("default",plateau,joueurs,joueurcourant).EcrisPartie();
         }
         catch (Exception e){
-            System.out.println("Erreur de chargement de la partie");
+            System.out.println("Erreur d'enregistrement de la partie");
         }
 
     }

@@ -5,6 +5,7 @@ import Global.Tools;
 import java.awt.*;
 
 public class Plateau {
+    public int nbjoueur;
     private Tuile[][] grille;
     private Bille[][] billes;
 
@@ -12,7 +13,8 @@ public class Plateau {
      * Initialise un plateau avec le nombre de joueur et la taille précisé.
      * Pour fonctionner pleinement avec le GameManager, ces deux chiffres doivent etre ceux de Configuration
      */
-    public Plateau(int nbjoueur, int taille){
+    public Plateau(int _nbjoueur, int taille){
+        nbjoueur = _nbjoueur;
         grille = new Tuile [taille][taille];
         for (int i = 0; i < taille; i++)
             for (int j = 0; j < taille; j++)
