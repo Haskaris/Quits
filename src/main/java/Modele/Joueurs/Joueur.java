@@ -5,13 +5,13 @@ import Modele.Coup;
 import java.util.List;
 
 public abstract class Joueur {
-    /*
-    * La classe joueur devra implémenter cette interface.
-    * Au démarrage, chaque joueur devra appeler GameManager.EnregistrerJoueur(this)
-    * Pour l'instant, après 4 joueurs enregistrés, il faudra détruire un joueur d'abord (a voir si on met un remplacement automatique)
-    * Si le joueur à besoin de connaitre ses billes, on peut le rajouter dans le retour d'EnregistrerJoueur
-    * */
+    public String nom;
+    public int couleur;
 
+    public Joueur(String _nom, int _couleur){
+        nom = _nom;
+        couleur = _couleur;
+    }
 
 
     /**

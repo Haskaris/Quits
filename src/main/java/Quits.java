@@ -7,7 +7,7 @@ public class Quits {
 
     public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
         Plateau plateau = new Plateau(4, 5);
-        LecteurRedacteur.PrintNiveau(plateau);
+        LecteurRedacteur.AffichePartie(plateau);
 
         //Properties.Load();
         //GameManager.InstanceGame();

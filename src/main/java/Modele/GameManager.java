@@ -64,7 +64,7 @@ public class GameManager {
     }
 
     /**
-     * Permet de jouer un coup. Ne doit etre utilisé que si joueurcourant est votre no de joueur. A voir si on rajoute une verification pour ca
+     *  Joue les tours de la partie. S'arrete à la fin
      */
     public static void JouerTour(){
         while(FinTour()){
@@ -92,6 +92,42 @@ public class GameManager {
         if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
             joueurcourant =0;
         return true;
+    }
+
+
+
+    /**
+     * Charge une partie
+     */
+    public static void ChargerPartie(){
+        try {
+            plateau = new LecteurRedacteur("default").LitPartie();
+        }
+        catch (Exception e){
+            System.out.println("Erreur de chargement de la partie");
+        }
+        for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
+            joueurs[i] = new JoueurHumain();
+        }
+
+        interfacegraphique = new InterfaceGraphique();
+        historique = new Historique();
+        joueurcourant = 0;
+
+        JouerTour();
+    }
+
+    /**
+     * Enregistre une partie
+     */
+    public static void EnregistrerPartie(){
+        try {
+            new LecteurRedacteur("default").EcrisPartie(plateau);
+        }
+        catch (Exception e){
+            System.out.println("Erreur de chargement de la partie");
+        }
+
     }
 
 

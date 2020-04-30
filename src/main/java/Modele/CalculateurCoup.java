@@ -2,7 +2,6 @@ package Modele;
 
 import Global.Tools;
 import Modele.Support.Bille;
-import Modele.Support.Tuile;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -62,9 +61,6 @@ public class CalculateurCoup {
         return c1.rangee.equals(c2.rangee) && c1.positif != c2.positif;
 
     }
-
-
-
 
 
         private void DeplacementsBille(){
