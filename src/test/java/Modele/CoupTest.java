@@ -2,7 +2,7 @@ package Modele;
 
 import Global.Tools;
 import Modele.Joueurs.Joueur;
-import Modele.Joueurs.JoueurIA;
+import Modele.Joueurs.JoueurIANormale;
 import Modele.Support.Bille;
 import Modele.Support.Plateau;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +53,7 @@ class CoupTest {
 
     @Test
     public void TestEntreeController() {
-        Joueur joueur = new JoueurIA("IA0",0);
+        Joueur joueur = new JoueurIANormale("IA0",0);
         List<Coup> coupspossible = new CalculateurCoup(0,GameManager.plateau.BillesJoueur(0)).CoupsPossible();
         LecteurRedacteur.AffichePartie(GameManager.plateau);
         GameManager.historique.Faire(joueur.Jouer(coupspossible));

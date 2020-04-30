@@ -11,13 +11,13 @@ import java.awt.*;
 public class Coup {
     /**
      * Bille indique la bille a bouger (null sinon)
-     * dir est la direction dans laquelle cette bille doit bouger (consulter Global.Tools)
+     * direction est la direction dans laquelle cette bille doit bouger (consulter Global.Tools)
      * Point indique la rangee a bouger (null sinon) (ex : (-1,2) indique la colonne 2, (0,-1) la ligne 0)
      * positif est vrai si la rangee bouge vers le positif (chaque indice i deviendra i+1) et inversement si faux
      * joueur indique le joueur responsable du coup
      */
     Bille bille = null;
-    Dir dir;
+    Dir direction;
     Point rangee = null;
     Boolean positif;
     Joueur joueur;
@@ -28,7 +28,7 @@ public class Coup {
     */
     public Coup(Bille _bille, Dir _dir/*,Joueur_Interface _joueur*/) {
         bille = _bille;
-        dir = _dir;
+        direction = _dir;
         //joueur = _joueur;
     }
 
@@ -43,7 +43,7 @@ public class Coup {
 
     public void Execute() {
         if(bille!=null){
-            GameManager.plateau.DeplacerBille(bille,dir);
+            GameManager.plateau.DeplacerBille(bille, direction);
         }
         if(rangee != null){
             GameManager.plateau.DeplacerRangee(rangee,positif);
@@ -52,11 +52,21 @@ public class Coup {
 
     public void Dexecute(){
         if(bille!=null){
-            GameManager.plateau.DeplacerBille(bille,InverseDir(dir));
+            GameManager.plateau.DeplacerBille(bille,InverseDir(direction));
         }
         if(rangee != null){
             GameManager.plateau.DeplacerRangee(rangee,!positif);
         }
+    }
+
+    public void Afficher(){
+        if(bille!=null){
+            System.out.println(bille.PositionGet());
+            System.out.println(direction);
+        }
+        if(rangee != null){
+            System.out.println(rangee);
+            System.out.println(positif);        }
     }
 
 }

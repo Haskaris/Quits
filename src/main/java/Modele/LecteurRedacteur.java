@@ -1,17 +1,11 @@
 package Modele;
 
 import Global.Configuration;
-import Modele.Joueurs.Joueur;
-import Modele.Joueurs.JoueurDistant;
-import Modele.Joueurs.JoueurHumain;
-import Modele.Joueurs.JoueurIA;
+import Modele.Joueurs.*;
 import Modele.Support.Plateau;
 import Modele.Support.Tuile;
 
-import static java.lang.Character.forDigit;
-
 import java.io.*;
-import java.net.URL;
 
 public class LecteurRedacteur {
     String filepath;
@@ -68,9 +62,9 @@ public class LecteurRedacteur {
             switch (metadonees[2]){
                 case "HUMAIN":joueurs[k] = new JoueurHumain(metadonees[0],Integer.parseInt(metadonees[1]));
                 case "DISTANT":joueurs[k] = new JoueurDistant(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA0":joueurs[k] = new JoueurIA(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA1":joueurs[k] = new JoueurIA(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA2":joueurs[k] = new JoueurIA(metadonees[0],Integer.parseInt(metadonees[1]));
+                case "IA0":joueurs[k] = new JoueurIAFacile(metadonees[0],Integer.parseInt(metadonees[1]));
+                case "IA1":joueurs[k] = new JoueurIANormale(metadonees[0],Integer.parseInt(metadonees[1]));
+                case "IA2":joueurs[k] = new JoueurIADifficile(metadonees[0],Integer.parseInt(metadonees[1]));
             }
         }
 
@@ -126,8 +120,12 @@ public class LecteurRedacteur {
             stream.write(' ');
             if(joueurs[i] instanceof JoueurHumain)
                 stream.write("HUMAIN".getBytes());
-            if(joueurs[i] instanceof JoueurIA)
+            if(joueurs[i] instanceof JoueurIAFacile)
                 stream.write("IA0".getBytes());
+            if(joueurs[i] instanceof JoueurIANormale)
+                stream.write("IA1".getBytes());
+            if(joueurs[i] instanceof JoueurIADifficile)
+                stream.write("IA2".getBytes());
             if(joueurs[i] instanceof JoueurDistant)
                 stream.write("DISTANT".getBytes());
             stream.write('\n');

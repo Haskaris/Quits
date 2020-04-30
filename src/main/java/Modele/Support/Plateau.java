@@ -33,7 +33,8 @@ public class Plateau {
     public void DeplacerBille(Bille bille, Tools.Dir direction){
         Point depart = bille.PositionGet();
         Point arrivee = new Point(depart.x + Tools.DirToPoint(direction).x,depart.y + Tools.DirToPoint(direction).y);
-        grille[arrivee.x][arrivee.y].MettreBille(grille[depart.x][depart.y].EnleverBille(),arrivee);
+        grille[depart.x][depart.y].EnleverBille();
+        grille[arrivee.x][arrivee.y].MettreBille(bille,arrivee);
     }
 
     /**
