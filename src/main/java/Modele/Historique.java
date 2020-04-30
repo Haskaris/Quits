@@ -1,10 +1,10 @@
 package Modele;
 
 public class Historique {
-    Commande passe;
-    Commande futur;
+    Coup passe;
+    Coup futur;
 
-    public void Faire(Commande c){
+    public void Faire(Coup c){
         if(c == null) return ; // Correspond a une impossibilite de se deplacer pour le player. Rien n'est enregistre
         c.Execute();
         c.next = passe;
@@ -14,7 +14,7 @@ public class Historique {
 
     public void Annuler(){
         if(PasseEstVide())return;
-        Commande c = passe.next;
+        Coup c = passe.next;
         passe.next = null;
         futur = passe;
         passe = c;
@@ -23,7 +23,7 @@ public class Historique {
 
     public void Refaire(){
         if(FuturEstVide())return;
-        Commande c = futur.next;
+        Coup c = futur.next;
         futur.next = null;
         passe = futur;
         futur = c;

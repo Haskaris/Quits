@@ -1,11 +1,14 @@
 package Modele;
 
+import Modele.Joueurs.Joueur;
+import Modele.Support.Bille;
+
 import static Global.Tools.Dir;
 import static Global.Tools.InverseDir;
 
 import java.awt.*;
 
-public class Coup extends Commande {
+public class Coup {
     /**
      * Bille indique la bille a bouger (null sinon)
      * dir est la direction dans laquelle cette bille doit bouger (consulter Global.Tools)
@@ -17,8 +20,8 @@ public class Coup extends Commande {
     Dir dir;
     Point rangee = null;
     Boolean positif;
-    Joueur_Interface joueur;
-
+    Joueur joueur;
+    Coup next;
 
     /**
     * On veut jouer un deplacement de bille

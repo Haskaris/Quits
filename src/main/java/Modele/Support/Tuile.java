@@ -1,4 +1,4 @@
-package Modele;
+package Modele.Support;
 
 import java.awt.*;
 

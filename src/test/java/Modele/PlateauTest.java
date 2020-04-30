@@ -1,6 +1,8 @@
 package Modele;
 
 import Global.Tools;
+import Modele.Support.Bille;
+import Modele.Support.Plateau;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,9 +22,9 @@ class PlateauTest {
     void CreationPlateau(){
         try {
             plateau = new Plateau(2, 5);
-            LecteurRedacteur.PrintNiveau(plateau);
+            LecteurRedacteur.AffichePartie(plateau);
             plateau = new Plateau(4, 8);
-            LecteurRedacteur.PrintNiveau(plateau);
+            LecteurRedacteur.AffichePartie(plateau);
         }catch (Exception e){
             fail();
         }

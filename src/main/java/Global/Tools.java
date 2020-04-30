@@ -11,8 +11,8 @@ public class Tools{
     public static enum Dir {
         NO,
         NE,
-        SO,
         SE,
+        SO,
         RIEN;
     }
 
@@ -20,8 +20,8 @@ public class Tools{
         switch (d){
             case NO:return 0;
             case NE:return 1;
-            case SO:return 2;
-            case SE:return 3;
+            case SE:return 2;
+            case SO:return 3;
         }
         return 4;
     }
@@ -29,8 +29,8 @@ public class Tools{
         switch (n){
             case 0:return Dir.NO;
             case 1:return Dir.NE;
-            case 2:return Dir.SO;
-            case 3:return Dir.SE;
+            case 2:return Dir.SE;
+            case 3:return Dir.SO;
         }
         return Dir.RIEN;
     }
