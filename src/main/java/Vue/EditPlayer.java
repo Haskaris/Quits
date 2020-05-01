@@ -1,21 +1,29 @@
 package Vue;
 
 import Global.Tools.AILevel;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
 public class EditPlayer extends JPanel {
     JTextField playerName;
-    JComboBox CB_aiLevel;
+    Color playerColor;
     AILevel aiLevel;
     
-    public EditPlayer(String playerName) {
+    JComboBox CB_aiLevel;
+    JButton buttonColorChooser;
+    ColorPicker colorPicker;
+    
+    public EditPlayer(String playerName, Color playerColor) {
+        this.aiLevel = AILevel.Player;
+        this.playerColor = playerColor;
         this.playerName = new JTextField(playerName);
         this.playerName.setPreferredSize(new Dimension(200,50));
-        this.aiLevel = AILevel.Player;
         this.CB_aiLevel = new JComboBox(new Object[]{"Humain", "Ordinateur facile", "Ordinateur normal", "Ordinateur difficile"});
         this.CB_aiLevel.addActionListener ((ActionEvent e) -> {
             switch(this.CB_aiLevel.getSelectedIndex()) {
@@ -34,8 +42,16 @@ public class EditPlayer extends JPanel {
             }
             this.updateUI();
         });
+        this.colorPicker = new ColorPicker(this.playerColor);
+        this.buttonColorChooser = new JButton(this.playerColor.toString());
+        this.buttonColorChooser.addActionListener((ActionEvent e) -> {
+            this.playerColor = this.colorPicker.showDialog();
+            this.buttonColorChooser.setText(this.playerColor.toString());
+        });
+        
         this.add(this.playerName);
         this.add(this.CB_aiLevel);
+        this.add(this.buttonColorChooser);
         
     }
 }
