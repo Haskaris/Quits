@@ -7,11 +7,12 @@ import Modele.Joueurs.JoueurHumain;
 import Modele.Joueurs.JoueurIAFacile;
 import Modele.Support.Bille;
 import Modele.Support.Plateau;
-import Vue.InterfaceGraphique;
+import Vue.MainInterface;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import static java.lang.System.exit;    //Pas sûr de l'utilité
 import java.util.*;
 
 public class GameManager {
@@ -41,36 +42,53 @@ public class GameManager {
      * Ici la liste des Objets accessibles aux autres parties du jeu
      */
     public static Plateau plateau;
-    public static InterfaceGraphique interfacegraphique;
-    public static Joueur[] joueurs = new Joueur[4];
+    public static MainInterface interfacegraphique;
+    public ArrayList<Joueur> joueurs = new ArrayList<>();
     public static Historique historique;
     public static int joueurcourant ;
 
     /**
      * Permet d'initialiser une partie. Les parametres de la partie sont definies dans Configuration
      */
-    public static void InstanceGame(){
+    public void InstanceGame(){
         plateau = new Plateau((Integer)Configuration.Lis("Joueurs"),(Integer)Configuration.Lis("Taille"));
 
-        for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
+        /*for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
                 joueurs[i] = new JoueurIAFacile("Default",i);
+        }*/
+        
+        /**
+         * On ne lance pas de jeu sans joueurs?!
+         */
+        if (joueurs.isEmpty()) {
+            System.out.println("Ah, tu essaies de lancer le jeu sans joueur...");
+            exit(1);
         }
 
-        interfacegraphique = new InterfaceGraphique();
+        interfacegraphique = new MainInterface();
         historique = new Historique();
         joueurcourant = 0;
 
         LecteurRedacteur.AffichePartie(plateau);
         JouerTour();
     }
+    
+    /**
+     * Ajoute un joueur à la liste de joueur
+     * @param player joueur à ajouter
+     */
+    public void addPlayer(Joueur player) {
+        this.joueurs.add(player);
+    }
 
     /**
      *  Joue les tours de la partie. S'arrete à la fin
      */
-    public static void JouerTour(){
+    public void JouerTour(){
         while(FinTour()){
             List<Coup> coupspossible = new CalculateurCoup(joueurcourant,plateau.BillesJoueur(joueurcourant)).CoupsPossible();
-            Coup coup = joueurs[joueurcourant].Jouer(coupspossible);
+            //Coup coup = joueurs[joueurcourant].Jouer(coupspossible);
+            Coup coup = joueurs.get(joueurcourant).Jouer(coupspossible);
             historique.Faire(coup);
             LecteurRedacteur.AffichePartie(plateau);
         }
@@ -102,19 +120,20 @@ public class GameManager {
     /**
      * Charge une partie
      */
-    public static void ChargerPartie(){
-        try {
+    public void ChargerPartie(){
+        /*try {
             LecteurRedacteur lr = new LecteurRedacteur("default.save");
             lr.LitPartie();
             plateau = lr.plateau;
             joueurs = lr.joueurs;
             joueurcourant = lr.joueurcourant;
         }
-        catch (Exception e){
+        catch (Exception e){*/
             System.out.println("Erreur de chargement de la partie");
-        }
+            exit(1);
+        //}
 
-        interfacegraphique = new InterfaceGraphique();
+        interfacegraphique = new MainInterface();
         historique = new Historique();
 
         JouerTour();
@@ -124,12 +143,13 @@ public class GameManager {
      * Enregistre une partie
      */
     public static void EnregistrerPartie(){
-        try {
+        /*try {
             new LecteurRedacteur("default.save",plateau,joueurs,joueurcourant).EcrisPartie();
         }
-        catch (Exception e){
+        catch (Exception e){*/
             System.out.println("Erreur d'enregistrement de la partie");
-        }
+            exit(1);
+        //}
 
     }
 
