@@ -4,6 +4,7 @@ import Global.Configuration;
 import Modele.Joueurs.*;
 import Modele.Support.Plateau;
 import Modele.Support.Tuile;
+import java.awt.Color;
 
 import java.io.*;
 
@@ -60,11 +61,11 @@ public class LecteurRedacteur {
             //Format : NOM COULEUR TYPE
             String[] metadonees = ReadLine(in_stream).split(" ");
             switch (metadonees[2]){
-                case "HUMAIN":joueurs[k] = new JoueurHumain(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "DISTANT":joueurs[k] = new JoueurDistant(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA0":joueurs[k] = new JoueurIAFacile(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA1":joueurs[k] = new JoueurIANormale(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA2":joueurs[k] = new JoueurIADifficile(metadonees[0],Integer.parseInt(metadonees[1]));
+                case "HUMAIN":joueurs[k] = new JoueurHumain(metadonees[0],Color.decode(metadonees[1]));//Integer.parseInt(metadonees[1]));
+                case "DISTANT":joueurs[k] = new JoueurDistant(metadonees[0],Color.decode(metadonees[1]));
+                case "IA0":joueurs[k] = new JoueurIAFacile(metadonees[0],Color.decode(metadonees[1]));
+                case "IA1":joueurs[k] = new JoueurIANormale(metadonees[0],Color.decode(metadonees[1]));
+                case "IA2":joueurs[k] = new JoueurIADifficile(metadonees[0],Color.decode(metadonees[1]));
             }
         }
 
@@ -116,7 +117,9 @@ public class LecteurRedacteur {
         for (int i = 0; i < plateau.nbjoueur; i++) {
             stream.write(joueurs[i].nom.getBytes());
             stream.write(' ');
-            stream.write(IntToChar(joueurs[i].couleur.byteValue()));
+            
+            //Transforme la couleur du joueur en chaine de char puis en byte
+            stream.write(joueurs[i].couleur.toString().getBytes());
             stream.write(' ');
             if(joueurs[i] instanceof JoueurHumain)
                 stream.write("HUMAIN".getBytes());
