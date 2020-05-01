@@ -7,6 +7,13 @@ public class Tools{
     public final static int ROUGE = 1;
     public final static int BLANC = 2;
     public final static int NOIR = 3;
+    
+    public static enum IALevel {
+        Player,
+        Easy,
+        Medium,
+        Hard,
+    }
 
     public static enum Dir {
         NO,
