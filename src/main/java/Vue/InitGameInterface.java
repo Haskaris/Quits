@@ -10,15 +10,17 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class InterfaceInit extends JPanel {
+public class InitGameInterface extends JPanel {
     private JButton buttonRules;
     private JLabel rulesMod;
     private JComboBox listMod;
     private JButton buttonPlay;
     private JPanel editPlayers;
+    private MainInterface parent;
     
-    public InterfaceInit() {
+    public InitGameInterface(MainInterface parent) {
         super();
+        this.parent = parent;
         this.rulesMod = new JLabel("Mode de jeu :");
         this.buttonRules = new JButton("Règles");
         this.buttonPlay = new JButton("Jouer");
@@ -50,6 +52,10 @@ public class InterfaceInit extends JPanel {
                     break;
             }
             this.updateUI();
+        });
+        
+        this.buttonPlay.addActionListener((ActionEvent e) -> {
+            parent.changeForGame();
         });
         this.add(buttonRules);
         this.add(rulesMod);
