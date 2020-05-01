@@ -1,12 +1,13 @@
 package Modele.Joueurs;
 
 import Modele.Coup;
+import java.awt.Color;
 
 import java.util.List;
 
 public class JoueurIANormale extends Joueur {
 
-    public JoueurIANormale(String _nom, int _couleur) {
+    public JoueurIANormale(String _nom, Color _couleur) {
         super(_nom, _couleur);
     }
 

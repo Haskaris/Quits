@@ -1,18 +1,24 @@
 package Modele.Joueurs;
 
 import Modele.Coup;
+import java.awt.Color;
 
 import java.util.List;
 
 public abstract class Joueur {
     public String nom;
-    public Integer couleur;
+    //public Integer couleur;
+    public Color couleur;
 
-    public Joueur(String _nom, int _couleur){
+    /*public Joueur(String _nom, int _couleur){
+        nom = _nom;
+        couleur = _couleur;
+    }*/
+    
+    public Joueur(String _nom, Color _couleur){
         nom = _nom;
         couleur = _couleur;
     }
-
 
     /**
      * Le joueur devra à ce moment jouer (lancer l'ia ou récupérer l'entrée utilisateur)
