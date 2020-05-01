@@ -1,7 +1,7 @@
 
 package Controleur;
 
-import Global.Tools.IALevel;
+import Global.Tools.AILevel;
 import Modele.GameManager;
 import Modele.Joueurs.*;
 import java.awt.Color;
@@ -30,7 +30,7 @@ public class Mediateur {
         return new JoueurIADifficile(playerName, color);
     }
     
-    public void addPlayer(String playerName, Color color, IALevel level) {
+    public void addPlayer(String playerName, Color color, AILevel level) {
         switch(level) {
             case Player:
                 this.managerDeJeu.addPlayer(newPlayerHuman(playerName, color));
