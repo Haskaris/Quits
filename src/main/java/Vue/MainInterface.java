@@ -12,10 +12,6 @@ public class MainInterface extends JFrame {
     GameInterface gameInterface;
     Mediateur mediateur;
     
-    public static void main(String argv[]) {
-        new MainInterface();
-    }
-    
     public MainInterface() {
         super();
         this.setTitle("Quits");
