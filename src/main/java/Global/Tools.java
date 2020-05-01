@@ -8,7 +8,7 @@ public class Tools{
     public final static int BLANC = 2;
     public final static int NOIR = 3;
     
-    public static enum IALevel {
+    public static enum AILevel {
         Player,
         Easy,
         Medium,
