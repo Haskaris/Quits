@@ -43,7 +43,7 @@ public class GameManager {
      */
     public static Plateau plateau;
     public static MainInterface interfacegraphique;
-    public ArrayList<Joueur> joueurs = new ArrayList<>();
+    public static ArrayList<Joueur> joueurs = new ArrayList<>();
     public static Historique historique;
     public static int joueurcourant ;
 
@@ -77,14 +77,14 @@ public class GameManager {
      * Ajoute un joueur à la liste de joueur
      * @param player joueur à ajouter
      */
-    public void addPlayer(Joueur player) {
-        this.joueurs.add(player);
+    public static void addPlayer(Joueur player) {
+        GameManager.joueurs.add(player);
     }
 
     /**
      *  Joue les tours de la partie. S'arrete à la fin
      */
-    public void JouerTour(){
+    public static void JouerTour(){
         while(FinTour()){
             List<Coup> coupspossible = new CalculateurCoup(joueurcourant,plateau.BillesJoueur(joueurcourant)).CoupsPossible();
             //Coup coup = joueurs[joueurcourant].Jouer(coupspossible);
@@ -120,7 +120,7 @@ public class GameManager {
     /**
      * Charge une partie
      */
-    public void ChargerPartie(){
+    public static void ChargerPartie(){
         /*try {
             LecteurRedacteur lr = new LecteurRedacteur("default.save");
             lr.LitPartie();

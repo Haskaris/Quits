@@ -7,11 +7,8 @@ import Modele.Joueurs.*;
 import java.awt.Color;
 
 public class Mediateur {
-    //Voué à mourir
-    GameManager managerDeJeu;
     
     public Mediateur() {
-        managerDeJeu = new GameManager();
     }
     
     private Joueur newPlayerHuman(String playerName, Color color) {
@@ -33,21 +30,21 @@ public class Mediateur {
     public void addPlayer(String playerName, Color color, AILevel level) {
         switch(level) {
             case Player:
-                this.managerDeJeu.addPlayer(newPlayerHuman(playerName, color));
+                GameManager.addPlayer(newPlayerHuman(playerName, color));
                 break;
             case Easy:
-                this.managerDeJeu.addPlayer(newPlayerAIEeasy(playerName, color));
+                GameManager.addPlayer(newPlayerAIEeasy(playerName, color));
                 break;
             case Hard:
-                this.managerDeJeu.addPlayer(newPlayerAIHard(playerName, color));
+                GameManager.addPlayer(newPlayerAIHard(playerName, color));
                 break;
             case Medium:
-                this.managerDeJeu.addPlayer(newPlayerAIMedium(playerName, color));
+                GameManager.addPlayer(newPlayerAIMedium(playerName, color));
                 break;
         }
     }
     
     public Joueur getPlayer(int index) {
-        return this.managerDeJeu.joueurs.get(index);
+        return GameManager.joueurs.get(index);
     }
 }
