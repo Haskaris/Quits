@@ -1,9 +1,11 @@
 package Vue;
 
+import java.awt.Component;
 import java.awt.FlowLayout; //Peut être à changer
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -55,13 +57,28 @@ public class InitGameInterface extends JPanel {
         });
         
         this.buttonPlay.addActionListener((ActionEvent e) -> {
-            parent.changeForGame();
+            parent.initGame();
         });
         this.add(buttonRules);
         this.add(rulesMod);
         this.add(listMod);
         this.add(editPlayers);
         this.add(buttonPlay);
+    }
+    
+    public ArrayList<EditPlayer> getEditPlayers() {
+        ArrayList<EditPlayer> tmp = new ArrayList<>();
+        //Je récupère tous le contenu de mon panel editPlayers
+        //Il ne devrait y avoir que des EditPlayers
+        Component[] components = this.editPlayers.getComponents();
+        for (Component c: components) {
+            //Si le component récupéré est un EditPlayer
+            if (c.getClass().equals(EditPlayer.class)) {
+                //Je l'ajoute à ma liste
+                tmp.add((EditPlayer)c);
+            }
+        }
+        return tmp;
     }
     
 }
