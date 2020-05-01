@@ -53,7 +53,7 @@ class CoupTest {
 
     @Test
     public void TestEntreeController() {
-        Joueur joueur = new JoueurIANormale("IA0",0);
+        Joueur joueur = new JoueurIANormale("IA0",Color.RED);
         List<Coup> coupspossible = new CalculateurCoup(0,GameManager.plateau.BillesJoueur(0)).CoupsPossible();
         LecteurRedacteur.AffichePartie(GameManager.plateau);
         GameManager.historique.Faire(joueur.Jouer(coupspossible));

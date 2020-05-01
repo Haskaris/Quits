@@ -3,6 +3,7 @@ package Modele;
 import Modele.Joueurs.Joueur;
 import Modele.Joueurs.JoueurIANormale;
 import Modele.Support.Plateau;
+import java.awt.Color;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +16,9 @@ class LecteurRedacteurTest {
     int nbjoueurtest = 2;
     int tailletest = 5;
     String nomtest0 = "Default1";
-    int couleurtest0 = 0;
+    Color couleurtest0 = Color.BLUE;
     String nomtest1 = "Default2";
-    int couleurtest1 = 1;
+    Color couleurtest1 = Color.GREEN;
     int joueurcouranttest = 0;
 
     @Test
