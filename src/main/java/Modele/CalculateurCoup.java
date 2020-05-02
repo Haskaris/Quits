@@ -25,7 +25,7 @@ public class CalculateurCoup {
     Plateau plateau;
     Joueur joueur;
     Dir joueurpos;
-    Bille[] billes;
+    List<Bille> billes;
     List<Coup> coups;
     Coup derniercoup;
 

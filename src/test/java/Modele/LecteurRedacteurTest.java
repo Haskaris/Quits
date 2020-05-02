@@ -25,9 +25,9 @@ class LecteurRedacteurTest {
     void ecrisPartie() {
         try {
             Plateau plateau = new Plateau(nbjoueurtest, tailletest);
-            Joueur[] joueurs = new Joueur[2];
-            joueurs[0] = new JoueurIANormale(nomtest0, couleurtest0);
-            joueurs[1] = new JoueurIANormale(nomtest1, couleurtest1);
+            plateau.joueurs = new Joueur[2];
+            plateau.joueurs[0] = new JoueurIANormale(nomtest0, couleurtest0);
+            plateau.joueurs[1] = new JoueurIANormale(nomtest1, couleurtest1);
 
             new LecteurRedacteur(pathtest).EcrisPartie(plateau);
 

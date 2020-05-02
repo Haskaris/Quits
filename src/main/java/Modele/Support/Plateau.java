@@ -33,9 +33,9 @@ public class Plateau {
                 grille[i][j]=new Tuile();
 
         if(nbjoueur == 2 )
-            Init2Players(joueurs);
+            Init2Players();
         if(nbjoueur == 4)
-            Init4Players(joueurs);
+            Init4Players();
 
         historique = new Historique(this);
         joueurcourant = 0;
@@ -126,45 +126,29 @@ public class Plateau {
     }
 
     /**
-     * Place une nouvelle bille de la couleur précisé, aux coordonnées précisées
+     * Place une nouvelle bille de la couleur précisé, aux coordonnées précisées, et l'ajoute à son joueur
      */
-    public void PlacerBilleAt(int x, int y,int couleur){
-        grille[x][y].MettreBille(new Bille(couleur),new Point(x,y));
+    public void PlacerNouvelleBilleA(int x, int y, int couleur){
+        Bille b = new Bille(couleur);
+        joueurs[couleur].billes.add(b);
+        grille[x][y].MettreBille(b,new Point(x,y));
     }
-    /**
-     * Place une bille donnée, aux coordonnées précisées
-     */
-    public void PlacerBilleAt(int x, int y,Bille bille){
-        grille[x][y].MettreBille(bille,new Point(x,y));
-    }
+
 
     /**
      * Initialise le plateau avec les règles 2 joueurs classiques
      */
-    private void Init2Players(Joueur[] joueurs){
+    private void Init2Players(){
         int l =  grille.length;
         boolean pair = l%2==0;
 
-        for (int i = 0; i < joueurs.length; i++) {
-            if(pair)
-                joueurs[i].billes = new Bille[grille.length-1];
-            else
-                joueurs[i].billes = new Bille[grille.length];
-            for (int j = 0; j < joueurs[i].billes.length; j++) {
-                joueurs[i].billes[j] = new Bille(i);
-            }
-        }
-
-        int pos0 = 0, pos1 = 0;
         for (int i = 0; i < l; i++) {
             for (int j = 0; j < l; j++) {
                 if((pair && (j == l/2 - i - 1 || j == l/2 - i - 2)) || (!pair && (j == l/2 - i || j == l/2 - i - 1))) {
-                    PlacerBilleAt(i, j, joueurs[0].billes[pos0]);
-                    pos0++;
+                    PlacerNouvelleBilleA(i, j, 0);
                 }
                 if(j == 3*l/2 - i || j == 3*l/2 - i - 1){
-                    PlacerBilleAt(i,j,joueurs[1].billes[pos1]);
-                    pos1++;
+                    PlacerNouvelleBilleA(i, j, 1);
                 }
             }
         }
@@ -174,37 +158,34 @@ public class Plateau {
     /**
      * Initialise le plateau avec les règles 4 joueurs classiques
      */
-    private void Init4Players(Joueur[] joueurs){
+    private void Init4Players(){
         int l =  grille.length;
-        for (int i = 0; i < joueurs.length; i++) {
-            joueurs[i].billes=new Bille[grille.length/2*2-1];
-            for (int j = 0; j < joueurs[i].billes.length; j++) {
-                joueurs[i].billes[j] = new Bille(i);
-            }
-        }
 
-        int pos0 = 0, pos1 = 0, pos2 = 0,pos3 = 0;
         for (int i = 0; i < l; i++) {
 
             if(i<l/2) {
-                PlacerBilleAt(0,i,joueurs[0].billes[pos0]);
-                pos0++;
-                if(i!=0){PlacerBilleAt(i,0,joueurs[0].billes[pos0]);
-                pos0++;}
-                if(i!=0){PlacerBilleAt(l-1,1,joueurs[3].billes[pos3]);
-                pos3++;}
-                PlacerBilleAt(i,l-1,joueurs[1].billes[pos1]);
-                pos1++;
+                PlacerNouvelleBilleA(0,i,0);
+
+                if(i!=0)
+                    PlacerNouvelleBilleA(i,0,0);
+
+                if(i!=0)
+                    PlacerNouvelleBilleA(l-1,1,3);
+
+                PlacerNouvelleBilleA(i,l-1,1);
             }
+
             if(i>l/2) {
-                PlacerBilleAt(i,0,joueurs[3].billes[pos3]);
-                pos3++;
-                if(i!=l-1){PlacerBilleAt(0,i,joueurs[1].billes[pos1]);
-                pos1++;}
-                PlacerBilleAt(l-1,i,joueurs[2].billes[pos2]);
-                pos2++;
-                if(i!=l-1){PlacerBilleAt(i,l-1,joueurs[2].billes[pos2]);
-                pos2++;}
+                PlacerNouvelleBilleA(i,0,3);
+
+                if(i!=l-1)
+                    PlacerNouvelleBilleA(0,i,1);
+
+                PlacerNouvelleBilleA(l-1,i,2);
+
+                if(i!=l-1)
+                    PlacerNouvelleBilleA(i,l-1,2);
+
             }
         }
     }

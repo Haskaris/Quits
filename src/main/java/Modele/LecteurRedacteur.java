@@ -22,31 +22,15 @@ public class LecteurRedacteur {
         //InputStream in_stream = ClassLoader.getSystemClassLoader().getResourceAsStream("Sauvegardes/" + filepath);
         InputStream in_stream = new FileInputStream("Sauvegardes/" + filepath);
 
-        //On recupère la taille et le nombre de joueurs
+        //On lit la taille et le nombre de joueurs
         String[] firstline = ReadLine(in_stream).split(" ");
         int taille = Integer.parseInt(firstline[0]);
-        System.out.println("Taille = " + taille);
         int nbjoueur = Integer.parseInt(firstline[1]);
-        System.out.println("NbJoueur = " + nbjoueur);
 
-        //On ecrit le plateau
         Plateau plateau = new Plateau(0,taille);
+
+        //On lit les infos sur les joueurs
         plateau.joueurs = new Joueur[nbjoueur];
-
-        byte[] data = new byte[1];
-        int i=0,j=0;
-        while(i<taille) {
-            in_stream.read(data);
-            if(data[0] != '\n'){
-                if (data[0] != '9')
-                    plateau.PlacerBilleAt(i, j, Character.getNumericValue(data[0]));
-                j++;
-            }else {
-                i++;
-                j=0;
-            }
-        }
-
         for (int k = 0; k < nbjoueur; k++) {
             //Format : NOM COULEUR TYPE
             String[] metadonees = ReadLine(in_stream).split(" ");
@@ -56,6 +40,23 @@ public class LecteurRedacteur {
                 case "IA0":plateau.joueurs[k] = new JoueurIAFacile(metadonees[0],Integer.parseInt(metadonees[1]));
                 case "IA1":plateau.joueurs[k] = new JoueurIANormale(metadonees[0],Integer.parseInt(metadonees[1]));
                 case "IA2":plateau.joueurs[k] = new JoueurIADifficile(metadonees[0],Integer.parseInt(metadonees[1]));
+            }
+        }
+
+
+        //On lit le plateau
+        byte[] data = new byte[1];
+        int i=0,j=0;
+        while(i<taille) {
+            in_stream.read(data);
+            if(data[0] != '\n'){
+                if (data[0] != '9'){
+                    plateau.PlacerNouvelleBilleA(i, j, Character.getNumericValue(data[0]));
+                }
+                j++;
+            }else {
+                i++;
+                j=0;
             }
         }
 
@@ -97,13 +98,6 @@ public class LecteurRedacteur {
         stream.write((byte)IntToChar(plateau.joueurs.length));
         stream.write('\n');
 
-        //Contenu du plateau
-        Tuile[][] tab = plateau.GetGrille();
-        for(int i=0;i<tab.length;i++){
-            for(int j=0;j<tab[0].length;j++)
-                stream.write((byte)IntToChar(tab[i][j].CouleurBille()));
-            stream.write('\n');
-        }
         //Info sur les joueurs
         for (int i = 0; i < plateau.joueurs.length; i++) {
             stream.write(plateau.joueurs[i].nom.getBytes());
@@ -123,6 +117,13 @@ public class LecteurRedacteur {
             stream.write('\n');
         }
 
+    //Contenu du plateau
+    Tuile[][] tab = plateau.GetGrille();
+    for(int i=0;i<tab.length;i++){
+        for(int j=0;j<tab[0].length;j++)
+            stream.write((byte)IntToChar(tab[i][j].CouleurBille()));
+        stream.write('\n');
+    }
     stream.write('\n');
     stream.flush();
     stream.close();
