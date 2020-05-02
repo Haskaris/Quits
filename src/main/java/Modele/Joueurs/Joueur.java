@@ -3,16 +3,18 @@ package Modele.Joueurs;
 import Modele.Coup;
 import Modele.Support.Bille;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Joueur {
     public String nom;
     public Integer couleur;
-    public Bille[] billes;
+    public List<Bille> billes;
 
     public Joueur(String _nom, int _couleur){
         nom = _nom;
         couleur = _couleur;
+        billes = new ArrayList<>();
     }
 
 

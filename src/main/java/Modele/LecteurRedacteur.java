@@ -33,13 +33,16 @@ public class LecteurRedacteur {
         Plateau plateau = new Plateau(0,taille);
         plateau.joueurs = new Joueur[nbjoueur];
 
+
+
         byte[] data = new byte[1];
         int i=0,j=0;
         while(i<taille) {
             in_stream.read(data);
             if(data[0] != '\n'){
-                if (data[0] != '9')
-                    plateau.PlacerBilleAt(i, j, Character.getNumericValue(data[0]));
+                if (data[0] != '9'){
+                    plateau.PlacerNouvelleBilleA(i, j, Character.getNumericValue(data[0]));
+                }
                 j++;
             }else {
                 i++;
