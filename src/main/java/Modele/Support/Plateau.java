@@ -1,20 +1,27 @@
 package Modele.Support;
 
+import Global.Configuration;
 import Global.Tools;
 import Modele.Joueurs.Joueur;
+import Modele.Joueurs.JoueurIAFacile;
 
 import java.awt.*;
 
 public class Plateau {
-    public int nbjoueur;
     private Tuile[][] grille;
+    public Joueur[] joueurs;
+    public int joueurcourant;
 
     /**
      * Initialise un plateau avec le nombre de joueur et la taille précisé.
      * Pour fonctionner pleinement avec le GameManager, ces deux chiffres doivent etre ceux de Configuration
      */
-    public Plateau(int _nbjoueur, int taille, Joueur[] joueurs){
-        nbjoueur = _nbjoueur;
+    public Plateau(int nbjoueur, int taille){
+        joueurs = new Joueur[nbjoueur];
+        for (int i = 0; i < nbjoueur; i++) {
+            joueurs[i] = new JoueurIAFacile("Default",i);
+        }
+
         grille = new Tuile [taille][taille];
         for (int i = 0; i < taille; i++)
             for (int j = 0; j < taille; j++)
@@ -24,6 +31,8 @@ public class Plateau {
             Init2Players(joueurs);
         if(nbjoueur == 4)
             Init4Players(joueurs);
+
+        joueurcourant = 0;
     }
 
     /**
@@ -158,6 +167,9 @@ public class Plateau {
         }
     }
 
+    public Joueur JoueurCourant(){
+        return joueurs[joueurcourant];
+    }
 
     public Tuile[][]GetGrille(){
         return grille;

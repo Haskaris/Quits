@@ -42,24 +42,19 @@ public class GameManager {
      */
     public static Plateau plateau;
     public static InterfaceGraphique interfacegraphique;
-    public static Joueur[] joueurs = new Joueur[4];
     public static Historique historique;
-    public static int joueurcourant ;
 
     /**
      * Permet d'initialiser une partie. Les parametres de la partie sont definies dans Configuration
      */
     public static void InstanceGame(){
-        for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
-            joueurs[i] = new JoueurIAFacile("Default",i);
-        }
-        plateau = new Plateau((Integer)Configuration.Lis("Joueurs"),(Integer)Configuration.Lis("Taille"),joueurs);
+
+        plateau = new Plateau((Integer)Configuration.Lis("Joueurs"),(Integer)Configuration.Lis("Taille"));
 
 
 
         interfacegraphique = new InterfaceGraphique();
         historique = new Historique();
-        joueurcourant = 0;
 
         LecteurRedacteur.AffichePartie(plateau);
         JouerTour();
@@ -70,8 +65,8 @@ public class GameManager {
      */
     public static void JouerTour(){
         while(FinTour()){
-            List<Coup> coupspossible = new CalculateurCoup(joueurcourant,joueurs[joueurcourant].billes).CoupsPossible();
-            Coup coup = joueurs[joueurcourant].Jouer(coupspossible);
+            List<Coup> coupspossible = new CalculateurCoup(plateau.JoueurCourant()).CoupsPossible();
+            Coup coup = plateau.JoueurCourant().Jouer(coupspossible);
             historique.Faire(coup);
             LecteurRedacteur.AffichePartie(plateau);
         }
@@ -82,19 +77,19 @@ public class GameManager {
      */
     private static boolean FinTour(){
         boolean estfini = true;
-        for (Bille bille:joueurs[joueurcourant].billes) {
+        for (Bille bille:plateau.JoueurCourant().billes) {
             if(!bille.EstSortie())
                 estfini = false;
         }
 
         if(estfini){
-            System.out.println("Joueur " + joueurcourant + " a gagné");
+            System.out.println("Joueur " + plateau.joueurcourant + " a gagné");
             return false;
         }
 
-        joueurcourant++;
-        if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
-            joueurcourant =0;
+        plateau.joueurcourant ++;
+        if(plateau.joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
+            plateau.joueurcourant =0;
         return true;
     }
 
@@ -105,11 +100,7 @@ public class GameManager {
      */
     public static void ChargerPartie(){
         try {
-            LecteurRedacteur lr = new LecteurRedacteur("default.save");
-            lr.LitPartie();
-            plateau = lr.plateau;
-            joueurs = lr.joueurs;
-            joueurcourant = lr.joueurcourant;
+            plateau = new LecteurRedacteur("default.save").LitPartie();
         }
         catch (Exception e){
             System.out.println("Erreur de chargement de la partie");
@@ -126,7 +117,7 @@ public class GameManager {
      */
     public static void EnregistrerPartie(){
         try {
-            new LecteurRedacteur("default.save",plateau,joueurs,joueurcourant).EcrisPartie();
+            new LecteurRedacteur("default.save").EcrisPartie(plateau);
         }
         catch (Exception e){
             System.out.println("Erreur d'enregistrement de la partie");

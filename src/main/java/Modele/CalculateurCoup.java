@@ -1,6 +1,7 @@
 package Modele;
 
 import Global.Tools;
+import Modele.Joueurs.Joueur;
 import Modele.Support.Bille;
 
 import java.awt.*;
@@ -21,16 +22,16 @@ public class CalculateurCoup {
      * Crée la liste de coup possible pour un joueur
      */
 
-    int joueur;
+    Joueur joueur;
     Dir joueurpos;
     Bille[] billes;
     List<Coup> coups;
 
-    CalculateurCoup(int _joueur, Bille[] _billes){
+    CalculateurCoup(Joueur _joueur){
         joueur = _joueur;
-        billes = _billes;
+        billes = joueur.billes;
         coups = new ArrayList<>();
-        joueurpos = Tools.IntToDir(joueur);
+        joueurpos = Tools.IntToDir(joueur.couleur);
     }
 
     public List<Coup> CoupsPossible(){
