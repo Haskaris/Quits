@@ -1,12 +1,19 @@
 package Modele;
 
+import Modele.Support.Plateau;
+
 public class Historique {
+    Plateau plateau;
     Coup passe;
     Coup futur;
 
+    public Historique(Plateau _plateau){
+        plateau = _plateau;
+    }
+
     public void Faire(Coup c){
         if(c == null) return ; // Correspond a une impossibilite de se deplacer pour le player. Rien n'est enregistre
-        c.Execute();
+        c.Execute(plateau);
         c.next = passe;
         passe = c;
         futur = null;
@@ -18,7 +25,7 @@ public class Historique {
         passe.next = null;
         futur = passe;
         passe = c;
-        futur.Dexecute();
+        futur.Dexecute(plateau);
     }
 
     public void Refaire(){
@@ -27,7 +34,7 @@ public class Historique {
         futur.next = null;
         passe = futur;
         futur = c;
-        passe.Execute();
+        passe.Execute(plateau);
     }
 
     public boolean PasseEstVide(){
@@ -36,4 +43,5 @@ public class Historique {
     public boolean FuturEstVide(){
         return futur == null;
     }
+    public Coup DernierCoup(){return passe;}
 }

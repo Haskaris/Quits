@@ -2,19 +2,24 @@ package Modele.Support;
 
 import Global.Configuration;
 import Global.Tools;
+import Modele.CalculateurCoup;
+import Modele.Coup;
+import Modele.Historique;
 import Modele.Joueurs.Joueur;
 import Modele.Joueurs.JoueurIAFacile;
+import Modele.LecteurRedacteur;
 
 import java.awt.*;
+import java.util.List;
 
 public class Plateau {
     private Tuile[][] grille;
     public Joueur[] joueurs;
     public int joueurcourant;
+    public Historique historique;
 
     /**
      * Initialise un plateau avec le nombre de joueur et la taille précisé.
-     * Pour fonctionner pleinement avec le GameManager, ces deux chiffres doivent etre ceux de Configuration
      */
     public Plateau(int nbjoueur, int taille){
         joueurs = new Joueur[nbjoueur];
@@ -32,8 +37,45 @@ public class Plateau {
         if(nbjoueur == 4)
             Init4Players(joueurs);
 
+        historique = new Historique(this);
         joueurcourant = 0;
     }
+
+    /**
+     *  Joue les tours de la partie. S'arrete à la fin
+     */
+    public void JouePartie(){
+        while(FinTour()){
+            List<Coup> coupspossible = new CalculateurCoup(this,JoueurCourant()).CoupsPossible();
+            Coup coup = JoueurCourant().Jouer(coupspossible);
+            historique.Faire(coup);
+            LecteurRedacteur.AffichePartie(this);
+        }
+
+    }
+
+    /**
+     * Clot un tour. Verifie les conditions de victoire et passe au joueur suivant
+     */
+    private boolean FinTour(){
+        boolean estfini = true;
+        for (Bille bille:JoueurCourant().billes) {
+            if(!bille.EstSortie())
+                estfini = false;
+        }
+
+        if(estfini){
+            System.out.println("Joueur " + joueurcourant + " a gagné");
+            return false;
+        }
+
+        joueurcourant ++;
+        if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
+            joueurcourant =0;
+        return true;
+    }
+
+
 
     /**
      * Deplace la bille précisée, dans la direction précisé. Aucune vérification
