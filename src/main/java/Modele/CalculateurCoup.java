@@ -1,14 +1,15 @@
 package Modele;
 
 import Global.Tools;
+import Modele.Joueurs.Joueur;
 import Modele.Support.Bille;
+import Modele.Support.Plateau;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static Global.Tools.DirToPoint;
-import static Modele.GameManager.plateau;
 import static Global.Tools.Dir;
 import static Global.Tools.Dir.NO;
 import static Global.Tools.Dir.NE;
@@ -21,16 +22,20 @@ public class CalculateurCoup {
      * Crée la liste de coup possible pour un joueur
      */
 
-    int joueur;
+    Plateau plateau;
+    Joueur joueur;
     Dir joueurpos;
     Bille[] billes;
     List<Coup> coups;
+    Coup derniercoup;
 
-    CalculateurCoup(int _joueur, Bille[] _billes){
-        joueur = _joueur;
-        billes = _billes;
+    public CalculateurCoup(Plateau _plateau,Joueur _joueur){
+        plateau = _plateau;
+        joueur = plateau.JoueurCourant();
+        billes = joueur.billes;
         coups = new ArrayList<>();
-        joueurpos = Tools.IntToDir(joueur);
+        joueurpos = Tools.IntToDir(joueur.couleur);
+        derniercoup = plateau.historique.DernierCoup();
     }
 
     public List<Coup> CoupsPossible(){
@@ -41,16 +46,15 @@ public class CalculateurCoup {
 
 
     private void DeplacementsTuile() {
-        Coup dernier = GameManager.historique.passe;
         for (int i = 0; i < plateau.GetGrille().length ; i++) {
-            if(TuileEstLibre(0,i) && !SontCoupInverse(dernier,new Coup(new Point(-1,i),false)))
-                coups.add(new Coup(new Point(-1,i),false));
-            if(TuileEstLibre(plateau.GetGrille().length-1,i) && !SontCoupInverse(dernier,new Coup(new Point(-1,i),true)))
-                coups.add(new Coup(new Point(-1,i),true));
-            if(TuileEstLibre(i,0)  && !SontCoupInverse(dernier,new Coup(new Point(i,-1),false)))
-                coups.add(new Coup(new Point(i,-1),false));
-            if(TuileEstLibre(i, plateau.GetGrille().length-1)&& !SontCoupInverse(dernier,new Coup(new Point(i,-1),true)))
-                coups.add(new Coup(new Point(i,-1),true));
+            if(TuileEstLibre(0,i) && !SontCoupInverse(derniercoup,new Coup(new Point(-1,i),false,joueur)))
+                coups.add(new Coup(new Point(-1,i),false,joueur));
+            if(TuileEstLibre(plateau.GetGrille().length-1,i) && !SontCoupInverse(derniercoup,new Coup(new Point(-1,i),true,joueur)))
+                coups.add(new Coup(new Point(-1,i),true,joueur));
+            if(TuileEstLibre(i,0)  && !SontCoupInverse(derniercoup,new Coup(new Point(i,-1),false,joueur)))
+                coups.add(new Coup(new Point(i,-1),false,joueur));
+            if(TuileEstLibre(i, plateau.GetGrille().length-1)&& !SontCoupInverse(derniercoup,new Coup(new Point(i,-1),true,joueur)))
+                coups.add(new Coup(new Point(i,-1),true,joueur));
         }
     }
 
@@ -67,13 +71,13 @@ public class CalculateurCoup {
         for (Bille b:billes) {
             if(!b.EstSortie()){
                 if(joueurpos != NO && TuileEstLibre(add(b.PositionGet(),DirToPoint(NO))))
-                    coups.add(new Coup(b,NO));
+                    coups.add(new Coup(b,NO,joueur));
                 if(joueurpos != NE && TuileEstLibre(add(b.PositionGet(),DirToPoint(NE))))
-                    coups.add(new Coup(b,NE));
+                    coups.add(new Coup(b,NE,joueur));
                 if(joueurpos != SE && TuileEstLibre(add(b.PositionGet(),DirToPoint(SE))))
-                    coups.add(new Coup(b,SE));
+                    coups.add(new Coup(b,SE,joueur));
                 if(joueurpos != SO && TuileEstLibre(add(b.PositionGet(),DirToPoint(SO))))
-                    coups.add(new Coup(b,SO));
+                    coups.add(new Coup(b,SO,joueur));
             }
         }
     }

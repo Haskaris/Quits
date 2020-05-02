@@ -2,6 +2,7 @@ package Modele;
 
 import Modele.Joueurs.Joueur;
 import Modele.Support.Bille;
+import Modele.Support.Plateau;
 
 import static Global.Tools.Dir;
 import static Global.Tools.InverseDir;
@@ -26,36 +27,36 @@ public class Coup {
     /**
     * On veut jouer un deplacement de bille
     */
-    public Coup(Bille _bille, Dir _dir/*,Joueur_Interface _joueur*/) {
+    public Coup(Bille _bille, Dir _dir,Joueur _joueur) {
         bille = _bille;
         direction = _dir;
-        //joueur = _joueur;
+        joueur = _joueur;
     }
 
     /**
      * On veut jouer un deplacement de ligne
      */
-    public Coup(Point _rangee, Boolean _positif/*,Joueur_Interface _joueur*/) {
+    public Coup(Point _rangee, Boolean _positif, Joueur _joueur) {
         rangee = _rangee;
         positif = _positif;
-        //joueur = _joueur;
+        joueur = _joueur;
     }
 
-    public void Execute() {
+    public void Execute(Plateau plateau) {
         if(bille!=null){
-            GameManager.plateau.DeplacerBille(bille, direction);
+            plateau.DeplacerBille(bille, direction);
         }
         if(rangee != null){
-            GameManager.plateau.DeplacerRangee(rangee,positif);
+            plateau.DeplacerRangee(rangee,positif);
         }
     }
 
-    public void Dexecute(){
+    public void Dexecute(Plateau plateau){
         if(bille!=null){
-            GameManager.plateau.DeplacerBille(bille,InverseDir(direction));
+            plateau.DeplacerBille(bille,InverseDir(direction));
         }
         if(rangee != null){
-            GameManager.plateau.DeplacerRangee(rangee,!positif);
+            plateau.DeplacerRangee(rangee,!positif);
         }
     }
 

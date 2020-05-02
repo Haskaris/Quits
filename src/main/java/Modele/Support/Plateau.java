@@ -1,31 +1,81 @@
 package Modele.Support;
 
+import Global.Configuration;
 import Global.Tools;
+import Modele.CalculateurCoup;
+import Modele.Coup;
+import Modele.Historique;
+import Modele.Joueurs.Joueur;
+import Modele.Joueurs.JoueurIAFacile;
+import Modele.LecteurRedacteur;
 
 import java.awt.*;
+import java.util.List;
 
 public class Plateau {
-    public int nbjoueur;
     private Tuile[][] grille;
-    private Bille[][] billes;
+    public Joueur[] joueurs;
+    public int joueurcourant;
+    public Historique historique;
 
     /**
      * Initialise un plateau avec le nombre de joueur et la taille précisé.
-     * Pour fonctionner pleinement avec le GameManager, ces deux chiffres doivent etre ceux de Configuration
      */
-    public Plateau(int _nbjoueur, int taille){
-        nbjoueur = _nbjoueur;
+    public Plateau(int nbjoueur, int taille){
+        joueurs = new Joueur[nbjoueur];
+        for (int i = 0; i < nbjoueur; i++) {
+            joueurs[i] = new JoueurIAFacile("Default",i);
+        }
+
         grille = new Tuile [taille][taille];
         for (int i = 0; i < taille; i++)
             for (int j = 0; j < taille; j++)
                 grille[i][j]=new Tuile();
 
-        billes = new Bille[4][];
         if(nbjoueur == 2 )
-            Init2Players();
+            Init2Players(joueurs);
         if(nbjoueur == 4)
-            Init4Players();
+            Init4Players(joueurs);
+
+        historique = new Historique(this);
+        joueurcourant = 0;
     }
+
+    /**
+     *  Joue les tours de la partie. S'arrete à la fin
+     */
+    public void JouePartie(){
+        while(FinTour()){
+            List<Coup> coupspossible = new CalculateurCoup(this,JoueurCourant()).CoupsPossible();
+            Coup coup = JoueurCourant().Jouer(coupspossible);
+            historique.Faire(coup);
+            LecteurRedacteur.AffichePartie(this);
+        }
+
+    }
+
+    /**
+     * Clot un tour. Verifie les conditions de victoire et passe au joueur suivant
+     */
+    private boolean FinTour(){
+        boolean estfini = true;
+        for (Bille bille:JoueurCourant().billes) {
+            if(!bille.EstSortie())
+                estfini = false;
+        }
+
+        if(estfini){
+            System.out.println("Joueur " + joueurcourant + " a gagné");
+            return false;
+        }
+
+        joueurcourant ++;
+        if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
+            joueurcourant =0;
+        return true;
+    }
+
+
 
     /**
      * Deplace la bille précisée, dans la direction précisé. Aucune vérification
@@ -91,17 +141,17 @@ public class Plateau {
     /**
      * Initialise le plateau avec les règles 2 joueurs classiques
      */
-    private void Init2Players(){
+    private void Init2Players(Joueur[] joueurs){
         int l =  grille.length;
         boolean pair = l%2==0;
 
-        for (int i = 0; i < billes.length; i++) {
+        for (int i = 0; i < joueurs.length; i++) {
             if(pair)
-                billes[i]=new Bille[grille.length-1];
+                joueurs[i].billes = new Bille[grille.length-1];
             else
-                billes[i]=new Bille[grille.length];
-            for (int j = 0; j < billes[i].length; j++) {
-                billes[i][j] = new Bille(i);
+                joueurs[i].billes = new Bille[grille.length];
+            for (int j = 0; j < joueurs[i].billes.length; j++) {
+                joueurs[i].billes[j] = new Bille(i);
             }
         }
 
@@ -109,11 +159,11 @@ public class Plateau {
         for (int i = 0; i < l; i++) {
             for (int j = 0; j < l; j++) {
                 if((pair && (j == l/2 - i - 1 || j == l/2 - i - 2)) || (!pair && (j == l/2 - i || j == l/2 - i - 1))) {
-                    PlacerBilleAt(i, j, billes[0][pos0]);
+                    PlacerBilleAt(i, j, joueurs[0].billes[pos0]);
                     pos0++;
                 }
                 if(j == 3*l/2 - i || j == 3*l/2 - i - 1){
-                    PlacerBilleAt(i,j,billes[1][pos1]);
+                    PlacerBilleAt(i,j,joueurs[1].billes[pos1]);
                     pos1++;
                 }
             }
@@ -124,12 +174,12 @@ public class Plateau {
     /**
      * Initialise le plateau avec les règles 4 joueurs classiques
      */
-    private void Init4Players(){
+    private void Init4Players(Joueur[] joueurs){
         int l =  grille.length;
-        for (int i = 0; i < billes.length; i++) {
-            billes[i]=new Bille[grille.length/2*2-1];
-            for (int j = 0; j < billes[i].length; j++) {
-                billes[i][j] = new Bille(i);
+        for (int i = 0; i < joueurs.length; i++) {
+            joueurs[i].billes=new Bille[grille.length/2*2-1];
+            for (int j = 0; j < joueurs[i].billes.length; j++) {
+                joueurs[i].billes[j] = new Bille(i);
             }
         }
 
@@ -137,30 +187,30 @@ public class Plateau {
         for (int i = 0; i < l; i++) {
 
             if(i<l/2) {
-                PlacerBilleAt(0,i,billes[0][pos0]);
+                PlacerBilleAt(0,i,joueurs[0].billes[pos0]);
                 pos0++;
-                if(i!=0){PlacerBilleAt(i,0,billes[0][pos0]);
+                if(i!=0){PlacerBilleAt(i,0,joueurs[0].billes[pos0]);
                 pos0++;}
-                if(i!=0){PlacerBilleAt(l-1,1,billes[3][pos3]);
+                if(i!=0){PlacerBilleAt(l-1,1,joueurs[3].billes[pos3]);
                 pos3++;}
-                PlacerBilleAt(i,l-1,billes[1][pos1]);
+                PlacerBilleAt(i,l-1,joueurs[1].billes[pos1]);
                 pos1++;
             }
             if(i>l/2) {
-                PlacerBilleAt(i,0,billes[3][pos3]);
+                PlacerBilleAt(i,0,joueurs[3].billes[pos3]);
                 pos3++;
-                if(i!=l-1){PlacerBilleAt(0,i,billes[1][pos1]);
+                if(i!=l-1){PlacerBilleAt(0,i,joueurs[1].billes[pos1]);
                 pos1++;}
-                PlacerBilleAt(l-1,i,billes[2][pos2]);
+                PlacerBilleAt(l-1,i,joueurs[2].billes[pos2]);
                 pos2++;
-                if(i!=l-1){PlacerBilleAt(i,l-1,billes[2][pos2]);
+                if(i!=l-1){PlacerBilleAt(i,l-1,joueurs[2].billes[pos2]);
                 pos2++;}
             }
         }
     }
 
-    public Bille[] BillesJoueur(int couleur){
-        return billes[couleur];
+    public Joueur JoueurCourant(){
+        return joueurs[joueurcourant];
     }
 
     public Tuile[][]GetGrille(){
