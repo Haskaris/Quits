@@ -2,6 +2,7 @@ package Modele;
 
 import Global.Tools;
 import Modele.Joueurs.Joueur;
+import Modele.Joueurs.JoueurIAFacile;
 import Modele.Joueurs.JoueurIANormale;
 import Modele.Support.Bille;
 import Modele.Support.Plateau;
@@ -15,10 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CoupTest {
     Bille b;
+    Joueur joueurs[] = new Joueur[2];
 
     @BeforeEach
     public void init(){
-        GameManager.plateau = new Plateau(2,5);
+        joueurs[0] = new JoueurIAFacile("default",0);
+        joueurs[1] = new JoueurIAFacile("default",1);
+        GameManager.plateau = new Plateau(2,5,joueurs);
         b = new Bille (2);
         GameManager.historique = new Historique();
     }
@@ -53,13 +57,12 @@ class CoupTest {
 
     @Test
     public void TestEntreeController() {
-        Joueur joueur = new JoueurIANormale("IA0",0);
-        List<Coup> coupspossible = new CalculateurCoup(0,GameManager.plateau.BillesJoueur(0)).CoupsPossible();
+        List<Coup> coupspossible = new CalculateurCoup(0,joueurs[0].billes).CoupsPossible();
         LecteurRedacteur.AffichePartie(GameManager.plateau);
-        GameManager.historique.Faire(joueur.Jouer(coupspossible));
+        GameManager.historique.Faire(joueurs[0].Jouer(coupspossible));
         LecteurRedacteur.AffichePartie(GameManager.plateau);
-        coupspossible = new CalculateurCoup(1,GameManager.plateau.BillesJoueur(1)).CoupsPossible();
-        GameManager.historique.Faire(joueur.Jouer(coupspossible));
+        coupspossible = new CalculateurCoup(1,joueurs[1].billes).CoupsPossible();
+        GameManager.historique.Faire(joueurs[1].Jouer(coupspossible));
         LecteurRedacteur.AffichePartie(GameManager.plateau);
 
     }

@@ -50,11 +50,12 @@ public class GameManager {
      * Permet d'initialiser une partie. Les parametres de la partie sont definies dans Configuration
      */
     public static void InstanceGame(){
-        plateau = new Plateau((Integer)Configuration.Lis("Joueurs"),(Integer)Configuration.Lis("Taille"));
-
         for (int i = 0; i < (Integer)Configuration.Lis("Joueurs"); i++) {
-                joueurs[i] = new JoueurIAFacile("Default",i);
+            joueurs[i] = new JoueurIAFacile("Default",i);
         }
+        plateau = new Plateau((Integer)Configuration.Lis("Joueurs"),(Integer)Configuration.Lis("Taille"),joueurs);
+
+
 
         interfacegraphique = new InterfaceGraphique();
         historique = new Historique();
@@ -69,7 +70,7 @@ public class GameManager {
      */
     public static void JouerTour(){
         while(FinTour()){
-            List<Coup> coupspossible = new CalculateurCoup(joueurcourant,plateau.BillesJoueur(joueurcourant)).CoupsPossible();
+            List<Coup> coupspossible = new CalculateurCoup(joueurcourant,joueurs[joueurcourant].billes).CoupsPossible();
             Coup coup = joueurs[joueurcourant].Jouer(coupspossible);
             historique.Faire(coup);
             LecteurRedacteur.AffichePartie(plateau);
@@ -81,7 +82,7 @@ public class GameManager {
      */
     private static boolean FinTour(){
         boolean estfini = true;
-        for (Bille bille:plateau.BillesJoueur(joueurcourant)) {
+        for (Bille bille:joueurs[joueurcourant].billes) {
             if(!bille.EstSortie())
                 estfini = false;
         }
