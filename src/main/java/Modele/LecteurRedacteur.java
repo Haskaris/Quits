@@ -28,7 +28,7 @@ public class LecteurRedacteur {
         int taille = Integer.parseInt(firstline[0]);
         int nbjoueur = Integer.parseInt(firstline[1]);
 
-        Plateau plateau = new Plateau(0,taille);
+        Plateau plateau = new Plateau();
 
         //On lit les infos sur les joueurs
         plateau.joueurs = new Joueur[nbjoueur];
