@@ -7,23 +7,40 @@ package Vue;
 
 import Global.Configuration;
 import Modele.Support.Plateau;
+import Modele.Support.Tuile;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  *
  * @author Mathis
  */
 public class VuePlateau extends PlateauGraphique {
-    ImageQuits tuile;
+    ArrayList<ImageQuits> tuiles;
     Plateau plateau;
-    int hauteurtuile;
+    int largeurTuile;
+    int hauteurTuile;
+    
     
     // Décalage des éléments (pour pouvoir les animer)
     Vecteur[][] decalages;
     
     VuePlateau(Plateau plateau) {
         this.plateau = plateau;
-        tuile = lisImage("Tuile");
+        //tuile = lisImage("Tuile");
+        initTuile();
+    }
+    
+    private void initTuile() {
+        tuiles = new ArrayList<>();
+        tuiles.add(lisImage("Tuile1"));
+        tuiles.add(lisImage("Tuile2"));
+        tuiles.add(lisImage("Tuile3"));
+        tuiles.add(lisImage("Tuile4"));
+        tuiles.add(lisImage("Tuile5"));
+        tuiles.add(lisImage("Tuile6"));
+        tuiles.add(lisImage("Tuile7"));
+        tuiles.add(lisImage("Tuile8"));
     }
     
     private ImageQuits lisImage(String nom) {
@@ -47,23 +64,31 @@ public class VuePlateau extends PlateauGraphique {
             decalages = new Vecteur[5][5];
         }
         
+        largeurTuile = largeur() / 5;
+        hauteurTuile = hauteur() / 5;
+        
+        largeurTuile = Math.min(largeurTuile, hauteurTuile);
+        hauteurTuile = largeurTuile;
+        
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                int x = j * hauteurtuile;
-                int y = i * hauteurtuile;
-                tracer(tuile, x, y, hauteurtuile, hauteurtuile);
+                int x = j * largeurTuile;
+                int y = i * hauteurTuile;
+                Tuile currentTile = plateau.GetGrille()[i][j];
+                int index = currentTile.getIndexOfColor();
+                tracer(tuiles.get(index), x, y, largeurTuile, hauteurTuile);
             }
         }
     }
 
     @Override
     int hauteurCase() {
-        return hauteurtuile;
+        return hauteurTuile;
     }
 
     @Override
     int largeurCase() {
-        return hauteurtuile;
+        return largeurTuile;
     }
 
     @Override

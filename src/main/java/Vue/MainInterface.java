@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class MainInterface extends JFrame {
-    InitGameInterface initGameInterface;
-    GameInterface gameInterface;
+    InitGame initGameInterface;
     Mediateur mediateur;
     
     public MainInterface() {
@@ -21,10 +20,10 @@ public class MainInterface extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         //this.setMinimumSize(new Dimension(500,500));
-        //initGameInterface = new InitGameInterface(this);
+        initGameInterface = new InitGame(mediateur);
         //gameInterface = new GameInterface(this);
         
-        this.add(new InitGameAuto(mediateur));
+        this.add(initGameInterface);
         this.pack();
         this.setVisible(true);
     }
@@ -32,13 +31,15 @@ public class MainInterface extends JFrame {
     public void initGame() {
         //À mettre dans le mediateur ?
         //Ajout des joueurs dans la partie
-        ArrayList<EditPlayer> tmp = this.initGameInterface.getEditPlayers();
+        ArrayList<EditPlayer> tmp = this.initGameInterface.getEditsPlayers();
         for (EditPlayer e : tmp) {
-            this.mediateur.addPlayer(e.playerName.getText(), Color.yellow, e.aiLevel);
+            this.mediateur.addPlayer(e.playerName, e.playerColor, e.aiLevel);
         }
-        this.remove(initGameInterface);
-        this.add(gameInterface);
-        gameInterface.updatePlayer1(this.mediateur.getPlayer(0).nom);
-        this.repaint();
+        
+        //Pour "fermer" la fenêtre
+        this.setVisible(false);
+        
+        //Démarer la partie
+        GraphicInterface.demarrer(mediateur);
     }
 }
