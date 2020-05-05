@@ -28,6 +28,14 @@ public final class Configuration {
     private static Boolean Animations = true;
     private static int Taille = 5;
     private static int Joueurs = 2;
+    private static String Tuile1 = "TuilesIHM/tuile_couleur_1.png";
+    private static String Tuile2 = "TuilesIHM/tuile_couleur_2.png";
+    private static String Tuile3 = "TuilesIHM/tuile_couleur_3.png";
+    private static String Tuile4 = "TuilesIHM/tuile_couleur_4.png";
+    private static String Tuile5 = "TuilesIHM/tuile_couleur_5.png";
+    private static String Tuile6 = "TuilesIHM/tuile_couleur_6.png";
+    private static String Tuile7 = "TuilesIHM/tuile_couleur_7.png";
+    private static String Tuile8 = "TuilesIHM/tuile_couleur_8.png";
 
     public static Boolean Ecris(String S, Object valeur) {
         Field[] fields = instance().getClass().getDeclaredFields();
