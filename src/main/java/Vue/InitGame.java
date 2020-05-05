@@ -7,23 +7,24 @@ package Vue;
 
 import Controleur.Mediateur;
 import java.awt.Color;
-import javax.swing.Box;
+import java.awt.Component;
+import java.util.ArrayList;
 
 /**
  *
  * @author Mathis
  */
-public class InitGameAuto extends javax.swing.JPanel {
+public class InitGame extends javax.swing.JPanel {
 
     Mediateur mediateur;
     
     /**
      * Creates new form InitGameAuto
      */
-    public InitGameAuto(Mediateur mediateur) {
+    public InitGame(Mediateur mediateur) {
         initComponents();
-        this.editPlayers.add(new EditPlayerAuto("JoueurA", Color.BLUE));
-        this.editPlayers.add(new EditPlayerAuto("JoueurB", Color.RED));
+        this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
+        this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
         this.updateUI();
         this.mediateur = mediateur;
     }
@@ -106,18 +107,18 @@ public class InitGameAuto extends javax.swing.JPanel {
         this.editPlayers.removeAll();
             switch(this.gameModeList.getSelectedIndex()) {
                 case 0:
-                    this.editPlayers.add(new EditPlayerAuto("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayerAuto("JoueurB", Color.RED));
+                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
+                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
                     break;
                 case 1:
-                    this.editPlayers.add(new EditPlayerAuto("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayerAuto("JoueurB", Color.RED));
+                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
+                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
                     break;
                 case 2:
-                    this.editPlayers.add(new EditPlayerAuto("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayerAuto("JoueurB", Color.RED));
-                    this.editPlayers.add(new EditPlayerAuto("JoueurC", Color.YELLOW));
-                    this.editPlayers.add(new EditPlayerAuto("JoueurD", Color.GREEN));
+                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
+                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.editPlayers.add(new EditPlayer("JoueurC", Color.YELLOW));
+                    this.editPlayers.add(new EditPlayer("JoueurD", Color.GREEN));
                     break;
             }
         this.updateUI();
@@ -127,6 +128,20 @@ public class InitGameAuto extends javax.swing.JPanel {
         this.mediateur.initGame();
     }//GEN-LAST:event_ButtonPlayActionPerformed
 
+    public ArrayList<EditPlayer> getEditsPlayers() {
+        ArrayList<EditPlayer> tmp = new ArrayList<>();
+        //Je récupère tous le contenu de mon panel editPlayers
+        //Il ne devrait y avoir que des EditPlayers
+        Component[] components = this.editPlayers.getComponents();
+        for (Component c: components) {
+            //Si le component récupéré est un EditPlayer
+            if (c.getClass().equals(EditPlayer.class)) {
+                //Je l'ajoute à ma liste
+                tmp.add((EditPlayer)c);
+            }
+        }
+        return tmp;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonPlay;
