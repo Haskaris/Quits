@@ -1,9 +1,20 @@
 package Modele.Support;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Tuile {
     private Bille bille = null;
+    private int indexOfColor;
+    
+    Tuile() {
+        Random random = new Random();
+        indexOfColor = random.nextInt(8);
+    }
+    
+    public int getIndexOfColor() {
+        return this.indexOfColor;
+    }
 
     public boolean ContientBille(){
         return bille != null;

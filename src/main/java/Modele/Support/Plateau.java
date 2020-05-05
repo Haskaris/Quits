@@ -17,25 +17,30 @@ public class Plateau {
     public Joueur[] joueurs;
     public int joueurcourant;
     public Historique historique;
+    
+    private int maxPlayer = 0;
 
     /**
-     * Initialise un plateau avec le nombre de joueur et la taille précisé.
+     * Initialise un plateau
+     * Taille FIXE
      */
-    public Plateau(int nbjoueur, int taille){
-        joueurs = new Joueur[nbjoueur];
+    public Plateau(){
+        /*joueurs = new Joueur[nbjoueur];
         for (int i = 0; i < nbjoueur; i++) {
             joueurs[i] = new JoueurIAFacile("Default",i);
-        }
+        }*/
+        
+        joueurs = new Joueur[4];
 
-        grille = new Tuile [taille][taille];
-        for (int i = 0; i < taille; i++)
-            for (int j = 0; j < taille; j++)
-                grille[i][j]=new Tuile();
+        grille = new Tuile[5][5];
+        for (int i = 0; i < 5; i++)
+            for (int j = 0; j < 5; j++)
+                grille[i][j] = new Tuile();
 
-        if(nbjoueur == 2 )
+        /*if(nbjoueur == 2 )
             Init2Players();
         if(nbjoueur == 4)
-            Init4Players();
+            Init4Players();*/
 
         historique = new Historique(this);
         joueurcourant = 0;
@@ -51,7 +56,6 @@ public class Plateau {
             historique.Faire(coup);
             LecteurRedacteur.AffichePartie(this);
         }
-
     }
 
     /**
@@ -144,10 +148,10 @@ public class Plateau {
         for (int i = 0; i < l; i++) {
             for (int j = 0; j < l; j++) {
                 if((pair && (j == l/2 - i - 1 || j == l/2 - i - 2)) || (!pair && (j == l/2 - i || j == l/2 - i - 1))) {
-                    PlacerNouvelleBilleA(i, j, 0);
+                    //PlacerNouvelleBilleA(i, j, 0);
                 }
                 if(j == 3*l/2 - i || j == 3*l/2 - i - 1){
-                    PlacerNouvelleBilleA(i, j, 1);
+                    //PlacerNouvelleBilleA(i, j, 1);
                 }
             }
         }
@@ -190,11 +194,20 @@ public class Plateau {
     }
 
     public Joueur JoueurCourant(){
-        return joueurs[joueurcourant];
+        return getPlayer(joueurcourant);
     }
 
     public Tuile[][]GetGrille(){
         return grille;
+    }
+
+    public void addPlayer(Joueur player) {
+        //Voué à changer
+        this.joueurs[maxPlayer++] = player;
+    }
+
+    public Joueur getPlayer(int index) {
+        return this.joueurs[index];
     }
 
 
