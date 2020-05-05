@@ -1,6 +1,5 @@
 import Global.Configuration;
 import Global.Properties;
-import Modele.GameManager;
 import org.junit.jupiter.api.Test;
 
 

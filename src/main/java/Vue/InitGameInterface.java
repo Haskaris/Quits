@@ -33,26 +33,26 @@ public class InitGameInterface extends JPanel {
         this.listMod = new JComboBox(new Object[]{"2 joueurs 5 billes", "2 joueurs 3 billes", "4 joueurs"});
         
         //Initialise le premier cas
-        this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-        this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+        this.editPlayers.add(new EditPlayerAuto("JoueurA", Color.BLUE));
+        this.editPlayers.add(new EditPlayerAuto("JoueurB", Color.RED));
         
         //Ajout du listener permettant de modifier l'affichage du nombre de joueur
         this.listMod.addActionListener ((ActionEvent e) -> {
             this.editPlayers.removeAll();
             switch(this.listMod.getSelectedIndex()) {
                 case 0:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.editPlayers.add(new EditPlayerAuto("JoueurA", Color.BLUE));
+                    this.editPlayers.add(new EditPlayerAuto("JoueurB", Color.RED));
                     break;
                 case 1:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.editPlayers.add(new EditPlayerAuto("JoueurA", Color.BLUE));
+                    this.editPlayers.add(new EditPlayerAuto("JoueurB", Color.RED));
                     break;
                 case 2:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
-                    this.editPlayers.add(new EditPlayer("JoueurC", Color.YELLOW));
-                    this.editPlayers.add(new EditPlayer("JoueurD", Color.GREEN));
+                    this.editPlayers.add(new EditPlayerAuto("JoueurA", Color.BLUE));
+                    this.editPlayers.add(new EditPlayerAuto("JoueurB", Color.RED));
+                    this.editPlayers.add(new EditPlayerAuto("JoueurC", Color.YELLOW));
+                    this.editPlayers.add(new EditPlayerAuto("JoueurD", Color.GREEN));
                     break;
             }
             this.updateUI();

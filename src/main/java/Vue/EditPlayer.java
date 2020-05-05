@@ -1,5 +1,6 @@
 package Vue;
 
+import Vue.ColorPicker.ColorPicker;
 import Global.Tools.AILevel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -45,7 +46,7 @@ public class EditPlayer extends JPanel {
         this.colorPicker = new ColorPicker(this.playerColor);
         this.buttonColorChooser = new JButton(this.playerColor.toString());
         this.buttonColorChooser.addActionListener((ActionEvent e) -> {
-            this.playerColor = this.colorPicker.showDialog();
+            this.colorPicker.showDialog(null);
             this.buttonColorChooser.setText(this.playerColor.toString());
         });
         

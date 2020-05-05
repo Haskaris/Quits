@@ -7,7 +7,7 @@ import java.util.List;
 
 public class JoueurHumain extends Joueur {
 
-    public JoueurHumain(String _nom, Color _couleur) {
+    public JoueurHumain(String _nom, int _couleur) {
         super(_nom, _couleur);
     }
 

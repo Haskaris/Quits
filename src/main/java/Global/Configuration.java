@@ -15,11 +15,10 @@ public final class Configuration {
             instance = new Configuration();
         return instance;
     }
+    
     private Configuration(){
         super();
     }
-
-
 
     /** Liste des paramètres configurables et sauvegardable
      *  A faire correspondre avec la class Properties pour la sauvegarde
@@ -29,12 +28,6 @@ public final class Configuration {
     private static Boolean Animations = true;
     private static int Taille = 5;
     private static int Joueurs = 2;
-
-
-
-    /**
-    */
-
 
     public static Boolean Ecris(String S, Object valeur) {
         Field[] fields = instance().getClass().getDeclaredFields();

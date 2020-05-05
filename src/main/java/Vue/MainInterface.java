@@ -14,15 +14,19 @@ public class MainInterface extends JFrame {
     
     public MainInterface() {
         super();
+        this.mediateur = new Mediateur();
+        this.mediateur.addMainInterface(this);
+        
         this.setTitle("Quits");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setMinimumSize(new Dimension(500,500));
-        initGameInterface = new InitGameInterface(this);
-        gameInterface = new GameInterface(this);
-        this.add(initGameInterface);
+        
+        //this.setMinimumSize(new Dimension(500,500));
+        //initGameInterface = new InitGameInterface(this);
+        //gameInterface = new GameInterface(this);
+        
+        this.add(new InitGameAuto(mediateur));
         this.pack();
         this.setVisible(true);
-        this.mediateur = new Mediateur();
     }
     
     public void initGame() {

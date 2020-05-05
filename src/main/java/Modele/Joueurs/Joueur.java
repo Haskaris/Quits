@@ -1,23 +1,25 @@
 package Modele.Joueurs;
 
 import Modele.Coup;
-import java.awt.Color;
+import Modele.Support.Bille;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Joueur {
     public String nom;
-    //public Integer couleur;
-    public Color couleur;
+    public Integer couleur;
+    public List<Bille> billes;
 
     /*public Joueur(String _nom, int _couleur){
         nom = _nom;
         couleur = _couleur;
     }*/
     
-    public Joueur(String _nom, Color _couleur){
+    public Joueur(String _nom, int _couleur){
         nom = _nom;
         couleur = _couleur;
+        billes = new ArrayList<>();
     }
 
     /**
