@@ -15,11 +15,11 @@ public class Quits {
      * Permet d'initialiser ka partie. Les parametres de la partie sont definies dans Configuration
      */
     public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
-        new MainInterface();
         Properties.Load();
+        new MainInterface();
         //interfacegraphique = new InterfaceGraphique();
-        plateau = new Plateau((Integer) Configuration.Lis("Joueurs"),(Integer)Configuration.Lis("Taille"));
-        plateau.JouePartie();
+        //plateau = new Plateau();
+        //plateau.JouePartie();
     }
 
     /**
