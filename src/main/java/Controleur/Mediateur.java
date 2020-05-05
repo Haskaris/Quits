@@ -7,50 +7,52 @@ import Modele.Support.Plateau;
 import Vue.GraphicInterface;
 import Vue.MainInterface;
 import java.awt.Color;
+import java.awt.Point;
 
 public class Mediateur {
-    Plateau plateau;
+    private Plateau plateau;
     GraphicInterface graphicInterface;
     MainInterface mainInterface;
     
     public Mediateur() {
+        plateau = new Plateau();
     }
     
     private Joueur newPlayerHuman(String playerName, Color color) {
-        return null;//new JoueurHumain(playerName, color);
+        return new JoueurHumain(playerName, 0);
     }
     
     private Joueur newPlayerAIEeasy(String playerName, Color color) {
-        return null;//new JoueurIAFacile(playerName, color);
+        return new JoueurIAFacile(playerName, 1);
     }
     
     private Joueur newPlayerAIMedium(String playerName, Color color) {
-        return null;//new JoueurIANormale(playerName, color);
+        return new JoueurIANormale(playerName, 2);
     }
     
     private Joueur newPlayerAIHard(String playerName, Color color) {
-        return null;//new JoueurIADifficile(playerName, color);
+        return new JoueurIADifficile(playerName, 3);
     }
     
     public void addPlayer(String playerName, Color color, AILevel level) {
         switch(level) {
             case Player:
-                //plateau.addPlayer(newPlayerHuman(playerName, color));
+                plateau.addPlayer(newPlayerHuman(playerName, color));
                 break;
             case Easy:
-                //GameManager.addPlayer(newPlayerAIEeasy(playerName, color));
+                plateau.addPlayer(newPlayerAIEeasy(playerName, color));
                 break;
             case Hard:
-                //GameManager.addPlayer(newPlayerAIHard(playerName, color));
+                plateau.addPlayer(newPlayerAIHard(playerName, color));
                 break;
             case Medium:
-                //GameManager.addPlayer(newPlayerAIMedium(playerName, color));
+                plateau.addPlayer(newPlayerAIMedium(playerName, color));
                 break;
         }
     }
     
     public Joueur getPlayer(int index) {
-        return null;//plateau.joueurs.get(index);
+        return plateau.getPlayer(index);
     }
     
     public void addGraphicInterface(GraphicInterface vue) {
@@ -64,4 +66,12 @@ public class Mediateur {
     public void initGame() {
         this.mainInterface.initGame();
     } 
+    
+    public Plateau getPlateau() {
+        return this.plateau;
+    }
+
+    public void mouseClick(int l, int c) {
+        this.plateau.DeplacerRangee(new Point(l, c), true);
+    }
 }
