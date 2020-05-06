@@ -44,7 +44,7 @@ class LecteurRedacteurTest {
     void litPartie() {
             Board plateau = null;
             try {
-                plateau = new ReaderWriter(pathtest).LitPartie();
+                plateau = new ReaderWriter(pathtest).readGame();
             } catch (IOException e) {
                 e.printStackTrace();
                 fail();
