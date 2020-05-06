@@ -2,6 +2,7 @@ package Modele;
 
 import Global.Configuration;
 import Modele.Joueurs.*;
+import Modele.Support.Bille;
 import Modele.Support.Plateau;
 import Modele.Support.Tuile;
 import java.awt.Color;
@@ -24,7 +25,7 @@ public class LecteurRedacteur {
         InputStream in_stream = new FileInputStream("Sauvegardes/" + filepath);
 
         //On lit la taille et le nombre de joueurs
-        String[] firstline = ReadLine(in_stream).split(" ");
+        String[] firstline = readLine(in_stream).split(" ");
         int taille = Integer.parseInt(firstline[0]);
         int nbjoueur = Integer.parseInt(firstline[1]);
 
@@ -33,20 +34,41 @@ public class LecteurRedacteur {
         //On lit les infos sur les joueurs
         plateau.joueurs = new Joueur[nbjoueur];
         for (int k = 0; k < nbjoueur; k++) {
-            //Format : NOM COULEUR TYPE
-            String[] metadonees = ReadLine(in_stream).split(" ");
+            //Format :
+            //NOM COULEUR TYPE
+            //Bille1X-Bille1Y/Bille2X-Bille2Y
+            String[] metadonees = readLine(in_stream).split(" ");
+            Joueur tmp = null;
             switch (metadonees[2]){
-                case "HUMAIN":plateau.joueurs[k] = new JoueurHumain(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "DISTANT":plateau.joueurs[k] = new JoueurDistant(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA0":plateau.joueurs[k] = new JoueurIAFacile(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA1":plateau.joueurs[k] = new JoueurIANormale(metadonees[0],Integer.parseInt(metadonees[1]));
-                case "IA2":plateau.joueurs[k] = new JoueurIADifficile(metadonees[0],Integer.parseInt(metadonees[1]));
+                case "HUMAIN":
+                    tmp = new JoueurHumain(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                    break;
+                case "DISTANT":
+                    tmp = new JoueurDistant(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                    break;
+                case "IA0":
+                    tmp = new JoueurIAFacile(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                    break;
+                case "IA1":
+                    tmp = new JoueurIANormale(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                    break;
+                case "IA2":
+                    tmp = new JoueurIADifficile(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                    break;
             }
+            metadonees = readLine(in_stream).split("/");
+            for(String coord : metadonees) {
+                String[] xy = coord.split("-");
+                Bille btmp = new Bille(tmp.couleur);
+                tmp.addBille(btmp);
+                plateau.placerBilleA(btmp, Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
+            }
+            plateau.joueurs[k] = tmp;
         }
 
 
         //On lit le plateau
-        byte[] data = new byte[1];
+        /*byte[] data = new byte[1];
         int i=0,j=0;
         while(i<taille) {
             in_stream.read(data);
@@ -59,13 +81,13 @@ public class LecteurRedacteur {
                 i++;
                 j=0;
             }
-        }
+        }*/
         
         in_stream.close();
         return plateau;
     }
 
-    String ReadLine(InputStream stream) throws IOException {
+    private String readLine(InputStream stream) throws IOException {
         String S = "";
         byte[] data = new byte [1];
         stream.read(data);
@@ -76,56 +98,75 @@ public class LecteurRedacteur {
         return S;
     }
 
-
     /**
      * Ecris le contenu d'un plateau de jeu dans un fichier externe
+     * @param plateau plateau à sauvegarder
      */
     public void EcrisPartie(Plateau plateau) throws IOException{
-        File out = new File("Sauvegardes/" +filepath);
+        String path = "Sauvegardes/" + filepath;
+        File out = new File(path);
         OutputStream stream;
         try {
             out.getParentFile().mkdirs();
             out.createNewFile();
             stream = new FileOutputStream(out);
         }
-        catch(Exception e){
-            Configuration.logger().severe("Erreur de creation d'un fichier de sortie : " + "Sauvegardes/" + filepath);
+        catch(IOException e){
+            Configuration.logger().severe("Erreur de creation d'un fichier de sortie : " + path);
             return;
         }
 
-        //Taille et nombre de joueur
+        //On écrit la taille du tableau (pourquoi?)
         stream.write((byte)IntToChar(plateau.GetGrille().length));
         stream.write(' ');
+        //On écrit le nombre de joueur
         stream.write((byte)IntToChar(plateau.joueurs.length));
         stream.write('\n');
 
         //Info sur les joueurs
-        for (int i = 0; i < plateau.joueurs.length; i++) {
-            stream.write(plateau.joueurs[i].nom.getBytes());
+        for (Joueur joueur : plateau.joueurs) {
+            //On écrit le nom
+            stream.write(joueur.nom.getBytes());
             stream.write(' ');
-            stream.write(IntToChar(plateau.joueurs[i].couleur.byteValue()));
+            //On écrit la couleur
+            stream.write(joueur.couleur.getRGB());
             stream.write(' ');
-            if(plateau.joueurs[i] instanceof JoueurHumain)
+            //On écrit le type
+            if (joueur instanceof JoueurHumain) {
                 stream.write("HUMAIN".getBytes());
-            if(plateau.joueurs[i] instanceof JoueurIAFacile)
+            }
+            if (joueur instanceof JoueurIAFacile) {
                 stream.write("IA0".getBytes());
-            if(plateau.joueurs[i] instanceof JoueurIANormale)
+            }
+            if (joueur instanceof JoueurIANormale) {
                 stream.write("IA1".getBytes());
-            if(plateau.joueurs[i] instanceof JoueurIADifficile)
+            }
+            if (joueur instanceof JoueurIADifficile) {
                 stream.write("IA2".getBytes());
-            if(plateau.joueurs[i] instanceof JoueurDistant)
+            }
+            if (joueur instanceof JoueurDistant) {
                 stream.write("DISTANT".getBytes());
+            }
+            stream.write('\n');
+            //On écrit ses billes
+            for (Bille b : joueur.billes) {
+                stream.write(b.getTuile().getPosition().x);
+                stream.write('-');
+                stream.write(b.getTuile().getPosition().y);
+                stream.write('/');
+            }
             stream.write('\n');
         }
 
+    //TODO: Écrire l'indice des tuiles pour récupérer le même visuel
     //Contenu du plateau
     Tuile[][] tab = plateau.GetGrille();
-    for(int i=0;i<tab.length;i++){
+    /*for(int i=0;i<tab.length;i++){
         for(int j=0;j<tab[0].length;j++)
             stream.write((byte)IntToChar(tab[i][j].CouleurBille()));
         stream.write('\n');
     }
-    stream.write('\n');
+    stream.write('\n');*/
     stream.flush();
     stream.close();
  }
@@ -138,11 +179,11 @@ public class LecteurRedacteur {
      * Permet d'afficher l'etat du jeu dans la sortie standard.
      * Les 0 sont des cases vides, les chiffres sont les billes des joueurs
      */
-    public static void AffichePartie(Plateau p){
+    /*public static void AffichePartie(Plateau p){
         Tuile[][] tab = p.GetGrille();
         for(int i=0;i<tab.length;i++){
             for(int j=0;j<tab[0].length;j++){
-                if(tab[i][j].CouleurBille() != 9)
+                if(tab[i][j].getCouleurBille() != 9)
                     System.out.print(tab[i][j].CouleurBille());
                 else
                     System.out.print(".");
@@ -150,6 +191,6 @@ public class LecteurRedacteur {
             System.out.print('\n');
         }
         System.out.println("\n");
-    }
+    }*/
 
 }

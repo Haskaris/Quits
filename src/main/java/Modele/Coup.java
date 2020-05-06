@@ -60,7 +60,7 @@ public class Coup {
         }
     }
 
-    public void Afficher(){
+    /*public void Afficher(){
         if(bille!=null){
             System.out.println(bille.PositionGet());
             System.out.println(direction);
@@ -68,6 +68,6 @@ public class Coup {
         if(rangee != null){
             System.out.println(rangee);
             System.out.println(positif);        }
-    }
+    }*/
 
 }
