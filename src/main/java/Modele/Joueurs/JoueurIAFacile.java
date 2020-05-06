@@ -16,7 +16,8 @@ public class JoueurIAFacile extends Joueur {
     @Override
     public Coup Jouer(List<Coup> coups_possibles) {
         try {
-            TimeUnit.SECONDS.sleep(1);
+            //Thread.sleep( 1000 );
+            //TimeUnit.SECONDS.sleep(1);
         }catch (Exception e){
             System.out.println("Erreur d'attente de l'IA");
         }

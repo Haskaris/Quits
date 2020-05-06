@@ -5,6 +5,7 @@ import Global.Tools;
 import Global.Tools.AILevel;
 import Modele.Joueurs.*;
 import Modele.Support.Plateau;
+import Paterns.Observateur;
 import Vue.GraphicInterface;
 import Vue.MainInterface;
 import java.awt.Color;
@@ -12,11 +13,12 @@ import java.awt.Point;
 
 public class Mediateur {
     private Plateau plateau;
-    GraphicInterface graphicInterface;
+    public GraphicInterface graphicInterface;
     MainInterface mainInterface;
     
     public Mediateur() {
         plateau = new Plateau();
+        this.plateau.setMediateur(this);
     }
     
     private Joueur newPlayerHuman(String playerName, Color color) {
@@ -84,6 +86,10 @@ public class Mediateur {
      * @param c 
      */
     public void mouseClick(int l, int c) {
-        this.plateau.DeplacerRangee(new Point(l, c), true);
+        this.plateau.playTurn();
+    }
+
+    public void addObservateur(GraphicInterface aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

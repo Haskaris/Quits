@@ -1,5 +1,6 @@
 package Modele.Support;
 
+import Controleur.Mediateur;
 import Global.Configuration;
 import Global.Tools;
 import Global.Tools.GameMode;
@@ -7,11 +8,13 @@ import Modele.CalculateurCoup;
 import Modele.Coup;
 import Modele.Historique;
 import Modele.Joueurs.Joueur;
+import Modele.Joueurs.JoueurHumain;
 import Modele.Joueurs.JoueurIAFacile;
 import Modele.LecteurRedacteur;
 
 import java.awt.*;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Plateau {
     private Tuile[][] grille;
@@ -19,9 +22,13 @@ public class Plateau {
     public int joueurcourant;
     public Historique historique;
     
+    private Mediateur mediateur;
+    
     private GameMode gameMode;
     
     private int maxPlayer = 0;
+    
+     private Object lock1 = new Object();
 
     /**
      * Initialise un plateau
@@ -46,6 +53,10 @@ public class Plateau {
     
     public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
+    }
+    
+    public void setMediateur(Mediateur m) {
+        this.mediateur = m;
     }
     
     /**
@@ -80,13 +91,27 @@ public class Plateau {
     /**
      *  Joue les tours de la partie. S'arrete à la fin
      */
-    public void JouePartie(){
-        while(FinTour()){
+    public void JouePartie(Mediateur m){
+        //while(FinTour()){
+            
+            
+            //LecteurRedacteur.AffichePartie(this);
+        //}
+    }
+    
+    public void playTurn() {
+        if (JoueurCourant().getClass().equals(JoueurHumain.class)) {
+            
+        } else {
             List<Coup> coupspossible = new CalculateurCoup(this,JoueurCourant()).coupsPossibles();
             Coup coup = JoueurCourant().Jouer(coupspossible);
             historique.Faire(coup);
-            //LecteurRedacteur.AffichePartie(this);
         }
+        this.mediateur.graphicInterface.update();
+        
+        joueurcourant ++;
+        if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
+            joueurcourant =0;
     }
 
     /**

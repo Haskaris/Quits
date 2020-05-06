@@ -113,6 +113,10 @@ public class GraphicInterface implements Runnable, Observateur {
         frame.setSize(500, 300);
         frame.setVisible(true);
     }
+    
+    public void update() {
+        niv.repaint();
+    }
 
     @Override
     public void miseAJour() {

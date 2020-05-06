@@ -56,4 +56,5 @@ public abstract class Joueur {
      * @return le coup choisi par le joueur
      */
     abstract public Coup Jouer(List<Coup> coups_possibles);
+    
 }

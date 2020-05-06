@@ -32,7 +32,7 @@ public class Quits {
         catch (Exception e){
             System.out.println("Erreur de chargement de la partie");
         }
-        plateau.JouePartie();
+        //plateau.JouePartie();
     }
 
     /**
