@@ -25,10 +25,10 @@ class LecteurRedacteurTest {
     @Order(1)
     void ecrisPartie() {
         try {
-            Plateau plateau = new Plateau(nbjoueurtest, tailletest);
+            Plateau plateau = new Plateau();
             plateau.joueurs = new Joueur[2];
-            plateau.joueurs[0] = new JoueurIANormale(nomtest0, 0);
-            plateau.joueurs[1] = new JoueurIANormale(nomtest1, 1);
+            plateau.joueurs[0] = new JoueurIANormale(nomtest0, Color.BLUE);
+            plateau.joueurs[1] = new JoueurIANormale(nomtest1, Color.RED);
 
             new LecteurRedacteur(pathtest).EcrisPartie(plateau);
 
