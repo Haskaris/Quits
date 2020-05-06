@@ -35,7 +35,7 @@ public class Plateau {
         grille = new Tuile[5][5];
         for (int i = 0; i < 5; i++)
             for (int j = 0; j < 5; j++)
-                grille[i][j] = new Tuile();
+                grille[i][j] = new Tuile(i, j);
 
         /*if(nbjoueur == 2 )
             Init2Players();
@@ -51,10 +51,10 @@ public class Plateau {
      */
     public void JouePartie(){
         while(FinTour()){
-            List<Coup> coupspossible = new CalculateurCoup(this,JoueurCourant()).CoupsPossible();
+            List<Coup> coupspossible = new CalculateurCoup(this,JoueurCourant()).coupsPossibles();
             Coup coup = JoueurCourant().Jouer(coupspossible);
             historique.Faire(coup);
-            LecteurRedacteur.AffichePartie(this);
+            //LecteurRedacteur.AffichePartie(this);
         }
     }
 
@@ -62,11 +62,11 @@ public class Plateau {
      * Clot un tour. Verifie les conditions de victoire et passe au joueur suivant
      */
     private boolean FinTour(){
-        boolean estfini = true;
-        for (Bille bille:JoueurCourant().billes) {
+        boolean estfini = JoueurCourant().billes.isEmpty();
+        /*for (Bille bille:JoueurCourant().billes) {
             if(!bille.EstSortie())
                 estfini = false;
-        }
+        }*/
 
         if(estfini){
             System.out.println("Joueur " + joueurcourant + " a gagné");
@@ -85,10 +85,18 @@ public class Plateau {
      * Deplace la bille précisée, dans la direction précisé. Aucune vérification
      */
     public void DeplacerBille(Bille bille, Tools.Dir direction){
-        Point depart = bille.PositionGet();
+        Point depart = bille.getTuile().getPosition();
         Point arrivee = new Point(depart.x + Tools.DirToPoint(direction).x,depart.y + Tools.DirToPoint(direction).y);
-        grille[depart.x][depart.y].EnleverBille();
-        grille[arrivee.x][arrivee.y].MettreBille(bille,arrivee);
+        grille[depart.x][depart.y].enleverBille();
+        grille[arrivee.x][arrivee.y].addBille(bille);//MettreBille(bille,arrivee);
+    }
+    
+    private void updatePosition() {
+        for(int i = 0; i <  5; i++) {
+            for(int j = 0; j < 5; j++) {
+                grille[i][j].setPosition(i, j);
+            }
+        }
     }
 
     /**
@@ -127,41 +135,43 @@ public class Plateau {
                 grille[rangee.x][grille.length - 1] = tmp;
             }
         }
+        updatePosition();
     }
 
     /**
-     * Place une nouvelle bille de la couleur précisé, aux coordonnées précisées, et l'ajoute à son joueur
+     * Place une bille aux coordonnées X Y
+     * @param b
+     * @param x
+     * @param y
      */
-    public void PlacerNouvelleBilleA(int x, int y, int couleur){
-        Bille b = new Bille(couleur);
-        joueurs[couleur].billes.add(b);
-        grille[x][y].MettreBille(b,new Point(x,y));
+    public void placerBilleA(Bille b, int x, int y){
+        grille[x][y].addBille(b);
     }
 
     /**
      * Initialise le plateau avec les règles 2 joueurs classiques
      */
-    private void Init2Players(){
+   /* private void Init2Players(){
         int l =  grille.length;
         boolean pair = l%2==0;
 
         for (int i = 0; i < l; i++) {
             for (int j = 0; j < l; j++) {
                 if((pair && (j == l/2 - i - 1 || j == l/2 - i - 2)) || (!pair && (j == l/2 - i || j == l/2 - i - 1))) {
-                    //PlacerNouvelleBilleA(i, j, 0);
+                    PlacerNouvelleBilleA(i, j, 0);
                 }
                 if(j == 3*l/2 - i || j == 3*l/2 - i - 1){
-                    //PlacerNouvelleBilleA(i, j, 1);
+                    PlacerNouvelleBilleA(i, j, 1);
                 }
             }
         }
-    }
+    }*/
 
 
     /**
      * Initialise le plateau avec les règles 4 joueurs classiques
      */
-    private void Init4Players(){
+    /*private void Init4Players(){
         int l =  grille.length;
 
         for (int i = 0; i < l; i++) {
@@ -191,7 +201,7 @@ public class Plateau {
 
             }
         }
-    }
+    }*/
 
     public Joueur JoueurCourant(){
         return getPlayer(joueurcourant);
