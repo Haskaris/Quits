@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.InputStream;
 
-
+//À revoir → Faire comme le sokoban
 public final class Configuration {
     static volatile Configuration instance = null;
     public static Configuration instance(){
@@ -38,7 +38,7 @@ public final class Configuration {
     private static String Tuile7 = "TuilesIHM/tuile_couleur_7.png";
     private static String Tuile8 = "TuilesIHM/tuile_couleur_8.png";
 
-    public static Boolean ecris(String S, Object valeur) {
+    public static Boolean write(String S, Object valeur) {
         Field[] fields = instance().getClass().getDeclaredFields();
         for(Field field : fields){
             if(S.equals(field.getName())){
@@ -58,7 +58,7 @@ public final class Configuration {
         throw new NoSuchElementException("Element de configuration non trouvé");
     }
 
-    public static Object lis(String S)  {
+    public static Object read(String S)  {
         Field[] fields = instance().getClass().getDeclaredFields();
         for(Field field : fields){
             if(S.equals(field.getName()))
@@ -69,7 +69,7 @@ public final class Configuration {
     }
 
     public static Logger logger (){
-        Logger l = Logger.getLogger("SokobanLogger");
+        Logger l = Logger.getLogger("QuitsLogger");
         l.setLevel((Level.parse(LogLevel)));
         return l;
     }

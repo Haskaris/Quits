@@ -9,8 +9,8 @@ import java.util.List;
 
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(String _nom, Color _couleur) {
-        super(_nom, _couleur);
+    public HumanPlayer(String name, Color color) {
+        super(name, color);
     }
 
     @Override

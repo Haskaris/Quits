@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Vue;
+package View;
 
 import Paterns.Observateur;
 import java.awt.*;
@@ -18,10 +18,10 @@ import javax.swing.*;
  *
  * @author Mathis
  */
-public abstract class PlateauGraphique extends JComponent implements Observateur {
+public abstract class BoardGraphic extends JComponent implements Observateur {
     Graphics2D drawable;
     
-    protected ImageQuits lisImage(InputStream in) throws IOException {
+    protected ImageQuits readImage(InputStream in) throws IOException {
         return new ImageQuits(ImageIO.read(in));
     }
     
@@ -38,11 +38,11 @@ public abstract class PlateauGraphique extends JComponent implements Observateur
         tracerNiveau();
     }
     
-    int hauteur() {
+    public int hauteur() {
         return getHeight();
     }
 
-    int largeur() {
+    public int largeur() {
         return getWidth();
     }
     

@@ -64,7 +64,7 @@ public class Board {
 
         currentPlayer ++;
         //Ne marche pas car nos joueurs sont ajouté dynamiquement
-        if(currentPlayer>=(Integer)Configuration.lis("Joueurs"))
+        if(currentPlayer>=(Integer)Configuration.read("Joueurs"))
             currentPlayer =0;
         return true;
     }
@@ -74,7 +74,7 @@ public class Board {
      * @param marble
      * @param direction
      */
-    public void moveMarble(Marble marble, Tools.Dir direction){
+    public void moveMarble(Marble marble, Tools.Direction direction){
         Point startPoint = marble.getTile().getPosition();
         Point finishPoint = Tools.getNextPoint(startPoint, direction);
         grid[startPoint.x][startPoint.y].removeMarble();
@@ -98,7 +98,7 @@ public class Board {
      * @param line
      * @param direction
      */
-    public void moveLine(Point line, Tools.Dir direction){
+    public void moveLine(Point line, Tools.Direction direction){
         Tile tmp = null;
         //Factoriser
         switch(direction) {

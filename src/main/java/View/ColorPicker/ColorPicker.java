@@ -1,7 +1,7 @@
 
-package Vue.ColorPicker;
+package View.ColorPicker;
 
-import Vue.EditPlayer;
+import View.EditPlayer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

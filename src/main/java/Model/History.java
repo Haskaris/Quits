@@ -7,8 +7,8 @@ public class History {
     Move past;
     Move future;
 
-    public History(Board _plateau){
-        board = _plateau;
+    public History(Board board){
+        this.board = board;
     }
 
     public void doMove(Move c){

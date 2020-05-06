@@ -1,26 +1,26 @@
-package Vue;
+package View;
 
-import Controleur.Mediateur;
+import Controleur.Mediator;
 import Global.Tools;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
-public class MainInterface extends JFrame {
+public class MainGraphicInterface extends JFrame {
     InitGame initGameInterface;
-    Mediateur mediateur;
+    Mediator mediator;
     
-    public MainInterface() {
+    public MainGraphicInterface() {
         super();
-        this.mediateur = new Mediateur();
-        this.mediateur.addMainInterface(this);
+        this.mediator = new Mediator();
+        this.mediator.addMainInterface(this);
         
         this.setTitle("Quits");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         //this.setMinimumSize(new Dimension(500,500));
-        initGameInterface = new InitGame(mediateur);
+        initGameInterface = new InitGame(mediator);
         //gameInterface = new GameInterface(this);
         
         this.add(initGameInterface);
@@ -29,17 +29,17 @@ public class MainInterface extends JFrame {
     }
     
     public void initGame() {
-        //À mettre dans le mediateur ?
+        //À mettre dans le mediator ?
         //Ajout des joueurs dans la partie
         ArrayList<EditPlayer> tmp = this.initGameInterface.getEditsPlayers();
         for (EditPlayer e : tmp) {
-            this.mediateur.addPlayer(e.playerName, e.playerColor, e.aiLevel);
+            this.mediator.addPlayer(e.playerName, e.playerColor, e.aiLevel);
         }
         
         //Pour "fermer" la fenêtre
         this.setVisible(false);
         
         //Démarer la partie
-        GraphicInterface.demarrer(mediateur);
+        GraphicInterface.start(mediator);
     }
 }

@@ -17,33 +17,33 @@ public class Move {
  player indique le player responsable du coup
      */
     Marble marble = null;
-    Dir direction;
+    Direction direction;
     Point line = null;
     Player player;
     Move nextMove;
 
     /**
      * On veut jouer un deplacement de marble
-     * @param _marble Bille à déplacer
-     * @param _direction Direction du mouvement
-     * @param _player Responsable du mouvement
+     * @param marble Bille à déplacer
+     * @param direction Direction du mouvement
+     * @param player Responsable du mouvement
     */
-    public Move(Marble _marble, Dir _direction, Player _player) {
-        this.marble = _marble;
-        this.direction = _direction;
-        this.player = _player;
+    public Move(Marble marble, Direction direction, Player player) {
+        this.marble = marble;
+        this.direction = direction;
+        this.player = player;
     }
 
     /**
      * On veut jouer un deplacement de ligne
-     * @param _line Bille à déplacer
-     * @param _direction Direction du mouvement
-     * @param _player Responsable du mouvement
+     * @param line Bille à déplacer
+     * @param direction Direction du mouvement
+     * @param player Responsable du mouvement
     */
-    public Move(Point _line, Dir _direction, Player _player) {
-        this.line = _line;
-        this.direction = _direction;
-        this.player = _player;
+    public Move(Point line, Direction direction, Player player) {
+        this.line = line;
+        this.direction = direction;
+        this.player = player;
     }
 
     public void perform(Board board) {

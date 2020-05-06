@@ -1,8 +1,9 @@
 package Modele;
 
-import Modele.Joueurs.Joueur;
-import Modele.Joueurs.JoueurIANormale;
-import Modele.Support.Plateau;
+import Model.ReaderWriter;
+import Model.Players.Player;
+import Model.Players.AINormalPlayer;
+import Model.Support.Board;
 import java.awt.Color;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -25,12 +26,12 @@ class LecteurRedacteurTest {
     @Order(1)
     void ecrisPartie() {
         try {
-            Plateau plateau = new Plateau();
-            plateau.joueurs = new Joueur[2];
-            plateau.joueurs[0] = new JoueurIANormale(nomtest0, Color.BLUE);
-            plateau.joueurs[1] = new JoueurIANormale(nomtest1, Color.RED);
+            Board plateau = new Board();
+            plateau.players = new Player[2];
+            plateau.players[0] = new AINormalPlayer(nomtest0, Color.BLUE);
+            plateau.players[1] = new AINormalPlayer(nomtest1, Color.RED);
 
-            new LecteurRedacteur(pathtest).EcrisPartie(plateau);
+            new ReaderWriter(pathtest).writeGame(plateau);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -41,22 +42,22 @@ class LecteurRedacteurTest {
     @Test
     @Order(2)
     void litPartie() {
-            Plateau plateau = null;
+            Board plateau = null;
             try {
-                plateau = new LecteurRedacteur(pathtest).LitPartie();
+                plateau = new ReaderWriter(pathtest).LitPartie();
             } catch (IOException e) {
                 e.printStackTrace();
                 fail();
             }
             assertNotNull(plateau);
-            assertNotNull(plateau.joueurs);
-            assertEquals(nbjoueurtest,plateau.joueurs.length);
-            assertEquals(tailletest, plateau.GetGrille().length);
-            assertEquals(joueurcouranttest, plateau.joueurcourant);
-            assertEquals(nomtest0, plateau.joueurs[0].nom);
-            assertEquals(couleurtest0, plateau.joueurs[0].couleur);
-            assertEquals(nomtest1, plateau.joueurs[1].nom);
-            assertEquals(couleurtest1, plateau.joueurs[1].couleur);
+            assertNotNull(plateau.players);
+            assertEquals(nbjoueurtest,plateau.players.length);
+            assertEquals(tailletest, plateau.getGrid().length);
+            assertEquals(joueurcouranttest, plateau.currentPlayer);
+            assertEquals(nomtest0, plateau.players[0].name);
+            assertEquals(couleurtest0, plateau.players[0].color);
+            assertEquals(nomtest1, plateau.players[1].name);
+            assertEquals(couleurtest1, plateau.players[1].color);
 
     }
 

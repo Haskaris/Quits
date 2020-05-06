@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package Vue;
+package View;
 
-import Vue.ColorPicker.ColorPicker;
+import View.ColorPicker.ColorPicker;
 import Global.Tools;
 import java.awt.Color;
 

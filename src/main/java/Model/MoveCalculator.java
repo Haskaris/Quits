@@ -17,13 +17,13 @@ public class MoveCalculator {
      */
     Board board;
     Player player;
-    Dir playerStart;
+    Direction playerStart;
     List<Marble> marbles;
     List<Move> moves;
     Move lastMove;
 
-    public MoveCalculator(Board _board/*, Player _joueur*/){
-        this.board = _board;
+    public MoveCalculator(Board board/*, Player _joueur*/){
+        this.board = board;
         this.player = this.board.currentPlayer();
         this.marbles = this.player.getMarbles();
         this.playerStart = player.getStartPoint();
@@ -56,28 +56,28 @@ public class MoveCalculator {
             if (!movableTiles.contains(tileStudied)) {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Dir.N, player));
+                    moves.add(new Move(tileStudied.getPosition(), Direction.N, player));
                 }
             }
             tileStudied = board.getGrid()[tmpTileX][4];
             if (!movableTiles.contains(tileStudied)) {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Dir.S, player));
+                    moves.add(new Move(tileStudied.getPosition(), Direction.S, player));
                 }
             }
             tileStudied = board.getGrid()[0][tmpTileY];
             if (!movableTiles.contains(tileStudied)) {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Dir.O, player));
+                    moves.add(new Move(tileStudied.getPosition(), Direction.O, player));
                 }
             }
             tileStudied = board.getGrid()[4][tmpTileY];
             if (!movableTiles.contains(tileStudied)) {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Dir.E, player));
+                    moves.add(new Move(tileStudied.getPosition(), Direction.E, player));
                 }
             }
         }
@@ -109,17 +109,17 @@ public class MoveCalculator {
     private void marblesMoves(){
         this.marbles.forEach((b) -> {
             Point pos = b.getTile().getPosition();
-            if(this.playerStart != Dir.NO && isTileFree(add(pos, DirToPoint(Dir.NO)))) {
-                this.moves.add(new Move(b, Dir.NO, this.player));
+            if(this.playerStart != Direction.NO && isTileFree(add(pos, DirToPoint(Direction.NO)))) {
+                this.moves.add(new Move(b, Direction.NO, this.player));
             }
-            if(this.playerStart != Dir.NE && isTileFree(add(pos,DirToPoint(Dir.NE)))) {
-                this.moves.add(new Move(b, Dir.NE, this.player));
+            if(this.playerStart != Direction.NE && isTileFree(add(pos,DirToPoint(Direction.NE)))) {
+                this.moves.add(new Move(b, Direction.NE, this.player));
             }
-            if(this.playerStart != Dir.SE && isTileFree(add(pos,DirToPoint(Dir.SE)))) {
-                this.moves.add(new Move(b, Dir.SE, this.player));
+            if(this.playerStart != Direction.SE && isTileFree(add(pos,DirToPoint(Direction.SE)))) {
+                this.moves.add(new Move(b, Direction.SE, this.player));
             }
-            if (this.playerStart != Dir.SO && isTileFree(add(pos,DirToPoint(Dir.SO)))) {
-                this.moves.add(new Move(b, Dir.SO, this.player));
+            if (this.playerStart != Direction.SO && isTileFree(add(pos,DirToPoint(Direction.SO)))) {
+                this.moves.add(new Move(b, Direction.SO, this.player));
             }
         });
     }

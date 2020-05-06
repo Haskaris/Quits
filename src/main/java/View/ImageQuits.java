@@ -1,4 +1,4 @@
-package Vue;
+package View;
 import java.awt.*;
 
 // Classe servant uniquement à casser la dépendance à Swing

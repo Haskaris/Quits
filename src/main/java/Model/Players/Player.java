@@ -1,6 +1,6 @@
 package Model.Players;
 
-import Global.Tools.Dir;
+import Global.Tools.Direction;
 import Model.Move;
 import Model.ReaderWriter;
 import Model.Support.Marble;
@@ -16,16 +16,16 @@ public abstract class Player {
     public String name;
     public Color color;
     private ArrayList<Marble> marbles;
-    private Dir startPoint;
+    private Direction startPoint;
     
     /**
      * Constructeur
-     * @param _nom
-     * @param _couleur
+     * @param name
+     * @param color
      */
-    Player(String _nom, Color _couleur){
-        name = _nom;
-        color = _couleur;
+    Player(String name, Color color){
+        this.name = name;
+        this.color = color;
         marbles = new ArrayList<>();
     }
     
@@ -35,7 +35,7 @@ public abstract class Player {
      * @param _couleur
      * @param p 
      */
-    Player(String _nom, Color _couleur, Dir p){
+    Player(String _nom, Color _couleur, Direction p){
         name = _nom;
         color = _couleur;
         marbles = new ArrayList<>();
@@ -46,15 +46,15 @@ public abstract class Player {
      * Met le point de départ
      * @param p 
      */
-    public void setStartPoint(Dir p) {
+    public void setStartPoint(Direction p) {
         this.startPoint = p;
     }
     
     /**
      * Retourne le point de départ du joueur
-     * @return Dir
+     * @return Direction
      */
-    public Dir getStartPoint() {
+    public Direction getStartPoint() {
         return this.startPoint;
     }
     
