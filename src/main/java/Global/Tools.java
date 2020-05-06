@@ -2,12 +2,11 @@ package Global;
 
 import java.awt.*;
 
-public class Tools{
-    public final static int JAUNE = 0;
-    public final static int ROUGE = 1;
-    public final static int BLANC = 2;
-    public final static int NOIR = 3;
+public class Tools {
     
+    /**
+     * Énumération des niveaux d'ia
+     */
     public static enum AILevel {
         Player,
         Easy,
@@ -15,14 +14,26 @@ public class Tools{
         Hard,
     }
 
+    /**
+     * Énumération des directions
+     */
     public static enum Dir {
-        NO,
+        N,
         NE,
+        E,
         SE,
+        S,
         SO,
+        O,
+        NO,
         RIEN;
     }
 
+    /**
+     * DEPRECATED
+     * @param d
+     * @return 
+     */
     public static int DirToInt(Dir d){
         switch (d){
             case NO:return 0;
@@ -32,6 +43,12 @@ public class Tools{
         }
         return 4;
     }
+    
+    /**
+     * DEPRECATED
+     * @param n
+     * @return 
+     */
     public static Dir IntToDir(int n){
         switch (n){
             case 0:return Dir.NO;
@@ -42,6 +59,11 @@ public class Tools{
         return Dir.RIEN;
     }
 
+    /**
+     * DEPRECATED
+     * @param d
+     * @return 
+     */
     public static Point DirToPoint(Dir d){
         int x = 0,y = 0;
         switch (d){
@@ -53,6 +75,11 @@ public class Tools{
         return new Point(x,y);
     }
 
+    /**
+     * DEPRECATED
+     * @param p
+     * @return 
+     */
     public static Dir PointToDir(Point p){
         if(p.x == -1 && p.y == -1)
             return Dir.NO;
@@ -65,12 +92,21 @@ public class Tools{
         return Dir.RIEN;
     }
 
-    public static Dir InverseDir(Dir d){
+    /**
+     * Retourne la direction inverse de d
+     * @param d
+     * @return Dir
+     */
+    public static Dir reverse(Dir d){
         switch (d){
-            case NO: return Dir.SE;
+            case N: return Dir.S;
             case NE: return Dir.SO;
-            case SO: return Dir.NE;
+            case E: return Dir.O;
             case SE: return Dir.NO;
+            case S: return Dir.N;
+            case SO: return Dir.NE;
+            case O: return Dir.E;
+            case NO: return Dir.SE;
         }
         return Dir.RIEN;
     }
