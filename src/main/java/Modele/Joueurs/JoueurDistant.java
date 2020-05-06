@@ -6,7 +6,7 @@ import java.awt.Color;
 import java.util.List;
 
 public class JoueurDistant extends Joueur {
-    public JoueurDistant(String _nom, int _couleur) {
+    public JoueurDistant(String _nom, Color _couleur) {
         super(_nom, _couleur);
     }
 

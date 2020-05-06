@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class JoueurIAFacile extends Joueur {
 
-    public JoueurIAFacile(String _nom, int _couleur) {
+    public JoueurIAFacile(String _nom, Color _couleur) {
         super(_nom, _couleur);
     }
 
