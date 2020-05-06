@@ -59,9 +59,7 @@ public class LecteurRedacteur {
             metadonees = readLine(in_stream).split("/");
             for(String coord : metadonees) {
                 String[] xy = coord.split("-");
-                Bille btmp = new Bille(tmp.couleur);
-                tmp.addBille(btmp);
-                plateau.placerBilleA(btmp, Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
+                plateau.placerBilleA(tmp.addBille(), Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
             }
             plateau.joueurs[k] = tmp;
         }

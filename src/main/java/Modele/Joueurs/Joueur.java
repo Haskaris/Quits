@@ -35,8 +35,9 @@ public abstract class Joueur {
         return this.pointDeDepart;
     }
     
-    public void addBille(Bille b) {
-        this.billes.add(b);
+    public Bille addBille() {
+        this.billes.add(new Bille(this.couleur));
+        return this.billes.get(this.billes.size()-1);
     }
     
     /**

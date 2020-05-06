@@ -1,6 +1,7 @@
 
 package Controleur;
 
+import Global.Tools;
 import Global.Tools.AILevel;
 import Modele.Joueurs.*;
 import Modele.Support.Plateau;
@@ -63,14 +64,25 @@ public class Mediateur {
         this.mainInterface = vue;
     }
     
-    public void initGame() {
+    /**
+     * Prépare le plateau et change l'interface
+     * @param gameMode 
+     */
+    public void initGame(Tools.GameMode gameMode) {
         this.mainInterface.initGame();
+        this.plateau.setGameMode(gameMode);
+        this.plateau.initPlayers();
     } 
     
     public Plateau getPlateau() {
         return this.plateau;
     }
 
+    /**
+     * Évenement de clique de souris sur la ligne l et la colonne c
+     * @param l
+     * @param c 
+     */
     public void mouseClick(int l, int c) {
         this.plateau.DeplacerRangee(new Point(l, c), true);
     }

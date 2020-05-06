@@ -6,6 +6,7 @@
 package Vue;
 
 import Controleur.Mediateur;
+import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
@@ -17,12 +18,14 @@ import java.util.ArrayList;
 public class InitGame extends javax.swing.JPanel {
 
     Mediateur mediateur;
+    Tools.GameMode gameMode;
     
     /**
      * Creates new form InitGameAuto
      */
     public InitGame(Mediateur mediateur) {
         initComponents();
+        this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
         this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
         this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
         this.updateUI();
@@ -109,23 +112,26 @@ public class InitGame extends javax.swing.JPanel {
                 case 0:
                     this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
                     this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
                     break;
                 case 1:
                     this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
                     this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.gameMode = Tools.GameMode.TwoPlayersThreeBalls;
                     break;
                 case 2:
                     this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
                     this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
                     this.editPlayers.add(new EditPlayer("JoueurC", Color.YELLOW));
                     this.editPlayers.add(new EditPlayer("JoueurD", Color.GREEN));
+                    this.gameMode = Tools.GameMode.FourPlayersFiveBalls;
                     break;
             }
         this.updateUI();
     }//GEN-LAST:event_gameModeListItemStateChanged
 
     private void ButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonPlayActionPerformed
-        this.mediateur.initGame();
+        this.mediateur.initGame(this.gameMode);
     }//GEN-LAST:event_ButtonPlayActionPerformed
 
     public ArrayList<EditPlayer> getEditsPlayers() {

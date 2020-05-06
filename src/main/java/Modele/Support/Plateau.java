@@ -2,6 +2,7 @@ package Modele.Support;
 
 import Global.Configuration;
 import Global.Tools;
+import Global.Tools.GameMode;
 import Modele.CalculateurCoup;
 import Modele.Coup;
 import Modele.Historique;
@@ -17,6 +18,8 @@ public class Plateau {
     public Joueur[] joueurs;
     public int joueurcourant;
     public Historique historique;
+    
+    private GameMode gameMode;
     
     private int maxPlayer = 0;
 
@@ -37,13 +40,41 @@ public class Plateau {
             for (int j = 0; j < 5; j++)
                 grille[i][j] = new Tuile(i, j);
 
-        /*if(nbjoueur == 2 )
-            Init2Players();
-        if(nbjoueur == 4)
-            Init4Players();*/
-
         historique = new Historique(this);
         joueurcourant = 0;
+    }
+    
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+    
+    /**
+     * Initialise les joueurs (billes et position)
+     * en fonction du mode de jeu
+     */
+    public void initPlayers() {
+        switch(gameMode) {
+            case TwoPlayersFiveBalls:
+                this.joueurs[0].setPointDeDepart(Tools.Dir.SO);
+                this.joueurs[1].setPointDeDepart(Tools.Dir.NE);
+                break;
+            case TwoPlayersThreeBalls:
+                this.joueurs[0].setPointDeDepart(Tools.Dir.SO);
+                this.grille[0][3].addBille(this.joueurs[0].addBille());
+                this.grille[1][3].addBille(this.joueurs[0].addBille());
+                this.grille[1][4].addBille(this.joueurs[0].addBille());
+                this.joueurs[1].setPointDeDepart(Tools.Dir.NE);
+                this.grille[3][0].addBille(this.joueurs[1].addBille());
+                this.grille[3][1].addBille(this.joueurs[1].addBille());
+                this.grille[4][0].addBille(this.joueurs[1].addBille());
+                break;
+            case FourPlayersFiveBalls:
+                this.joueurs[0].setPointDeDepart(Tools.Dir.SO);
+                this.joueurs[1].setPointDeDepart(Tools.Dir.NE);
+                this.joueurs[2].setPointDeDepart(Tools.Dir.NO);
+                this.joueurs[3].setPointDeDepart(Tools.Dir.SE);
+                break;
+        }
     }
 
     /**
