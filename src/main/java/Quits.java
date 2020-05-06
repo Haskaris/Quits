@@ -27,7 +27,7 @@ public class Quits {
      */
     public static void ChargerPartie(){
         try {
-            plateau = new ReaderWriter("default.save").LitPartie();
+            plateau = new ReaderWriter("default.save").readGame();
         }
         catch (Exception e){
             System.out.println("Erreur de chargement de la partie");
