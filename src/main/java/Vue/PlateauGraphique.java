@@ -28,6 +28,13 @@ public abstract class PlateauGraphique extends JComponent implements Observateur
     protected void tracer(ImageQuits i, int x, int y, int l, int h) {
         drawable.drawImage(i.image(), x, y, l, h, null);
     }
+    
+    protected void drawBall(Color c, int x, int y, int l, int h) {
+        drawable.setPaint(c);
+        drawable.fillOval(x+l/4, y+h/4, l/2, h/2);
+        drawable.drawOval(x+l/4, y+h/4, l/2, h/2);
+        //drawable.drawImage(i.image(), x, y, l, h, null);
+    }
 
     @Override
     public void paintComponent(Graphics g) {

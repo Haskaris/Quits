@@ -77,6 +77,9 @@ public class VuePlateau extends PlateauGraphique {
                 Tuile currentTile = plateau.GetGrille()[i][j];
                 int index = currentTile.getIndexOfColor();
                 tracer(tuiles.get(index), x, y, largeurTuile, hauteurTuile);
+                if (currentTile.contientBille()) {
+                    drawBall(currentTile.getCouleurBille(), x, y, largeurTuile, hauteurTuile);
+                }
             }
         }
     }
