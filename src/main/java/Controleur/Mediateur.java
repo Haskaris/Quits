@@ -19,19 +19,19 @@ public class Mediateur {
     }
     
     private Joueur newPlayerHuman(String playerName, Color color) {
-        return new JoueurHumain(playerName, 0);
+        return new JoueurHumain(playerName, color);
     }
     
     private Joueur newPlayerAIEeasy(String playerName, Color color) {
-        return new JoueurIAFacile(playerName, 1);
+        return new JoueurIAFacile(playerName, color);
     }
     
     private Joueur newPlayerAIMedium(String playerName, Color color) {
-        return new JoueurIANormale(playerName, 2);
+        return new JoueurIANormale(playerName, color);
     }
     
     private Joueur newPlayerAIHard(String playerName, Color color) {
-        return new JoueurIADifficile(playerName, 3);
+        return new JoueurIADifficile(playerName, color);
     }
     
     public void addPlayer(String playerName, Color color, AILevel level) {
