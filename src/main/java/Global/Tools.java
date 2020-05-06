@@ -16,6 +16,7 @@ public class Tools {
 
     /**
      * Énumération des directions
+     * A mettre en vecteur
      */
     public static enum Dir {
         N,
@@ -27,6 +28,29 @@ public class Tools {
         O,
         NO,
         RIEN;
+    }
+    
+    public static Point getNextPoint(Point p, Dir d) {
+        Point tmp = new Point();
+        switch (d){
+            case NO:
+                tmp.x = p.x - 1;
+                tmp.y = p.y + 1;
+                break;
+            case NE:
+                tmp.x = p.x + 1;
+                tmp.y = p.y + 1;
+                break;
+            case SE:
+                tmp.x = p.x + 1;
+                tmp.y = p.y - 1;
+                break;
+            case SO:
+                tmp.x = p.x - 1;
+                tmp.y = p.y - 1;
+                break;
+        }
+        return tmp;
     }
 
     /**

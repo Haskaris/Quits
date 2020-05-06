@@ -4,8 +4,7 @@ import Modele.Joueurs.Joueur;
 import Modele.Support.Bille;
 import Modele.Support.Plateau;
 
-import static Global.Tools.Dir;
-import static Global.Tools.InverseDir;
+import static Global.Tools.*;
 
 import java.awt.*;
 
@@ -27,7 +26,7 @@ public class Coup {
     /**
     * On veut jouer un deplacement de bille
     */
-    public Coup(Bille _bille, Dir _dir,Joueur _joueur) {
+    public Coup(Bille _bille, Dir _dir, Joueur _joueur) {
         bille = _bille;
         direction = _dir;
         joueur = _joueur;
@@ -36,27 +35,28 @@ public class Coup {
     /**
      * On veut jouer un deplacement de ligne
      */
-    public Coup(Point _rangee, Boolean _positif, Joueur _joueur) {
+    public Coup(Point _rangee, Dir _dir, Joueur _joueur) {
         rangee = _rangee;
-        positif = _positif;
+        //positif = _positif;
+        direction = _dir;
         joueur = _joueur;
     }
 
     public void Execute(Plateau plateau) {
         if(bille!=null){
-            plateau.DeplacerBille(bille, direction);
+            plateau.deplacerBille(bille, direction);
         }
         if(rangee != null){
-            plateau.DeplacerRangee(rangee,positif);
+            plateau.deplacerRangee(rangee, direction);
         }
     }
 
     public void Dexecute(Plateau plateau){
         if(bille!=null){
-            plateau.DeplacerBille(bille,InverseDir(direction));
+            plateau.deplacerBille(bille, reverse(direction));
         }
         if(rangee != null){
-            plateau.DeplacerRangee(rangee,!positif);
+            plateau.deplacerRangee(rangee, reverse(direction));
         }
     }
 

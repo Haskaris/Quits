@@ -117,7 +117,7 @@ public class LecteurRedacteur {
         }
 
         //On écrit la taille du tableau (pourquoi?)
-        stream.write((byte)IntToChar(plateau.GetGrille().length));
+        stream.write((byte)IntToChar(plateau.getGrille().length));
         stream.write(' ');
         //On écrit le nombre de joueur
         stream.write((byte)IntToChar(plateau.joueurs.length));
@@ -160,7 +160,7 @@ public class LecteurRedacteur {
 
     //TODO: Écrire l'indice des tuiles pour récupérer le même visuel
     //Contenu du plateau
-    Tuile[][] tab = plateau.GetGrille();
+    Tuile[][] tab = plateau.getGrille();
     /*for(int i=0;i<tab.length;i++){
         for(int j=0;j<tab[0].length;j++)
             stream.write((byte)IntToChar(tab[i][j].CouleurBille()));

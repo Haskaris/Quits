@@ -6,8 +6,6 @@ import Modele.CalculateurCoup;
 import Modele.Coup;
 import Modele.Historique;
 import Modele.Joueurs.Joueur;
-import Modele.Joueurs.JoueurIAFacile;
-import Modele.LecteurRedacteur;
 
 import java.awt.*;
 import java.util.List;
@@ -25,22 +23,12 @@ public class Plateau {
      * Taille FIXE
      */
     public Plateau(){
-        /*joueurs = new Joueur[nbjoueur];
-        for (int i = 0; i < nbjoueur; i++) {
-            joueurs[i] = new JoueurIAFacile("Default",i);
-        }*/
-        
         joueurs = new Joueur[4];
 
         grille = new Tuile[5][5];
         for (int i = 0; i < 5; i++)
             for (int j = 0; j < 5; j++)
                 grille[i][j] = new Tuile(i, j);
-
-        /*if(nbjoueur == 2 )
-            Init2Players();
-        if(nbjoueur == 4)
-            Init4Players();*/
 
         historique = new Historique(this);
         joueurcourant = 0;
@@ -50,9 +38,9 @@ public class Plateau {
      *  Joue les tours de la partie. S'arrete à la fin
      */
     public void JouePartie(){
-        while(FinTour()){
-            List<Coup> coupspossible = new CalculateurCoup(this,JoueurCourant()).coupsPossibles();
-            Coup coup = JoueurCourant().Jouer(coupspossible);
+        while(finTour()){
+            List<Coup> coupspossible = new CalculateurCoup(this, joueurCourant()).coupsPossibles();
+            Coup coup = joueurCourant().Jouer(coupspossible);
             historique.Faire(coup);
             //LecteurRedacteur.AffichePartie(this);
         }
@@ -61,12 +49,8 @@ public class Plateau {
     /**
      * Clot un tour. Verifie les conditions de victoire et passe au joueur suivant
      */
-    private boolean FinTour(){
-        boolean estfini = JoueurCourant().billes.isEmpty();
-        /*for (Bille bille:JoueurCourant().billes) {
-            if(!bille.EstSortie())
-                estfini = false;
-        }*/
+    private boolean finTour(){
+        boolean estfini = joueurCourant().billes.isEmpty();
 
         if(estfini){
             System.out.println("Joueur " + joueurcourant + " a gagné");
@@ -74,23 +58,27 @@ public class Plateau {
         }
 
         joueurcourant ++;
-        if(joueurcourant>=(Integer)Configuration.Lis("Joueurs"))
+        if(joueurcourant>=(Integer)Configuration.lis("Joueurs"))
             joueurcourant =0;
         return true;
     }
 
-
-
     /**
-     * Deplace la bille précisée, dans la direction précisé. Aucune vérification
+     * Deplace la bille précisée, dans la direction précisé.Aucune vérification
+     * @param bille
+     * @param direction
      */
-    public void DeplacerBille(Bille bille, Tools.Dir direction){
+    public void deplacerBille(Bille bille, Tools.Dir direction){
         Point depart = bille.getTuile().getPosition();
-        Point arrivee = new Point(depart.x + Tools.DirToPoint(direction).x,depart.y + Tools.DirToPoint(direction).y);
+        Point arrivee = Tools.getNextPoint(depart, direction);
         grille[depart.x][depart.y].enleverBille();
-        grille[arrivee.x][arrivee.y].addBille(bille);//MettreBille(bille,arrivee);
+        grille[arrivee.x][arrivee.y].addBille(bille);
     }
     
+    /**
+     * DEPRECATED
+     * Mets à jours les positions des tuiles
+     */
     private void updatePosition() {
         for(int i = 0; i <  5; i++) {
             for(int j = 0; j < 5; j++) {
@@ -102,38 +90,38 @@ public class Plateau {
     /**
      * Deplace la rangee précisée, dans le sens précisé. Aucune vérification
      */
-    public void DeplacerRangee(Point rangee, boolean positif){
-        if(rangee.x == -1){
-            if(positif) {
-                Tuile tmp = grille[grille.length-1][rangee.y];
-                for (int i = grille.length-1; i>0; i--) {
-                    grille[i][rangee.y] = grille[i-1][rangee.y];
-                }
-                grille[0][rangee.y] = tmp;
-            }
-            else{
-                Tuile tmp = grille[0][rangee.y];
+    public void deplacerRangee(Point rangee, Tools.Dir direction){
+        Tuile tmp = null;
+        switch(direction) {
+            case N:
+                //Factoriser
+                tmp = grille[0][rangee.y];
                 for (int i = 0; i < grille.length - 1; i++) {
                     grille[i][rangee.y] = grille[i+1][rangee.y] ;
                 }
                 grille[grille.length-1][rangee.y] = tmp;
-            }
-        }
-        else{
-            if(positif) {
-                Tuile tmp = grille[rangee.x][grille.length - 1];
+                break;
+            case E:
+                tmp = grille[rangee.x][grille.length - 1];
                 for (int i = grille.length-1; i>0; i--) {
                     grille[rangee.x][i] = grille[rangee.x][i-1];
                 }
                 grille[rangee.x][0] = tmp;
-            }
-            else{
-                Tuile tmp = grille[rangee.x][0];
+                break;
+            case S:
+                tmp = grille[grille.length-1][rangee.y];
+                for (int i = grille.length-1; i>0; i--) {
+                    grille[i][rangee.y] = grille[i-1][rangee.y];
+                }
+                grille[0][rangee.y] = tmp;
+                break;
+            case O:
+                tmp = grille[rangee.x][0];
                 for (int i = 0; i < grille.length - 1; i++) {
                     grille[rangee.x][i] = grille[rangee.x][i+1] ;
                 }
                 grille[rangee.x][grille.length - 1] = tmp;
-            }
+                break;
         }
         updatePosition();
     }
@@ -167,47 +155,11 @@ public class Plateau {
         }
     }*/
 
-
-    /**
-     * Initialise le plateau avec les règles 4 joueurs classiques
-     */
-    /*private void Init4Players(){
-        int l =  grille.length;
-
-        for (int i = 0; i < l; i++) {
-
-            if(i<l/2) {
-                PlacerNouvelleBilleA(0,i,0);
-
-                if(i!=0)
-                    PlacerNouvelleBilleA(i,0,0);
-
-                if(i!=0)
-                    PlacerNouvelleBilleA(l-1,1,3);
-
-                PlacerNouvelleBilleA(i,l-1,1);
-            }
-
-            if(i>l/2) {
-                PlacerNouvelleBilleA(i,0,3);
-
-                if(i!=l-1)
-                    PlacerNouvelleBilleA(0,i,1);
-
-                PlacerNouvelleBilleA(l-1,i,2);
-
-                if(i!=l-1)
-                    PlacerNouvelleBilleA(i,l-1,2);
-
-            }
-        }
-    }*/
-
-    public Joueur JoueurCourant(){
+    public Joueur joueurCourant(){
         return getPlayer(joueurcourant);
     }
 
-    public Tuile[][]GetGrille(){
+    public Tuile[][]getGrille(){
         return grille;
     }
 

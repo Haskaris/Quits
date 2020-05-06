@@ -44,7 +44,7 @@ public class VuePlateau extends PlateauGraphique {
     }
     
     private ImageQuits lisImage(String nom) {
-        String ressource = (String)Configuration.instance().Lis(nom);
+        String ressource = (String)Configuration.instance().lis(nom);
         Configuration.instance().logger().info("Lecture de l'image " + ressource + " comme " + nom);
         InputStream in = Configuration.charge(ressource);
         try {
@@ -74,7 +74,7 @@ public class VuePlateau extends PlateauGraphique {
             for (int j = 0; j < 5; j++) {
                 int x = j * largeurTuile;
                 int y = i * hauteurTuile;
-                Tuile currentTile = plateau.GetGrille()[i][j];
+                Tuile currentTile = plateau.getGrille()[i][j];
                 int index = currentTile.getIndexOfColor();
                 tracer(tuiles.get(index), x, y, largeurTuile, hauteurTuile);
             }

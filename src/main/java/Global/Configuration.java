@@ -20,8 +20,9 @@ public final class Configuration {
         super();
     }
 
-    /** Liste des paramètres configurables et sauvegardable
-     *  A faire correspondre avec la class Properties pour la sauvegarde
+    /** 
+     * Liste des paramètres configurables et sauvegardable
+     * A faire correspondre avec la class Properties pour la sauvegarde
      */
     private static String LogLevel = "WARNING";
     private static Boolean Maximized = false;
@@ -37,7 +38,7 @@ public final class Configuration {
     private static String Tuile7 = "TuilesIHM/tuile_couleur_7.png";
     private static String Tuile8 = "TuilesIHM/tuile_couleur_8.png";
 
-    public static Boolean Ecris(String S, Object valeur) {
+    public static Boolean ecris(String S, Object valeur) {
         Field[] fields = instance().getClass().getDeclaredFields();
         for(Field field : fields){
             if(S.equals(field.getName())){
@@ -55,10 +56,9 @@ public final class Configuration {
             }
         }
         throw new NoSuchElementException("Element de configuration non trouvé");
-
     }
 
-    public static Object Lis(String S)  {
+    public static Object lis(String S)  {
         Field[] fields = instance().getClass().getDeclaredFields();
         for(Field field : fields){
             if(S.equals(field.getName()))
@@ -68,12 +68,10 @@ public final class Configuration {
         throw new NoSuchElementException("Element de configuration non trouvé");
     }
 
-
     public static Logger logger (){
         Logger l = Logger.getLogger("SokobanLogger");
         l.setLevel((Level.parse(LogLevel)));
         return l;
-
     }
 
     public static InputStream charge(String path){

@@ -1,7 +1,9 @@
 
 package Controleur;
 
+import Global.Tools;
 import Global.Tools.AILevel;
+import Global.Tools.Dir;
 import Modele.Joueurs.*;
 import Modele.Support.Plateau;
 import Vue.GraphicInterface;
@@ -72,6 +74,6 @@ public class Mediateur {
     }
 
     public void mouseClick(int l, int c) {
-        this.plateau.DeplacerRangee(new Point(l, c), true);
+        this.plateau.deplacerRangee(new Point(l, c), Dir.S);
     }
 }
