@@ -40,6 +40,16 @@ public abstract class Joueur {
     }
     
     /**
+     * Enlève la bille de la liste des billes du joueur
+     * Retourne vrai si elle a été supprimée, faux sinon
+     * @param b
+     * @return 
+     */
+    public boolean removeBille(Bille b) {
+        return this.billes.remove(b);
+    }
+    
+    /**
      * Le joueur devra à ce moment jouer (lancer l'ia ou récupérer l'entrée utilisateur)
      * @param coups_possibles la liste des coups jouable par le joueur
      * @return le coup choisi par le joueur
