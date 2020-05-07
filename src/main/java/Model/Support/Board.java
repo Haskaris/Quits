@@ -104,20 +104,20 @@ public class Board {
         //Factoriser
         switch(direction) {
             case N:
-                tmp = grid[0][line.y];
+                tmp = grid[line.x][0];
                 for (int i = 0; i < grid.length - 1; i++) {
-                    grid[i][line.y] = grid[i+1][line.y] ;
+                    grid[line.x][i] = grid[line.x][i+1] ;
                 }
-                grid[grid.length-1][line.y] = tmp;
+                grid[line.x][grid.length - 1] = tmp;
                 break;
-            case E:
+            case S:
                 tmp = grid[line.x][grid.length - 1];
                 for (int i = grid.length-1; i>0; i--) {
                     grid[line.x][i] = grid[line.x][i-1];
                 }
                 grid[line.x][0] = tmp;
                 break;
-            case S:
+            case E:
                 tmp = grid[grid.length-1][line.y];
                 for (int i = grid.length-1; i>0; i--) {
                     grid[i][line.y] = grid[i-1][line.y];
@@ -125,11 +125,11 @@ public class Board {
                 grid[0][line.y] = tmp;
                 break;
             case O:
-                tmp = grid[line.x][0];
+                tmp = grid[0][line.y];
                 for (int i = 0; i < grid.length - 1; i++) {
-                    grid[line.x][i] = grid[line.x][i+1] ;
+                    grid[i][line.y] = grid[i+1][line.y] ;
                 }
-                grid[line.x][grid.length - 1] = tmp;
+                grid[grid.length-1][line.y] = tmp;
                 break;
         }
         updatePosition();
