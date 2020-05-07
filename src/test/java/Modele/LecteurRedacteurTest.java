@@ -1,5 +1,6 @@
 package Modele;
 
+import Global.Tools;
 import Model.ReaderWriter;
 import Model.Players.Player;
 import Model.Players.AINormalPlayer;
@@ -27,8 +28,11 @@ class LecteurRedacteurTest {
     void ecrisPartie() {
         try {
             Board board = new Board();
-            board.addPlayer(new AINormalPlayer(namePlayer0Test, Color.BLUE));
-            board.addPlayer(new AINormalPlayer(namePlayer1Test, Color.RED));
+            Player tmpPlayer0 = new AINormalPlayer(namePlayer0Test, colorPlayer0Test);
+            tmpPlayer0.setStartPoint(Tools.Direction.SO);
+            Player tmpPlayer1 = new AINormalPlayer(namePlayer1Test, colorPlayer1Test);
+            tmpPlayer1.setStartPoint(Tools.Direction.NE);
+            board.addPlayer(tmpPlayer0);
 
             new ReaderWriter(pathTest).writeGame(board);
         } catch (IOException e) {
