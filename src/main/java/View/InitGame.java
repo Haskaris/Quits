@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Vue;
+package View;
 
-import Controleur.Mediateur;
+import Controleur.Mediator;
 import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
@@ -17,19 +17,19 @@ import java.util.ArrayList;
  */
 public class InitGame extends javax.swing.JPanel {
 
-    Mediateur mediateur;
+    Mediator mediator;
     Tools.GameMode gameMode;
     
     /**
      * Creates new form InitGameAuto
      */
-    public InitGame(Mediateur mediateur) {
+    public InitGame(Mediator mediateur) {
         initComponents();
         this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
         this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
         this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
         this.updateUI();
-        this.mediateur = mediateur;
+        this.mediator = mediateur;
     }
 
     /**
@@ -131,7 +131,7 @@ public class InitGame extends javax.swing.JPanel {
     }//GEN-LAST:event_gameModeListItemStateChanged
 
     private void ButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonPlayActionPerformed
-        this.mediateur.initGame(this.gameMode);
+        this.mediator.initGame(this.gameMode);
     }//GEN-LAST:event_ButtonPlayActionPerformed
 
     public ArrayList<EditPlayer> getEditsPlayers() {

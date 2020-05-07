@@ -1,55 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Vue;
+package View;
 
 import Global.Configuration;
-import Modele.Support.Plateau;
-import Modele.Support.Tuile;
+import Model.Support.Board;
+import Model.Support.Tile;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-/**
- *
- * @author Mathis
- */
-public class VuePlateau extends PlateauGraphique {
-    ArrayList<ImageQuits> tuiles;
-    Plateau plateau;
-    int largeurTuile;
-    int hauteurTuile;
-    
+public class ViewBoard extends BoardGraphic {
+    ArrayList<ImageQuits> tilesImage;
+    Board board;
+    int widthTile;
+    int heightTile;
     
     // Décalage des éléments (pour pouvoir les animer)
     Vecteur[][] decalages;
     
-    VuePlateau(Plateau plateau) {
-        this.plateau = plateau;
-        //tuile = lisImage("Tuile");
+    ViewBoard(Board plateau) {
+        this.board = plateau;
         initTuile();
     }
     
     private void initTuile() {
-        tuiles = new ArrayList<>();
-        tuiles.add(lisImage("Tuile1"));
-        tuiles.add(lisImage("Tuile2"));
-        tuiles.add(lisImage("Tuile3"));
-        tuiles.add(lisImage("Tuile4"));
-        tuiles.add(lisImage("Tuile5"));
-        tuiles.add(lisImage("Tuile6"));
-        tuiles.add(lisImage("Tuile7"));
-        tuiles.add(lisImage("Tuile8"));
+        tilesImage = new ArrayList<>();
+        tilesImage.add(readImage("Tuile1"));
+        tilesImage.add(readImage("Tuile2"));
+        tilesImage.add(readImage("Tuile3"));
+        tilesImage.add(readImage("Tuile4"));
+        tilesImage.add(readImage("Tuile5"));
+        tilesImage.add(readImage("Tuile6"));
+        tilesImage.add(readImage("Tuile7"));
+        tilesImage.add(readImage("Tuile8"));
     }
     
-    private ImageQuits lisImage(String nom) {
-        String ressource = (String)Configuration.instance().Lis(nom);
-        Configuration.instance().logger().info("Lecture de l'image " + ressource + " comme " + nom);
+    private ImageQuits readImage(String name) {
+        String ressource = (String)Configuration.instance().read(name);
+        Configuration.instance().logger().info("Lecture de l'image " + ressource + " comme " + name);
         InputStream in = Configuration.charge(ressource);
         try {
             // Chargement d'une image utilisable dans Swing
-            return super.lisImage(in);
+            return super.readImage(in);
         } catch (Exception e) {
             Configuration.instance().logger().severe("Impossible de charger l'image " + ressource);
             System.exit(1);
@@ -64,21 +53,21 @@ public class VuePlateau extends PlateauGraphique {
             decalages = new Vecteur[5][5];
         }
         
-        largeurTuile = largeur() / 5;
-        hauteurTuile = hauteur() / 5;
+        widthTile = largeur() / 5;
+        heightTile = hauteur() / 5;
         
-        largeurTuile = Math.min(largeurTuile, hauteurTuile);
-        hauteurTuile = largeurTuile;
+        widthTile = Math.min(widthTile, heightTile);
+        heightTile = widthTile;
         
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                int x = j * largeurTuile;
-                int y = i * hauteurTuile;
-                Tuile currentTile = plateau.GetGrille()[i][j];
+                int x = j * widthTile;
+                int y = i * heightTile;
+                Tile currentTile = board.getGrid()[i][j];
                 int index = currentTile.getIndexOfColor();
-                tracer(tuiles.get(index), x, y, largeurTuile, hauteurTuile);
-                if (currentTile.contientBille()) {
-                    drawBall(currentTile.getCouleurBille(), x, y, largeurTuile, hauteurTuile);
+                tracer(tilesImage.get(index), x, y, widthTile, heightTile);
+                if (currentTile.hasMarble()) {
+                    drawBall(currentTile.getMarbleColor(), x, y, widthTile, heightTile);
                 }
             }
         }
@@ -86,12 +75,12 @@ public class VuePlateau extends PlateauGraphique {
 
     @Override
     int hauteurCase() {
-        return hauteurTuile;
+        return heightTile;
     }
 
     @Override
     int largeurCase() {
-        return largeurTuile;
+        return widthTile;
     }
 
     @Override

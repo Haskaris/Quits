@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Vue;
+package View;
 
-import Controleur.Mediateur;
-import Modele.Joueurs.Joueur;
-import Modele.Support.Plateau;
+import Controleur.Mediator;
+import Model.Players.Player;
+import Model.Support.Board;
 import Paterns.Observateur;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -23,24 +23,23 @@ import javax.swing.SwingUtilities;
  * @author Mathis
  */
 public class GraphicInterface implements Runnable, Observateur {
-    Plateau plateau;
-    Mediateur mediateur;
+    Board board;
+    Mediator mediator;
     
     JFrame frame;
-    PlateauGraphique niv;
+    BoardGraphic boardGraphic;
+    
     boolean maximized;
-    JLabel nbPas, nbPoussees;
-    JToggleButton IA, animation;
     
     JButton menu, undo, redo;
 
     
-    GraphicInterface(Plateau plateau, Mediateur m) {
-        this.plateau = plateau;
-        this.mediateur = m;
+    GraphicInterface(Board plateau, Mediator m) {
+        this.board = plateau;
+        this.mediator = m;
     }
 
-    public static void demarrer(Mediateur m) {
+    public static void start(Mediator m) {
         GraphicInterface vue = new GraphicInterface(m.getPlateau(), m);
         m.addGraphicInterface(vue);
         SwingUtilities.invokeLater(vue);
@@ -51,14 +50,14 @@ public class GraphicInterface implements Runnable, Observateur {
     public void run() {
         // Eléments de l'interface
         frame = new JFrame("Quits");
-        niv = new VuePlateau(this.plateau);
+        boardGraphic = new ViewBoard(this.board);
 
         // Texte et contrôles à droite de la fenêtre
         Box boxPlayer = Box.createVerticalBox();
 
-        for(Joueur player : this.plateau.joueurs) {
+        for(Player player : this.board.getPlayers()) {
             try {
-                JLabel titre = new JLabel(player.nom);
+                JLabel titre = new JLabel(player.name);
                 titre.setAlignmentX(Component.CENTER_ALIGNMENT);
                 boxPlayer.add(titre);
             } catch (Exception e) {
@@ -93,7 +92,7 @@ public class GraphicInterface implements Runnable, Observateur {
         //boiteTexte.add(annulerRefaire);
 
         // Retransmission des évènements au contrôleur
-        niv.addMouseListener(new MouseAction(niv, mediateur));
+        boardGraphic.addMouseListener(new MouseAction(boardGraphic, mediator));
         //frame.addKeyListener(new AdaptateurClavier(control));
         //Timer chrono = new Timer(16, new AdaptateurTemps(control));
         //IA.addActionListener(new AdaptateurIA(control));
@@ -105,7 +104,7 @@ public class GraphicInterface implements Runnable, Observateur {
         // Mise en place de l'interface
         frame.add(boxMenu, BorderLayout.WEST);
         frame.add(boxPlayer, BorderLayout.EAST);
-        frame.add(niv);
+        frame.add(boardGraphic);
         //j.ajouteObservateur(this);
         //chrono.start();
 
@@ -115,7 +114,7 @@ public class GraphicInterface implements Runnable, Observateur {
     }
     
     public void update() {
-        niv.repaint();
+        boardGraphic.repaint();
     }
 
     @Override

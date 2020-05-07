@@ -1,27 +1,36 @@
-package Modele.Support;
+package Model.Support;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Random;
 
-public class Tuile {
-    private Bille bille = null;
+public class Tile {
+    private Marble marble = null;
     private Point position;
     private int indexOfColor;
     
     /**
      * Constructeur
      */
-    Tuile(int x, int y) {
-        setIndexOfColor();
+    Tile(int x, int y) {
+        setRandomIndexOfColor();
         this.position = new Point(x, y);
     }
     
     /**
      * Génère un index aléatoire
      */
-    private void setIndexOfColor() {
+    private void setRandomIndexOfColor() {
         Random random = new Random();
-        this.indexOfColor = random.nextInt(8);
+        this.setIndexOfColor(random.nextInt(8));
+    }
+    
+    /**
+     * Change l'index de la couleur
+     */
+    public void setIndexOfColor(int i) {
+        this.indexOfColor = i;
     }
     
     /**
@@ -36,18 +45,18 @@ public class Tuile {
      * Retourne vrai si la tuile contient une bille
      * @return boolean
      */
-    public boolean contientBille(){
-        return bille != null;
+    public boolean hasMarble(){
+        return marble != null;
     }
 
     /**
      * Enlève la bille présente sur la tuile
-     * @return Bille
+     * @return Marble
      */
-    public Bille enleverBille(){
-        Bille btmp = bille;
-        bille = null;
-        return btmp;
+    public Marble removeMarble(){
+        Marble tmp = marble;
+        marble = null;
+        return tmp;
     }
     
     /**
@@ -55,9 +64,9 @@ public class Tuile {
      * et met à jour la tuile de la bille
      * @param b 
      */
-    public void addBille(Bille b) {
-        b.setTuile(this);
-        this.bille = b;
+    public void addMarble(Marble b) {
+        b.setTile(this);
+        this.marble = b;
     }
     
     /**
@@ -73,23 +82,27 @@ public class Tuile {
      * @param x
      * @param y 
      */
-    public void setPosition(int x, int y) {
+    public void updatePosition(int x, int y) {
         this.position.x = x;
         this.position.y = y;
     }
-    
-    /*public void MettreBille(Bille _bille, Point position){
-        bille = _bille;
-        //bille.PositionSet(position);
-    }*/
     
     /**
      * Retourne la couleur de la bille, null sinon
      * @return Color
      */
-    public Color getCouleurBille(){
-        if(bille == null)
+    public Color getMarbleColor(){
+        if(marble == null)
             return null;
-        return bille.CouleurGet();
+        return marble.getColor();
+    }
+    
+    /**
+     * S'imprime dans la sortie stream
+     * @param stream
+     * @throws IOException 
+     */
+    public void print(OutputStream stream) throws IOException {
+        stream.write(String.valueOf(this.indexOfColor).getBytes());
     }
 }
