@@ -35,14 +35,6 @@ public abstract class PlateauGraphique extends JComponent implements Observateur
         drawable.drawOval(x+l/4, y+h/4, l/2, h/2);
         //drawable.drawImage(i.image(), x, y, l, h, null);
     }
-    
-    protected void drawRect(Color c, int x, int y, int l, int h) {
-        drawable.setPaint(c);
-        drawable.fillRect(x, y, l, h);
-        drawable.drawRect(x, y, l, h);
-        //drawable.drawImage(i.image(), x, y, l, h, null);
-    }
-    
 
     @Override
     public void paintComponent(Graphics g) {

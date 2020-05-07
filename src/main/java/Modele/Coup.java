@@ -59,38 +59,15 @@ public class Coup {
             plateau.DeplacerRangee(rangee,!positif);
         }
     }
-    
-    
-    public Point getPosition() {
-        return bille.getTuile().getPosition();
-    }
-    
-    public Point getDirection() {
-        int x = 0,y = 0;
-        switch (direction) {
-            case NO: y--; x--; break;
-            case NE: y--; x++; break;
-            case SO: y++; x--; break;
-            case SE: y++; x++; break;
-        }
-        
-        return new Point(x,y);
-    }
-    
-    
-    public void Afficher(){
-        System.out.println("Un coup : ");
+
+    /*public void Afficher(){
         if(bille!=null){
-            System.out.println("Déplacement potentiel d'une bille");
-            System.out.println(bille.getTuile().getPosition());
+            System.out.println(bille.PositionGet());
             System.out.println(direction);
-            
         }
         if(rangee != null){
-            System.out.println("Déplacement déplacement potentiel d'une rangée : ");
             System.out.println(rangee);
-            System.out.println(positif);        
-        }
-    }
+            System.out.println(positif);        }
+    }*/
 
 }

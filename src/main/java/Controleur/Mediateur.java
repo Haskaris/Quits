@@ -86,7 +86,7 @@ public class Mediateur {
      * @param c 
      */
     public void mouseClick(int l, int c) {
-        this.plateau.playTurn(l,c);
+        this.plateau.playTurn();
     }
 
     public void addObservateur(GraphicInterface aThis) {
