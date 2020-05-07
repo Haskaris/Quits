@@ -67,6 +67,16 @@ public abstract class Player {
     }
     
     /**
+     * Ajoute une bille à la liste des billes du joueur 
+     * @return Marble
+     */
+    public Marble addMarble() {
+        Marble tmp = new Marble(this.color);
+        this.marbles.add(tmp);
+        return tmp;
+    }
+    
+    /**
      * Retourne la liste des billes du joueur
      * @return 
      */
