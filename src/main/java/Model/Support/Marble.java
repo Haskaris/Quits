@@ -46,9 +46,9 @@ public class Marble {
      * @throws IOException 
      */
     public void print(OutputStream stream) throws IOException {
-        stream.write(this.getTile().getPosition().x);
+        stream.write(String.valueOf(this.getTile().getPosition().x).getBytes());
         stream.write('-');
-        stream.write(this.getTile().getPosition().y);
+        stream.write(String.valueOf(this.getTile().getPosition().y).getBytes());
         stream.write('/');
     }
 }

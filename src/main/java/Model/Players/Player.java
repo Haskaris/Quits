@@ -111,7 +111,7 @@ public abstract class Player {
         stream.write(this.name.getBytes());
         stream.write(' ');
         //On écrit la couleur
-        stream.write(this.color.getRGB());
+        stream.write(String.valueOf(this.color.getRGB()).getBytes());
         stream.write('\n');
         for(Marble m : this.marbles) {
             m.print(stream);
@@ -127,22 +127,22 @@ public abstract class Player {
      */
     public static Player load(InputStream in_stream) throws IOException  {
         Player tmp = null;
-        String[] metadonees = ReaderWriter.readLine(in_stream).split(" ");
-        switch (metadonees[0]){
-                case "HUMAIN":
-                    tmp = new HumanPlayer(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+        String[] dataPlayer = ReaderWriter.readLine(in_stream).split(" ");
+        switch (dataPlayer[0]){
+                case "HumanPlayer":
+                    tmp = new HumanPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
-                case "DISTANT":
-                    tmp = new DistantPlayer(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                case "DistantPlayer":
+                    tmp = new DistantPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
-                case "IA0":
-                    tmp = new AIEasyPlayer(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                case "AIEasyPlayer":
+                    tmp = new AIEasyPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
-                case "IA1":
-                    tmp = new AINormalPlayer(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                case "AINormalPlayer":
+                    tmp = new AINormalPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
-                case "IA2":
-                    tmp = new AIHardPlayer(metadonees[0], new Color(Integer.parseInt(metadonees[1])));
+                case "AIHardPlayer":
+                    tmp = new AIHardPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
             }
         return tmp;

@@ -51,24 +51,24 @@ class LecteurRedacteurTest {
     @Test
     @Order(2)
     void litPartie() {
-            Board board = null;
-            try {
-                ReaderWriter rw = new ReaderWriter(pathTest);
-                board = rw.readGame();
-                //Si les tests fonctionnent, c'est qu'on ne peut pas charger une partie sans billes
-            } catch (IOException e) {
-                e.printStackTrace();
-                fail();
-            }
-            assertNotNull(board);
-            assertNotNull(board.getPlayers());
-            assertEquals(playerNumberTest,board.getPlayers().size());
-            assertEquals(boardSizeTest, board.getGrid().length);
-            assertEquals(currentPlayerTest, board.currentPlayer);
-            assertEquals(namePlayer0Test, board.getPlayer(0).name);
-            assertEquals(colorPlayer0Test, board.getPlayer(0).color);
-            assertEquals(namePlayer1Test, board.getPlayer(1).name);
-            assertEquals(colorPlayer1Test, board.getPlayer(1).color);
+        Board board = null;
+        try {
+            ReaderWriter rw = new ReaderWriter(pathTest);
+            board = rw.readGame();
+            //Si les tests fonctionnent, c'est qu'on ne peut pas charger une partie sans billes
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assertNotNull(board);
+        assertNotNull(board.getPlayers());
+        assertEquals(playerNumberTest, board.getPlayers().size());
+        assertEquals(boardSizeTest, board.getGrid().length);
+        assertEquals(currentPlayerTest, board.currentPlayer);
+        assertEquals(namePlayer0Test, board.getPlayer(0).name);
+        assertEquals(colorPlayer0Test, board.getPlayer(0).color);
+        assertEquals(namePlayer1Test, board.getPlayer(1).name);
+        assertEquals(colorPlayer1Test, board.getPlayer(1).color);
     }
 
 

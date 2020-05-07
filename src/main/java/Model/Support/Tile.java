@@ -103,6 +103,6 @@ public class Tile {
      * @throws IOException 
      */
     public void print(OutputStream stream) throws IOException {
-        stream.write(this.indexOfColor);
+        stream.write(String.valueOf(this.indexOfColor).getBytes());
     }
 }
