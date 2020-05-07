@@ -55,7 +55,6 @@ class LecteurRedacteurTest {
         try {
             ReaderWriter rw = new ReaderWriter(pathTest);
             board = rw.readGame();
-            //Si les tests fonctionnent, c'est qu'on ne peut pas charger une partie sans billes
         } catch (IOException e) {
             e.printStackTrace();
             fail();
