@@ -28,12 +28,18 @@ class LecteurRedacteurTest {
     void ecrisPartie() {
         try {
             Board board = new Board();
+            
             Player tmpPlayer0 = new AINormalPlayer(namePlayer0Test, colorPlayer0Test);
             tmpPlayer0.setStartPoint(Tools.Direction.SO);
             Player tmpPlayer1 = new AINormalPlayer(namePlayer1Test, colorPlayer1Test);
             tmpPlayer1.setStartPoint(Tools.Direction.NE);
+            
             board.addPlayer(tmpPlayer0);
-
+            board.placeMarbleOn(tmpPlayer0.addMarble(), 1, 1);
+            
+            board.addPlayer(tmpPlayer1);
+            board.placeMarbleOn(tmpPlayer1.addMarble(), 2, 2);
+            
             ReaderWriter rw = new ReaderWriter(pathTest);
             rw.writeGame(board);
         } catch (IOException e) {
@@ -49,6 +55,7 @@ class LecteurRedacteurTest {
             try {
                 ReaderWriter rw = new ReaderWriter(pathTest);
                 board = rw.readGame();
+                //Si les tests fonctionnent, c'est qu'on ne peut pas charger une partie sans billes
             } catch (IOException e) {
                 e.printStackTrace();
                 fail();
