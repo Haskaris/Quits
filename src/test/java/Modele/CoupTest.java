@@ -14,56 +14,56 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CoupTest {
-    Board plateau;
-    Marble b;
-    Player joueur;
+    Board board;
+    Marble marble;
+    Player player;
 
     @BeforeEach
     public void init(){
-        joueur = new AIEasyPlayer("default", Color.BLUE);
-        plateau = new Board();
-        plateau.addPlayer(joueur);
-        b = new Marble(Color.BLUE);
+        player = new AIEasyPlayer("default", Color.BLUE);
+        board = new Board();
+        board.addPlayer(player);
+        marble = player.addMarble();
     }
 
     @Test
     public void TestCoup() {
-        plateau.getGrid()[2][2].addMarble(b);
-        Move c = new Move(b, Tools.Direction.NO, joueur);
-        c.perform(plateau);
-        assertFalse(plateau.getGrid()[2][2].hasMarble());
-        assertTrue(plateau.getGrid()[1][1].hasMarble());
-        c.cancel(plateau);
-        assertFalse(plateau.getGrid()[1][1].hasMarble());
-        assertTrue(plateau.getGrid()[2][2].hasMarble());
+        board.getGrid()[2][2].addMarble(marble);
+        Move c = new Move(marble, Tools.Direction.NO, player);
+        c.perform(board);
+        assertFalse(board.getGrid()[2][2].hasMarble());
+        assertTrue(board.getGrid()[1][1].hasMarble());
+        c.cancel(board);
+        assertFalse(board.getGrid()[1][1].hasMarble());
+        assertTrue(board.getGrid()[2][2].hasMarble());
 
         System.out.println("Coup OK");
     }
 
     @Test
     public void TestHistorique() {
-        History historique = new History(plateau);
-        plateau.getGrid()[2][2].addMarble(b);
-        Move c1 = new Move(b, Tools.Direction.NO,joueur);
-        Move c2 = new Move(b, Tools.Direction.SO,joueur);
+        History historique = new History(board);
+        board.getGrid()[2][2].addMarble(marble);
+        Move c1 = new Move(marble, Tools.Direction.NO, player);
+        Move c2 = new Move(marble, Tools.Direction.SO, player);
         historique.doMove(c1);
         historique.doMove(c2);
         historique.undo();
         historique.redo();
         historique.undo();
-        assertTrue(plateau.getGrid()[1][1].hasMarble());
+        assertTrue(board.getGrid()[1][1].hasMarble());
         System.out.println("Historique OK");
     }
 
     @Test
     public void TestEntreeController() {
-        List<Move> coupspossible = new MoveCalculator(plateau).coupsPossibles();
-        //LecteurRedacteur.AffichePartie(plateau);
-        plateau.history.doMove(coupspossible.get(0));
-        //LecteurRedacteur.AffichePartie(plateau);
-        coupspossible = new MoveCalculator(plateau).coupsPossibles();
-        plateau.history.doMove(joueur.Jouer(coupspossible));
-        //LecteurRedacteur.AffichePartie(plateau);
+        List<Move> coupspossible = new MoveCalculator(board).coupsPossibles();
+        //LecteurRedacteur.AffichePartie(board);
+        board.history.doMove(coupspossible.get(0));
+        //LecteurRedacteur.AffichePartie(board);
+        coupspossible = new MoveCalculator(board).coupsPossibles();
+        board.history.doMove(player.Jouer(coupspossible));
+        //LecteurRedacteur.AffichePartie(board);
     }
 }
 

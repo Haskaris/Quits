@@ -13,26 +13,25 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LecteurRedacteurTest {
-    String pathtest = "TestJunit.save";
-    int nbjoueurtest = 2;
-    int tailletest = 5;
-    String nomtest0 = "Default1";
-    Color couleurtest0 = Color.BLUE;
-    String nomtest1 = "Default2";
-    Color couleurtest1 = Color.GREEN;
-    int joueurcouranttest = 0;
+    String pathTest = "TestJunit.save";
+    int playerNumberTest = 2;
+    int boardSizeTest = 5;
+    String namePlayer0Test = "Default1";
+    Color colorPlayer0Test = Color.BLUE;
+    String namePlayer1Test = "Default2";
+    Color colorPlayer1Test = Color.GREEN;
+    int currentPlayerTest = 0;
 
     @Test
     @Order(1)
     void ecrisPartie() {
         try {
-            Board plateau = new Board();
-            plateau.addPlayer(new AINormalPlayer(nomtest0, Color.BLUE));
-            plateau.addPlayer(new AINormalPlayer(nomtest1, Color.RED));
+            Board board = new Board();
+            board.addPlayer(new AINormalPlayer(namePlayer0Test, Color.BLUE));
+            board.addPlayer(new AINormalPlayer(namePlayer1Test, Color.RED));
 
-            new ReaderWriter(pathtest).writeGame(plateau);
-
-        }catch (Exception e){
+            new ReaderWriter(pathTest).writeGame(board);
+        } catch (IOException e) {
             e.printStackTrace();
             fail();
         }
@@ -41,23 +40,22 @@ class LecteurRedacteurTest {
     @Test
     @Order(2)
     void litPartie() {
-            Board plateau = null;
+            Board board = null;
             try {
-                plateau = new ReaderWriter(pathtest).readGame();
+                board = new ReaderWriter(pathTest).readGame();
             } catch (IOException e) {
                 e.printStackTrace();
                 fail();
             }
-            assertNotNull(plateau);
-            assertNotNull(plateau.players);
-            assertEquals(nbjoueurtest,plateau.players.length);
-            assertEquals(tailletest, plateau.getGrid().length);
-            assertEquals(joueurcouranttest, plateau.currentPlayer);
-            assertEquals(nomtest0, plateau.players[0].name);
-            assertEquals(couleurtest0, plateau.players[0].color);
-            assertEquals(nomtest1, plateau.players[1].name);
-            assertEquals(couleurtest1, plateau.players[1].color);
-
+            assertNotNull(board);
+            assertNotNull(board.players);
+            assertEquals(playerNumberTest,board.players.length);
+            assertEquals(boardSizeTest, board.getGrid().length);
+            assertEquals(currentPlayerTest, board.currentPlayer);
+            assertEquals(namePlayer0Test, board.players[0].name);
+            assertEquals(colorPlayer0Test, board.players[0].color);
+            assertEquals(namePlayer1Test, board.players[1].name);
+            assertEquals(colorPlayer1Test, board.players[1].color);
     }
 
 
