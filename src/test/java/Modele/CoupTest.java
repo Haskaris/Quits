@@ -22,6 +22,7 @@ class CoupTest {
     public void init(){
         joueur = new AIEasyPlayer("default", Color.BLUE);
         plateau = new Board();
+        plateau.addPlayer(joueur);
         b = new Marble(Color.BLUE);
     }
 

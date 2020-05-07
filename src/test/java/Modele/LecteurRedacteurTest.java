@@ -27,9 +27,8 @@ class LecteurRedacteurTest {
     void ecrisPartie() {
         try {
             Board plateau = new Board();
-            plateau.players = new Player[2];
-            plateau.players[0] = new AINormalPlayer(nomtest0, Color.BLUE);
-            plateau.players[1] = new AINormalPlayer(nomtest1, Color.RED);
+            plateau.addPlayer(new AINormalPlayer(nomtest0, Color.BLUE));
+            plateau.addPlayer(new AINormalPlayer(nomtest1, Color.RED));
 
             new ReaderWriter(pathtest).writeGame(plateau);
 
