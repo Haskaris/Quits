@@ -34,7 +34,8 @@ class LecteurRedacteurTest {
             tmpPlayer1.setStartPoint(Tools.Direction.NE);
             board.addPlayer(tmpPlayer0);
 
-            new ReaderWriter(pathTest).writeGame(board);
+            ReaderWriter rw = new ReaderWriter(pathTest);
+            rw.writeGame(board);
         } catch (IOException e) {
             e.printStackTrace();
             fail();
@@ -46,7 +47,8 @@ class LecteurRedacteurTest {
     void litPartie() {
             Board board = null;
             try {
-                board = new ReaderWriter(pathTest).readGame();
+                ReaderWriter rw = new ReaderWriter(pathTest);
+                board = rw.readGame();
             } catch (IOException e) {
                 e.printStackTrace();
                 fail();

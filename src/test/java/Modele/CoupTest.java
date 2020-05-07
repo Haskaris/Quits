@@ -25,11 +25,11 @@ class CoupTest {
         board = new Board();
         board.addPlayer(player);
         marble = player.addMarble();
+        board.getGrid()[2][2].addMarble(marble);
     }
 
     @Test
     public void TestCoup() {
-        board.getGrid()[2][2].addMarble(marble);
         Move c = new Move(marble, Tools.Direction.NO, player);
         c.perform(board);
         assertFalse(board.getGrid()[2][2].hasMarble());
@@ -44,7 +44,6 @@ class CoupTest {
     @Test
     public void TestHistorique() {
         History historique = new History(board);
-        board.getGrid()[2][2].addMarble(marble);
         Move c1 = new Move(marble, Tools.Direction.NO, player);
         Move c2 = new Move(marble, Tools.Direction.SO, player);
         historique.doMove(c1);
@@ -58,7 +57,8 @@ class CoupTest {
 
     @Test
     public void TestEntreeController() {
-        List<Move> coupspossible = new MoveCalculator(board).coupsPossibles();
+        MoveCalculator mc = new MoveCalculator(board);
+        List<Move> coupspossible = mc.coupsPossibles();
         //LecteurRedacteur.AffichePartie(board);
         board.history.doMove(coupspossible.get(0));
         //LecteurRedacteur.AffichePartie(board);
