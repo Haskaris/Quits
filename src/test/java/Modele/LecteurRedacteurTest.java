@@ -54,14 +54,14 @@ class LecteurRedacteurTest {
                 fail();
             }
             assertNotNull(board);
-            assertNotNull(board.players);
-            assertEquals(playerNumberTest,board.players.length);
+            assertNotNull(board.getPlayers());
+            assertEquals(playerNumberTest,board.getPlayers().size());
             assertEquals(boardSizeTest, board.getGrid().length);
             assertEquals(currentPlayerTest, board.currentPlayer);
-            assertEquals(namePlayer0Test, board.players[0].name);
-            assertEquals(colorPlayer0Test, board.players[0].color);
-            assertEquals(namePlayer1Test, board.players[1].name);
-            assertEquals(colorPlayer1Test, board.players[1].color);
+            assertEquals(namePlayer0Test, board.getPlayer(0).name);
+            assertEquals(colorPlayer0Test, board.getPlayer(0).color);
+            assertEquals(namePlayer1Test, board.getPlayer(1).name);
+            assertEquals(colorPlayer1Test, board.getPlayer(1).color);
     }
 
 
