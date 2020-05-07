@@ -10,7 +10,10 @@ import java.io.*;
 public class ReaderWriter {
     private String filepath;
 
-
+    /**
+     * Constructeur
+     * @param filepath 
+     */
     public ReaderWriter(String filepath) {
         this.filepath = filepath;
     }
@@ -32,7 +35,6 @@ public class ReaderWriter {
         Board board = new Board(/*boardSize*/);
 
         //On lit les infos sur les players
-        board.players = new Player[playerNumber];
         for (int k = 0; k < playerNumber; k++) {
             //Format :
             //TYPE NOM COULEUR
@@ -45,7 +47,7 @@ public class ReaderWriter {
                 tmp.addMarble(btmp);
                 board.placeMarbleOn(btmp, Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
             }
-            board.players[k] = tmp;
+            board.addPlayer(tmp);
         }
         
         board.load(in_stream);
@@ -79,11 +81,11 @@ public class ReaderWriter {
         stream.write(' ');
         //On écrit le nombre de joueur
         //Enregistrer le mode de jeu serait peut être mieux ?
-        stream.write((byte)IntToChar(board.players.length));
+        stream.write((byte)IntToChar(board.getPlayers().size()));
         stream.write('\n');
         
         //Info sur les players
-        for (Player p : board.players) {
+        for (Player p : board.getPlayers()) {
             p.print(stream);
         }
 
