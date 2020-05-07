@@ -17,11 +17,9 @@ import java.util.List;
 
 public class Board {
     private Tile[][] grid;
-    private ArrayList<Player> players;    //Le faire avec un arrayList est peut être mieux ?
+    private ArrayList<Player> players;
     public int currentPlayer;
     public History history;
-    
-    private int maxPlayer = 0;
 
     /**
      * Initialise un plateau
