@@ -8,6 +8,7 @@ package Vue;
 import Global.Configuration;
 import Modele.Support.Plateau;
 import Modele.Support.Tuile;
+import java.awt.Color;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -60,6 +61,11 @@ public class VuePlateau extends PlateauGraphique {
 
     @Override
     void tracerNiveau() {
+        System.out.println("JE TRACE LE NIVEAU LÀ");
+        System.out.println("JE TRACE LE NIVEAU LÀ");
+        System.out.println("JE TRACE LE NIVEAU LÀ");
+        System.out.println("JE TRACE LE NIVEAU LÀ");
+        
         if (decalages == null) {
             decalages = new Vecteur[5][5];
         }
@@ -77,11 +83,18 @@ public class VuePlateau extends PlateauGraphique {
                 Tuile currentTile = plateau.GetGrille()[i][j];
                 int index = currentTile.getIndexOfColor();
                 tracer(tuiles.get(index), x, y, largeurTuile, hauteurTuile);
+                if(plateau.joueurs[plateau.joueurcourant].etat == 0 && plateau.casesSelectionnees[i][j] == 0) {
+                    drawRect(new Color(0, 0, 0, 50), x, y, largeurTuile, hauteurTuile);
+                }
                 if (currentTile.contientBille()) {
                     drawBall(currentTile.getCouleurBille(), x, y, largeurTuile, hauteurTuile);
                 }
+                
+                
+                
             }
         }
+        
     }
 
     @Override

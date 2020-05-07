@@ -26,7 +26,9 @@ public class MouseAction extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         int l = e.getY() / plateau.hauteurCase();
         int c = e.getX() / plateau.largeurCase();
+        
         mediateur.mouseClick(l, c);
         //plateau.repaint();
+        plateau.tracerNiveau();
     }
 }
