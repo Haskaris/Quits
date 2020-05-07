@@ -38,19 +38,19 @@ public class Tools {
         switch (d) {
             case NO:
                 tmp.x = p.x - 1;
-                tmp.y = p.y + 1;
+                tmp.y = p.y - 1;
                 break;
             case NE:
                 tmp.x = p.x + 1;
-                tmp.y = p.y + 1;
+                tmp.y = p.y - 1;
                 break;
             case SE:
                 tmp.x = p.x + 1;
-                tmp.y = p.y - 1;
+                tmp.y = p.y + 1;
                 break;
             case SO:
                 tmp.x = p.x - 1;
-                tmp.y = p.y - 1;
+                tmp.y = p.y + 1;
                 break;
         }
         return tmp;
