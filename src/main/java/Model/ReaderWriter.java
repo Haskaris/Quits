@@ -8,36 +8,36 @@ import Model.Support.Board;
 import java.io.*;
 
 public class ReaderWriter {
-    private String filepath;
+    private final String filepath;
 
     /**
      * Constructeur
      * @param filepath 
      */
     public ReaderWriter(String filepath) {
-        this.filepath = filepath;
+        this.filepath = "Sauvegardes/" + filepath;
     }
-
+    
     /**
      * Lis le contenu d'un board de jeu d'un fichier externe
-     * À vérifier le bon fonctionnement
      * @return 
      * @throws java.io.IOException 
      */
     public Board readGame()throws IOException{
         Board board = new Board();
-        //On lit la boardSize et le nombre de players
-        try (InputStream in_stream = new FileInputStream("Sauvegardes/" + filepath)) {
+        try (InputStream in_stream = new FileInputStream(this.filepath)) {
             //On lit la boardSize et le nombre de players
             String[] firstline = readLine(in_stream).split(" ");
             int boardSize = Integer.parseInt(firstline[0]);
+            
             //Enregistrer le mode de jeu serait peut être mieux ?
             int playerNumber = Integer.parseInt(firstline[1]);
+            
             //board = new Board(/*boardSize*/);
             //On lit les infos sur les players
             for (int k = 0; k < playerNumber; k++) {
                 //Format :
-                //TYPE NOM COULEUR
+                //TYPE NOM COULEUR POSITION
                 //Bille1X-Bille1Y/Bille2X-Bille2Y
                 Player tmp = Player.load(in_stream);
                 String[] metadonees = readLine(in_stream).split("/");
@@ -47,7 +47,11 @@ public class ReaderWriter {
                     board.placeMarbleOn(btmp, Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
                 }
                 board.addPlayer(tmp);
-            }   board.load(in_stream);
+            }
+            
+            board.load(in_stream);
+        } catch (Exception e) {
+            System.out.println("Marchepas - " + e.getMessage());
         }
         return board;
     }
@@ -56,10 +60,10 @@ public class ReaderWriter {
     /**
      * Ecris le contenu d'un board de jeu dans un fichier externe
      * @param board board à sauvegarder
+     * @throws java.io.IOException
      */
     public void writeGame(Board board) throws IOException{
-        String path = "Sauvegardes/" + filepath;
-        File out = new File(path);
+        File out = new File(this.filepath);
         OutputStream stream;
         try {
             out.getParentFile().mkdirs();
@@ -67,17 +71,16 @@ public class ReaderWriter {
             stream = new FileOutputStream(out);
         }
         catch(IOException e){
-            Configuration.logger().severe("Erreur de creation d'un fichier de sortie : " + path);
+            Configuration.logger().severe("Erreur de creation d'un fichier de sortie : " + this.filepath);
             return;
         }
 
         //On écrit la boardSize du tableau (Pour quand elle sera dynamique)
-        //J'ai un doute là dessus, on ne peut pas simplement écrire l'entier ?
-        stream.write((byte)IntToChar(board.getGrid().length));
+        stream.write(String.valueOf(board.getGrid().length).getBytes());
         stream.write(' ');
         //On écrit le nombre de joueur
         //Enregistrer le mode de jeu serait peut être mieux ?
-        stream.write(/*(byte)IntToChar(*/board.getPlayers().size()/*)*/);
+        stream.write(String.valueOf(board.getPlayers().size()).getBytes());
         stream.write('\n');
         
         //Info sur les players
@@ -107,11 +110,6 @@ public class ReaderWriter {
             stream.read(data);
         }
         return S;
-    }
-
-    //J'ai un doute là dessus, on ne peut pas simplement écrire l'entier ?
-    private char IntToChar(int a){
-        return (char)(a+48);
     }
 
     /**
