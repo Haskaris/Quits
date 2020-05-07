@@ -10,8 +10,8 @@ class BaseTest {
     @Test
     public void TestConfiguration() {
         try{
-            Properties.Load();
-            assertNotNull(Configuration.Lis("Maximized"));
+            Properties.load();
+            assertNotNull(Configuration.read("Maximized"));
         }
         catch (Exception e){
             fail();

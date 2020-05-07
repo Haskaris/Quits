@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.InputStream;
 
-
+//À revoir → Faire comme le sokoban
 public final class Configuration {
     static volatile Configuration instance = null;
     public static Configuration instance(){
@@ -15,28 +15,30 @@ public final class Configuration {
             instance = new Configuration();
         return instance;
     }
+    
     private Configuration(){
         super();
     }
 
-
-
-    /** Liste des paramètres configurables et sauvegardable
-     *  A faire correspondre avec la class Properties pour la sauvegarde
+    /** 
+     * Liste des paramètres configurables et sauvegardable
+     * A faire correspondre avec la class Properties pour la sauvegarde
      */
     private static String LogLevel = "WARNING";
     private static Boolean Maximized = false;
     private static Boolean Animations = true;
     private static int Taille = 5;
     private static int Joueurs = 2;
+    private static String Tuile1 = "TuilesIHM/tuile_couleur_1.png";
+    private static String Tuile2 = "TuilesIHM/tuile_couleur_2.png";
+    private static String Tuile3 = "TuilesIHM/tuile_couleur_3.png";
+    private static String Tuile4 = "TuilesIHM/tuile_couleur_4.png";
+    private static String Tuile5 = "TuilesIHM/tuile_couleur_5.png";
+    private static String Tuile6 = "TuilesIHM/tuile_couleur_6.png";
+    private static String Tuile7 = "TuilesIHM/tuile_couleur_7.png";
+    private static String Tuile8 = "TuilesIHM/tuile_couleur_8.png";
 
-
-
-    /**
-    */
-
-
-    public static Boolean Ecris(String S, Object valeur) {
+    public static Boolean write(String S, Object valeur) {
         Field[] fields = instance().getClass().getDeclaredFields();
         for(Field field : fields){
             if(S.equals(field.getName())){
@@ -54,10 +56,9 @@ public final class Configuration {
             }
         }
         throw new NoSuchElementException("Element de configuration non trouvé");
-
     }
 
-    public static Object Lis(String S)  {
+    public static Object read(String S)  {
         Field[] fields = instance().getClass().getDeclaredFields();
         for(Field field : fields){
             if(S.equals(field.getName()))
@@ -67,12 +68,10 @@ public final class Configuration {
         throw new NoSuchElementException("Element de configuration non trouvé");
     }
 
-
     public static Logger logger (){
-        Logger l = Logger.getLogger("SokobanLogger");
+        Logger l = Logger.getLogger("QuitsLogger");
         l.setLevel((Level.parse(LogLevel)));
         return l;
-
     }
 
     public static InputStream charge(String path){

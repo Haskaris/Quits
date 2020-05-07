@@ -1,23 +1,25 @@
 import Global.Configuration;
 import Global.Properties;
-import Modele.LecteurRedacteur;
-import Modele.Support.Plateau;
-import Vue.InterfaceGraphique;
+import Model.ReaderWriter;
+import Model.Support.Board;
+import View.MainGraphicInterface;
+//import Vue.InterfaceGraphique;
 
 import java.io.IOException;
 
 public class Quits {
-    static InterfaceGraphique interfacegraphique;
-    static Plateau plateau;
+    //static InterfaceGraphique interfacegraphique;
+    static Board plateau;
 
     /**
      * Permet d'initialiser ka partie. Les parametres de la partie sont definies dans Configuration
      */
     public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
-        Properties.Load();
-        interfacegraphique = new InterfaceGraphique();
-        plateau = new Plateau((Integer) Configuration.Lis("Joueurs"),(Integer)Configuration.Lis("Taille"));
-        plateau.JouePartie();
+        Properties.load();
+        new MainGraphicInterface();
+        //interfacegraphique = new InterfaceGraphique();
+        //plateau = new Board();
+        //plateau.playGame();
     }
 
     /**
@@ -25,12 +27,12 @@ public class Quits {
      */
     public static void ChargerPartie(){
         try {
-            plateau = new LecteurRedacteur("default.save").LitPartie();
+            plateau = new ReaderWriter("default.save").readGame();
         }
         catch (Exception e){
             System.out.println("Erreur de chargement de la partie");
         }
-        plateau.JouePartie();
+        plateau.playGame();
     }
 
     /**
@@ -38,7 +40,7 @@ public class Quits {
      */
     public static void EnregistrerPartie(){
         try {
-            new LecteurRedacteur("default.save").EcrisPartie(plateau);
+            new ReaderWriter("default.save").writeGame(plateau);
         }
         catch (Exception e){
             System.out.println("Erreur d'enregistrement de la partie");
@@ -46,13 +48,12 @@ public class Quits {
 
     }
 
-
     /**
      * Fermeture du jeu
      */
     public static void Exit(){
         try {
-            Properties.Store();
+            Properties.store();
         } catch (IOException e) {
             Configuration.logger().severe("Erreur d'ecriture des Properties");
             System.exit(1);
