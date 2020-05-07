@@ -201,9 +201,9 @@ public class Board {
 
     public void load(InputStream in_stream) throws IOException  {
         for(int i = 0; i < 5; i++) {
-            String metadonees = ReaderWriter.readLine(in_stream);
+            String indexLine = ReaderWriter.readLine(in_stream);
             for(int j = 0; j < 5; j++) {
-                int indexOfColor = Character.getNumericValue(metadonees.charAt(j));
+                int indexOfColor = Character.getNumericValue(indexLine.charAt(j));
                 this.grid[i][j].setIndexOfColor(indexOfColor);
             }
         }

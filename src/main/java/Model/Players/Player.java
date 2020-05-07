@@ -112,6 +112,9 @@ public abstract class Player {
         stream.write(' ');
         //On écrit la couleur
         stream.write(String.valueOf(this.color.getRGB()).getBytes());
+        stream.write(' ');
+        //On écrit sa position
+        stream.write(this.startPoint.toString().getBytes());
         stream.write('\n');
         for(Marble m : this.marbles) {
             m.print(stream);
@@ -145,6 +148,7 @@ public abstract class Player {
                     tmp = new AIHardPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
             }
+        tmp.setStartPoint(Direction.valueOf(dataPlayer[3]));
         return tmp;
     }
 }
