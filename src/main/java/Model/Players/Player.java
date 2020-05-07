@@ -131,7 +131,6 @@ public abstract class Player {
     public static Player load(InputStream in_stream) throws IOException  {
         Player tmp = null;
         String[] dataPlayer = ReaderWriter.readLine(in_stream).split(" ");
-        System.out.println(dataPlayer[0] + " -- " + dataPlayer[1] + " -- " + dataPlayer[2] + " -- " + dataPlayer[3]);
         switch (dataPlayer[0]){
                 case "HumanPlayer":
                     tmp = new HumanPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));

@@ -43,9 +43,10 @@ class LecteurRedacteurTest {
             ReaderWriter rw = new ReaderWriter(pathTest);
             rw.writeGame(board);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             fail();
         }
+        System.out.println("Écriture d'une partie OK");
     }
 
     @Test
@@ -56,7 +57,7 @@ class LecteurRedacteurTest {
             ReaderWriter rw = new ReaderWriter(pathTest);
             board = rw.readGame();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             fail();
         }
         assertNotNull(board);
@@ -68,6 +69,7 @@ class LecteurRedacteurTest {
         assertEquals(colorPlayer0Test, board.getPlayer(0).color);
         assertEquals(namePlayer1Test, board.getPlayer(1).name);
         assertEquals(colorPlayer1Test, board.getPlayer(1).color);
+        System.out.println("Lecture d'une partie OK");
     }
 
 
