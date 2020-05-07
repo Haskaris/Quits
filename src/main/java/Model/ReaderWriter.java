@@ -21,38 +21,34 @@ public class ReaderWriter {
     /**
      * Lis le contenu d'un board de jeu d'un fichier externe
      * À vérifier le bon fonctionnement
+     * @return 
+     * @throws java.io.IOException 
      */
     public Board readGame()throws IOException{
-        InputStream in_stream = new FileInputStream("Sauvegardes/" + filepath);
-
+        Board board = new Board();
         //On lit la boardSize et le nombre de players
-        String[] firstline = readLine(in_stream).split(" ");
-        int boardSize = Integer.parseInt(firstline[0]);
-        
-        //Enregistrer le mode de jeu serait peut être mieux ?
-        int playerNumber = Integer.parseInt(firstline[1]);
-
-        Board board = new Board(/*boardSize*/);
-
-        //On lit les infos sur les players
-        for (int k = 0; k < playerNumber; k++) {
-            //Format :
-            //TYPE NOM COULEUR
-            //Bille1X-Bille1Y/Bille2X-Bille2Y
-            Player tmp = Player.load(in_stream);
-            String[] metadonees = readLine(in_stream).split("/");
-            for(String coord : metadonees) {
-                String[] xy = coord.split("-");
-                Marble btmp = new Marble(tmp.color);
-                tmp.addMarble(btmp);
-                board.placeMarbleOn(btmp, Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
-            }
-            board.addPlayer(tmp);
+        try (InputStream in_stream = new FileInputStream("Sauvegardes/" + filepath)) {
+            //On lit la boardSize et le nombre de players
+            String[] firstline = readLine(in_stream).split(" ");
+            int boardSize = Integer.parseInt(firstline[0]);
+            //Enregistrer le mode de jeu serait peut être mieux ?
+            int playerNumber = Integer.parseInt(firstline[1]);
+            //board = new Board(/*boardSize*/);
+            //On lit les infos sur les players
+            for (int k = 0; k < playerNumber; k++) {
+                //Format :
+                //TYPE NOM COULEUR
+                //Bille1X-Bille1Y/Bille2X-Bille2Y
+                Player tmp = Player.load(in_stream);
+                String[] metadonees = readLine(in_stream).split("/");
+                for(String coord : metadonees) {
+                    String[] xy = coord.split("-");
+                    Marble btmp = tmp.addMarble();
+                    board.placeMarbleOn(btmp, Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
+                }
+                board.addPlayer(tmp);
+            }   board.load(in_stream);
         }
-        
-        board.load(in_stream);
-        
-        in_stream.close();
         return board;
     }
 
@@ -81,7 +77,7 @@ public class ReaderWriter {
         stream.write(' ');
         //On écrit le nombre de joueur
         //Enregistrer le mode de jeu serait peut être mieux ?
-        stream.write((byte)IntToChar(board.getPlayers().size()));
+        stream.write(/*(byte)IntToChar(*/board.getPlayers().size()/*)*/);
         stream.write('\n');
         
         //Info sur les players
