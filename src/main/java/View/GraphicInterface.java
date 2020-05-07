@@ -55,7 +55,7 @@ public class GraphicInterface implements Runnable, Observateur {
         // Texte et contrôles à droite de la fenêtre
         Box boxPlayer = Box.createVerticalBox();
 
-        for(Player player : this.board.players) {
+        for(Player player : this.board.getPlayers()) {
             try {
                 JLabel titre = new JLabel(player.name);
                 titre.setAlignmentX(Component.CENTER_ALIGNMENT);

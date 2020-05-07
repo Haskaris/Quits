@@ -12,11 +12,12 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
     private Tile[][] grid;
-    public Player[] players;    //Le faire avec un arrayList est peut être mieux ?
+    private ArrayList<Player> players;    //Le faire avec un arrayList est peut être mieux ?
     public int currentPlayer;
     public History history;
     
@@ -27,7 +28,7 @@ public class Board {
      * Taille fixe pour le moment
      */
     public Board(){
-        players = new Player[4];
+        players = new ArrayList<>();
 
         grid = new Tile[5][5];
         for (int i = 0; i < 5; i++)
@@ -166,7 +167,7 @@ public class Board {
      * @param player 
      */
     public void addPlayer(Player player) {
-        this.players[maxPlayer++] = player;
+        this.players.add(player);
     }
 
     /**
@@ -175,7 +176,15 @@ public class Board {
      * @return Player
      */
     public Player getPlayer(int index) {
-        return this.players[index];
+        return this.players.get(index);
+    }
+    
+    /**
+     * Retourne la liste des joueurs
+     * @return 
+     */
+    public ArrayList<Player> getPlayers() {
+        return this.players;
     }
     
     /**
