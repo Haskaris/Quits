@@ -11,6 +11,7 @@ import Model.Support.Board;
 import Paterns.Observateur;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,7 +32,8 @@ public class GraphicInterface implements Runnable, Observateur {
     
     boolean maximized;
     
-    JButton menu, undo, redo;
+    JToggleButton menu;
+    JButton undo, redo;
 
     
     GraphicInterface(Board plateau, Mediator m) {
@@ -66,8 +68,7 @@ public class GraphicInterface implements Runnable, Observateur {
         }
         
         Box boxMenu = Box.createVerticalBox();
-        
-        menu = new JButton("Menu");
+        menu = new JToggleButton("Menu");
         menu.setAlignmentX(Component.LEFT_ALIGNMENT);
         menu.setFocusable(false);
         undo = new JButton("Défaire");
