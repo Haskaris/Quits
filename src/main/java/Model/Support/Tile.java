@@ -59,6 +59,10 @@ public class Tile {
         return tmp;
     }
     
+    public Marble getMarble() {
+        return marble;
+    }
+    
     /**
      * Ajoute une bille à la tuile
      * et met à jour la tuile de la bille

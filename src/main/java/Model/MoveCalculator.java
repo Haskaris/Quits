@@ -35,9 +35,15 @@ public class MoveCalculator {
      *
      * @return
      */
-    public List<Move> coupsPossibles() {
+    public List<Move> possibleMoves() {
         marblesMoves();
         tilesMoves();
+        return moves;
+    }
+
+    public List<Move> possibleMovesWithSource(int line, int column) {
+        marblesMovesWithSource(line, column);
+        tilesMovesWithSource(line, column);
         return moves;
     }
 
@@ -49,51 +55,9 @@ public class MoveCalculator {
 
         //Pour chaque marble on ajoute sa ligne et sa colonne
         for (Marble ball : marbles) {
-            Tile tmpTile = ball.getTile();
-            int tmpTileX = tmpTile.getPosition().x;
-            int tmpTileY = tmpTile.getPosition().y;
-            Tile tileStudied = board.getGrid()[tmpTileX][0];
-
-            if (!tileStudied.hasMarble()) {
-                //If, amongst the already-existing moves, there is the exact same move, we don't do anything
-                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.N, player);
-                if (!moveExists(toBeAdded)) {
-                    moves.add(toBeAdded);
-                }
-            }
-
-            tileStudied = board.getGrid()[tmpTileX][4];
-
-            if (!tileStudied.hasMarble()) {
-                //If, amongst the already-existing moves, there is the exact same move, we don't do anything
-                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.S, player);
-                if (!moveExists(toBeAdded)) {
-                    moves.add(toBeAdded);
-                }
-            }
-
-            tileStudied = board.getGrid()[0][tmpTileY];
-
-            if (!tileStudied.hasMarble()) {
-                //If, amongst the already-existing moves, there is the exact same move, we don't do anything
-                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.W, player);
-                if (!moveExists(toBeAdded)) {
-                    moves.add(toBeAdded);
-                }
-            }
-
-            tileStudied = board.getGrid()[4][tmpTileY];
-
-            if (!tileStudied.hasMarble()) {
-                //If, amongst the already-existing moves, there is the exact same move, we don't do anything
-                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.E, player);
-                if (!moveExists(toBeAdded)) {
-                    moves.add(toBeAdded);
-                }
-            }
-
+            tilesMovesWithSource(ball.getPosition().x, ball.getPosition().y);
         }
-
+        
         /*for (int i = 0; i < board.GetGrille().length ; i++) {
             if(TuileEstLibre(0,i) && !areReversed(lastMove, new Move(new Point(-1,i),false,player)))
                 moves.add(new Move(new Point(-1,i),false,player));
@@ -122,6 +86,59 @@ public class MoveCalculator {
     private void marblesMoves() {
         this.marbles.forEach((b) -> {
             Point pos = b.getTile().getPosition();
+            marblesMovesWithSource(pos.x, pos.y);
+        });
+    }
+
+    private void tilesMovesWithSource(int line, int column) {
+        if (board.getGrid()[line][column].hasMarble()) {
+            Marble ball = board.getGrid()[line][column].getMarble();
+            Tile tmpTile = ball.getTile();
+            int tmpTileX = tmpTile.getPosition().x;
+            int tmpTileY = tmpTile.getPosition().y;
+            Tile tileStudied = board.getGrid()[tmpTileX][0];
+
+            if (!tileStudied.hasMarble()) {
+                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.N, player);
+                if (!moveExists(toBeAdded)) {
+                    moves.add(toBeAdded);
+                }
+            }
+
+            tileStudied = board.getGrid()[tmpTileX][4];
+
+            if (!tileStudied.hasMarble()) {
+                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.S, player);
+                if (!moveExists(toBeAdded)) {
+                    moves.add(toBeAdded);
+                }
+            }
+
+            tileStudied = board.getGrid()[0][tmpTileY];
+
+            if (!tileStudied.hasMarble()) {
+                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.W, player);
+                if (!moveExists(toBeAdded)) {
+                    moves.add(toBeAdded);
+                }
+            }
+
+            tileStudied = board.getGrid()[4][tmpTileY];
+
+            if (!tileStudied.hasMarble()) {
+                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.E, player);
+                if (!moveExists(toBeAdded)) {
+                    moves.add(toBeAdded);
+                }
+            }
+
+        }
+    }
+
+    private void marblesMovesWithSource(int line, int column) {
+        if (board.getGrid()[line][column].hasMarble()) {
+            Marble b = board.getGrid()[line][column].getMarble();
+            Point pos = b.getTile().getPosition();
             if (this.playerStart != Direction.NW && isTileFree(add(pos, DirToPoint(Direction.NW)))) {
                 this.moves.add(new Move(b, Direction.NW, this.player));
             }
@@ -134,7 +151,7 @@ public class MoveCalculator {
             if (this.playerStart != Direction.SW && isTileFree(add(pos, DirToPoint(Direction.SW)))) {
                 this.moves.add(new Move(b, Direction.SW, this.player));
             }
-        });
+        }
     }
 
     public boolean isTileFree(Point p) {

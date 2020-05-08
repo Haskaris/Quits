@@ -22,6 +22,7 @@ public class Board {
 
     private Tile[][] grid;
     public int[][] availableTiles;
+    public ArrayList<Move> allPotentialShifts;
     private ArrayList<Player> players;
     public int currentPlayer;
     public History history;
@@ -40,6 +41,8 @@ public class Board {
                 grid[i][j] = new Tile(i, j);
             }
         }
+
+        allPotentialShifts = new ArrayList<>();
 
         availableTiles = new int[5][5];
         resetAvailableTiles();
@@ -132,28 +135,34 @@ public class Board {
         if (currentPlayer().getClass().equals(HumanPlayer.class)) {
             //TODO
             resetAvailableTiles();
+            allPotentialShifts.clear();
             availableTiles[line][column] = 1;
-            List<Move> possibleMoves = new MoveCalculator(this).coupsPossibles();
-            for (Move m : possibleMoves) {
+            //List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
+            List<Move> possibleMovesWithSource = new MoveCalculator(this).possibleMovesWithSource(line, column);
+            for (Move m : possibleMovesWithSource) {
                 m.Display();
                 try {
                     Point pos = m.getPosition();
                     if (line == pos.x && column == pos.y) {//If the selected marble is the source of the available move seleted
-                        
-                        Point dir = m.getDirection();
+
+                        Point dir = m.getCoordinatesDirection();
 
                         int x = pos.x + dir.x;
                         int y = pos.y + dir.y;
                         availableTiles[x][y] = 2;
                     }
                 } catch (Exception e) {
+                    //Here we handle the tile shifting
+                    m.Display();
+                    allPotentialShifts.add(m);
                     
+
                 }
 
             }
             diplayAvailableTiles();
         } else {
-            List<Move> possibleMoves = new MoveCalculator(this).coupsPossibles();
+            List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
             Move move = currentPlayer().Jouer(possibleMoves);
             history.doMove(move);
         }

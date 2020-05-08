@@ -1,15 +1,18 @@
 package View;
 
 import Global.Configuration;
+import Model.Move;
 import Model.Support.Board;
 import Model.Support.Tile;
 import java.awt.Color;
+import java.awt.Point;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ViewBoard extends BoardGraphic {
 
     ArrayList<ImageQuits> tileImages;
+    ImageQuits defaultMarble;
     ImageQuits selectedTile;
     ImageQuits arrowUp;
     ImageQuits arrowDown;
@@ -38,7 +41,7 @@ public class ViewBoard extends BoardGraphic {
         arrowRight = readImage("ArrowRight");
         arrowDown = readImage("ArrowDown");
         arrowLeft = readImage("ArrowLeft");
-
+        defaultMarble = readImage("DefaultMarble");
     }
 
     private ImageQuits readImage(String name) {
@@ -100,7 +103,7 @@ public class ViewBoard extends BoardGraphic {
 
                     }
                     drawBall(currentTile.getMarbleColor(), x, y, widthTile, heightTile);
-
+                    tracer(defaultMarble, x, y, widthTile, heightTile);
                 }
                 if (board.availableTiles[i][j] == 2) {//The available moves for this marble
                     Color n = new Color(
@@ -112,6 +115,38 @@ public class ViewBoard extends BoardGraphic {
                 }
             }
         }
+        for (Move m : board.allPotentialShifts) {
+
+            Point p = m.getLine();
+            int rowOrColIndex = -1;
+            switch (m.getDirection()) {
+                case S:
+                    rowOrColIndex = p.x;
+                    //Display a down arrow on the upper part of the board
+                    tracer(arrowDown, widthTile * rowOrColIndex + (widthTile / 2), 0, widthTile, heightTile / 2);
+                    break;
+                case N:
+
+                    rowOrColIndex = p.x;
+                    //Display a down arrow on the upper part of the board
+                    tracer(arrowUp, widthTile * rowOrColIndex + (widthTile / 2), (int) (widthTile * 5.5), widthTile, heightTile / 2);
+                    break;
+                case W:
+                    rowOrColIndex = p.y;
+                    //Display a down arrow on the upper part of the board
+                    tracer(arrowLeft, (int) (widthTile * 5.5), widthTile * rowOrColIndex + (widthTile / 2), widthTile / 2, heightTile);
+                    break;
+                case E:
+                    rowOrColIndex = p.y;
+                    //Display a down arrow on the upper part of the board
+                    tracer(arrowRight, 0, widthTile * rowOrColIndex + (widthTile / 2), widthTile / 2, heightTile);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
     }
 
     @Override

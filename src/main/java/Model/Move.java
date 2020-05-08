@@ -72,10 +72,22 @@ public class Move {
         return marble.getPosition();
     }
 
-    public Point getDirection() {
+    public Point getCoordinatesDirection() {
         return DirToPoint(direction);
     }
+    
+    public Direction getDirection() {
+        return direction;
+    }
+    
+    public Point getLine() {
+        return line;
+    }
 
+    public boolean isShift() {
+        return (marble == null);
+    }
+    
     public void Display() {
         if (marble != null) {
             System.out.println(marble.getPosition());
@@ -121,7 +133,7 @@ public class Move {
 
         }
     }
-
+    
     public boolean isEqual(Move toBeCompared) {
         return this.direction == toBeCompared.direction
                 && this.line.x == toBeCompared.line.x

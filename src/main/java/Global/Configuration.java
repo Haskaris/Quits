@@ -37,6 +37,8 @@ public final class Configuration {
     private static String ArrowUp = "Arrows/arrow_up.png";
     private static String ArrowDown = "Arrows/arrow_down.png";
     private static String ArrowRight = "Arrows/arrow_right.png";
+    private static String DefaultMarble = "Marbles/default_marble.png";
+    
     
     
 
