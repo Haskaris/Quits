@@ -1,10 +1,13 @@
 package Model.Support;
 
+import Controleur.Mediator;
 import Global.Configuration;
 import Global.Tools;
+import Global.Tools.Direction;
 import Model.MoveCalculator;
 import Model.Move;
 import Model.History;
+import Model.Players.HumanPlayer;
 import Model.ReaderWriter;
 import Model.Players.Player;
 
@@ -15,11 +18,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board {
+public class Board implements Cloneable{
     private Tile[][] grid;
     private ArrayList<Player> players;
     public int currentPlayer;
     public History history;
+    private Mediator mediator;
+    private Tools.GameMode gameMode;
 
     /**
      * Initialise un plateau
@@ -36,18 +41,101 @@ public class Board {
         history = new History(this);
         currentPlayer = 0;
     }
+    
+    /**
+     * Initialise les joueurs (billes et position)
+     * en fonction du mode de jeu
+     */
+    public void initPlayers() {
+        switch(gameMode) {
+            case TwoPlayersFiveBalls:
+                this.players.get(0).setStartPoint(Direction.SO);
+                this.grid[0][2].addMarble(this.players.get(0).addMarble());
+                this.grid[2][4].addMarble(this.players.get(0).addMarble());
+                this.players.get(1).setStartPoint(Direction.NE);
+                this.grid[2][0].addMarble(this.players.get(1).addMarble());
+                this.grid[4][2].addMarble(this.players.get(1).addMarble());
+                break;
+            case TwoPlayersThreeBalls:
+                this.players.get(0).setStartPoint(Direction.SO);
+                this.players.get(1).setStartPoint(Direction.NE);
+                break;
+            case FourPlayersFiveBalls:
+                this.players.get(0).setStartPoint(Direction.SO);
+                this.players.get(1).setStartPoint(Direction.NE);
+                this.players.get(2).setStartPoint(Direction.NO);
+                this.players.get(3).setStartPoint(Direction.SE);
+                break;
+        }
+        for (Player p : this.players) {
+            init3Marbles(p);
+        }
+    }
+    
+    /**
+     * Positionne les 3 billes récurentes des joueurs en fonction de leur
+     * point de départ. LE POINT DE DÉPART DOIT ÊTRE INITIALISÉ
+     * @param p Player
+     */
+    private void init3Marbles(Player p) {
+        switch (p.getStartPoint()) {
+            case SO:
+                this.grid[0][3].addMarble(p.addMarble());
+                this.grid[1][3].addMarble(p.addMarble());
+                this.grid[1][4].addMarble(p.addMarble());
+                break;
+            case NE:
+                this.grid[3][0].addMarble(p.addMarble());
+                this.grid[3][1].addMarble(p.addMarble());
+                this.grid[4][1].addMarble(p.addMarble());
+                break;
+            case NO:
+                this.grid[1][0].addMarble(p.addMarble());
+                this.grid[0][1].addMarble(p.addMarble());
+                this.grid[1][1].addMarble(p.addMarble());
+                break;
+            case SE:
+                this.grid[3][3].addMarble(p.addMarble());
+                this.grid[4][3].addMarble(p.addMarble());
+                this.grid[3][4].addMarble(p.addMarble());
+                break;
+        }
+    }
+    
+    public void setGameMode(Tools.GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+    
+    public void setMediator(Mediator m) {
+        this.mediator = m;
+    }
 
     /**
      * Joue les tours de la partie. S'arrete à la fin
      * Plante l'ihm
      */
     public void playGame(){
-        while(endRound()){
+        /*while(endRound()){
             List<Move> possiblesMoves = new MoveCalculator(this).coupsPossibles();
             Move coup = currentPlayer().Jouer(possiblesMoves);
             history.doMove(coup);
             //LecteurRedacteur.AffichePartie(this);
+        }*/
+    }
+    
+    public void playTurn() {
+        if (currentPlayer().getClass().equals(HumanPlayer.class)) {
+            
+        } else {
+            List<Move> possibleMove = new MoveCalculator(this).coupsPossibles();
+            Move move = currentPlayer().Jouer(possibleMove);
+            history.doMove(move);
         }
+        this.mediator.getGraphicInterface().update();
+        
+        currentPlayer ++;
+        if(currentPlayer>=(Integer)Configuration.read("Joueurs"))
+            currentPlayer =0;
     }
 
     /**
@@ -73,7 +161,7 @@ public class Board {
      * @param marble
      * @param direction
      */
-    public void moveMarble(Marble marble, Tools.Direction direction){
+    public void moveMarble(Marble marble, Direction direction){
         Point startPoint = marble.getTile().getPosition();
         Point finishPoint = Tools.getNextPoint(startPoint, direction);
         grid[startPoint.x][startPoint.y].removeMarble();
@@ -97,7 +185,7 @@ public class Board {
      * @param line
      * @param direction
      */
-    public void moveLine(Point line, Tools.Direction direction){
+    public void moveLine(Point line, Direction direction){
         Tile tmp = null;
         //Factoriser
         switch(direction) {
@@ -207,5 +295,15 @@ public class Board {
                 this.grid[i][j].setIndexOfColor(indexOfColor);
             }
         }
+    }
+
+    public Board clone() {
+        Board board = null;
+        try {
+            board = (Board) super.clone();
+        } catch(CloneNotSupportedException cnse) {
+            cnse.printStackTrace(System.err);
+        }
+        return board;
     }
 }

@@ -21,7 +21,7 @@ public class ReaderWriter {
     /**
      * Lis le contenu d'un board de jeu d'un fichier externe
      * @return 
-     * @throws java.io.IOException 
+     * @throws IOException
      */
     public Board readGame()throws IOException{
         Board board = new Board();
@@ -39,7 +39,7 @@ public class ReaderWriter {
                 //Format :
                 //TYPE NOM COULEUR POSITION
                 //Bille1X-Bille1Y/Bille2X-Bille2Y
-                Player tmp = Player.load(in_stream);
+                Player tmp = Player.load(in_stream, board);
                 String[] metadonees = readLine(in_stream).split("/");
                 for(String coord : metadonees) {
                     String[] xy = coord.split("-");
@@ -60,7 +60,7 @@ public class ReaderWriter {
     /**
      * Ecris le contenu d'un board de jeu dans un fichier externe
      * @param board board à sauvegarder
-     * @throws java.io.IOException
+     * @throws IOException
      */
     public void writeGame(Board board) throws IOException{
         File out = new File(this.filepath);
