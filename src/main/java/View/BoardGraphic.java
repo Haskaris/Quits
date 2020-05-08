@@ -31,6 +31,12 @@ public abstract class BoardGraphic extends JComponent implements Observateur {
         drawable.drawOval(x+l/4, y+h/4, l/2, h/2);
     }
     
+    protected void drawRect(Color c, int x, int y, int l, int h) {
+        drawable.setPaint(c);
+        drawable.fillRect(x, y, l, h);
+        drawable.drawRect(x, y, l, h);
+    }
+    
     protected void tracer(ImageQuits i, int x, int y, int l, int h) {
         drawable.drawImage(i.image(), x, y, l, h, null);
     }
@@ -41,7 +47,7 @@ public abstract class BoardGraphic extends JComponent implements Observateur {
 
         // On efface tout
         drawable.clearRect(0, 0, largeur(), hauteur());
-        tracerNiveau();
+        drawBoard();
     }
     
     public int hauteur() {
@@ -58,15 +64,15 @@ public abstract class BoardGraphic extends JComponent implements Observateur {
     }
     
     // tracerNiveau est la partie indépendante de Swing du dessin qui se trouve dans le descendant
-    abstract void tracerNiveau();
+    abstract void drawBoard();
     
-    abstract int hauteurCase();
-    abstract int largeurCase();
+    abstract int getHeightTile();
+    abstract int getWidthTile();
     
     // Méthodes pour les animations
     // décale un des éléments d'une fraction de case (pour les animations)
-    public abstract void decale(int l, int c, double dl, double dc);
+    public abstract void shift(int l, int c, double dl, double dc);
     // Changements du pousseur
-    public abstract void metAJourDirection(int dL, int dC);
-    public abstract void changeEtape();
+    public abstract void updateDirection(int dL, int dC);
+    public abstract void changeStep();
 }

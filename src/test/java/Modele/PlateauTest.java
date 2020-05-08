@@ -36,9 +36,9 @@ class PlateauTest {
         try {
             Marble b = new Marble(Color.BLUE);
             plateau.getGrid()[2][2].addMarble(b);
-            plateau.moveMarble(b, Tools.Direction.NO);
+            plateau.moveMarble(b, Tools.Direction.NW);
             assertTrue(plateau.getGrid()[1][1].hasMarble());
-            plateau.moveMarble(b, Tools.Direction.SO);
+            plateau.moveMarble(b, Tools.Direction.SW);
             plateau.moveMarble(b, Tools.Direction.SE);
             assertTrue(plateau.getGrid()[1][3].hasMarble());
         }catch (Exception e){

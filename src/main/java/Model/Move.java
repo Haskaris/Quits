@@ -9,12 +9,14 @@ import static Global.Tools.*;
 import java.awt.*;
 
 public class Move {
+
     /**
-     * Marble indique la marble a bouger (null sinon)
- direction est la direction dans laquelle cette marble doit bouger (consulter Global.Tools)
- Point indique la line a bouger (null sinon) (ex : (-1,2) indique la colonne 2, (0,-1) la ligne 0)
- positif est vrai si la line bouge vers le positif (chaque indice i deviendra i+1) et inversement si faux
- player indique le player responsable du coup
+     * Marble indique la marble a bouger (null sinon) direction est la direction
+     * dans laquelle cette marble doit bouger (consulter Global.Tools) Point
+     * indique la line a bouger (null sinon) (ex : (-1,2) indique la colonne 2,
+     * (0,-1) la ligne 0) positif est vrai si la line bouge vers le positif
+     * (chaque indice i deviendra i+1) et inversement si faux player indique le
+     * player responsable du coup
      */
     Marble marble = null;
     Direction direction;
@@ -24,10 +26,11 @@ public class Move {
 
     /**
      * On veut jouer un deplacement de marble
+     *
      * @param marble Bille à déplacer
      * @param direction Direction du mouvement
      * @param player Responsable du mouvement
-    */
+     */
     public Move(Marble marble, Direction direction, Player player) {
         this.marble = marble;
         this.direction = direction;
@@ -36,10 +39,11 @@ public class Move {
 
     /**
      * On veut jouer un deplacement de ligne
+     *
      * @param line Bille à déplacer
      * @param direction Direction du mouvement
      * @param player Responsable du mouvement
-    */
+     */
     public Move(Point line, Direction direction, Player player) {
         this.line = line;
         this.direction = direction;
@@ -47,31 +51,81 @@ public class Move {
     }
 
     public void perform(Board board) {
-        if(marble != null){
+        if (marble != null) {
             board.moveMarble(marble, direction);
         }
-        if(line != null){
+        if (line != null) {
             board.moveLine(line, direction);
         }
     }
 
-    public void cancel(Board board){
-        if(marble != null){
+    public void cancel(Board board) {
+        if (marble != null) {
             board.moveMarble(marble, reverse(direction));
         }
-        if(line != null){
+        if (line != null) {
             board.moveLine(line, reverse(direction));
         }
     }
 
-    /*public void Afficher(){
-        if(marble!=null){
-            System.out.println(marble.PositionGet());
+    public Point getPosition() {
+        return marble.getPosition();
+    }
+
+    public Point getDirection() {
+        return DirToPoint(direction);
+    }
+
+    public void Display() {
+        if (marble != null) {
+            System.out.println(marble.getPosition());
             System.out.println(direction);
         }
-        if(line != null){
-            System.out.println(line);
-            System.out.println(positif);        }
-    }*/
+        if (line != null) {
+            //System.out.println(line);
+            //System.out.println(direction);
+            int number = -1;
+            String cardinalPoint = "";
+            String isRowOrCol = "";
+            switch (direction) {
+                case S:
+                    //Moving on y axis
+                    cardinalPoint = "South";
+                    isRowOrCol = "Column";
+                    number = line.x;
+                    break;
+                case N:
+                    //Moving on y axis
+                    cardinalPoint = "North";
+                    isRowOrCol = "Column";
+                    number = line.x;
+                    break;
+                case W:
+                    //Moving on x axis
+                    cardinalPoint = "West";
+                    isRowOrCol = "Row";
+                    number = line.y;
+                    break;
+                case E:
+                    //Moving on x axis
+                    cardinalPoint = "East";
+                    isRowOrCol = "Row";
+                    number = line.y;
+                    break;
+                default:
+                    System.out.println("Erreur");
+                    break;
+            }
+
+            System.out.println(isRowOrCol + " n°" + number + " shiftable towards " + cardinalPoint + ".");
+
+        }
+    }
+
+    public boolean isEqual(Move toBeCompared) {
+        return this.direction == toBeCompared.direction
+                && this.line.x == toBeCompared.line.x
+                && this.line.y == toBeCompared.line.y;
+    }
 
 }

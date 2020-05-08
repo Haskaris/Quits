@@ -33,16 +33,16 @@ public class Tools {
         E,
         SE,
         S,
-        SO,
-        O,
-        NO,
-        RIEN;
+        SW,
+        W,
+        NW,
+        NODIR;
     }
 
     public static Point getNextPoint(Point p, Direction d) {
         Point tmp = new Point();
         switch (d) {
-            case NO:
+            case NW:
                 tmp.x = p.x - 1;
                 tmp.y = p.y - 1;
                 break;
@@ -54,7 +54,7 @@ public class Tools {
                 tmp.x = p.x + 1;
                 tmp.y = p.y + 1;
                 break;
-            case SO:
+            case SW:
                 tmp.x = p.x - 1;
                 tmp.y = p.y + 1;
                 break;
@@ -69,7 +69,7 @@ public class Tools {
     public static Point DirToPoint(Direction d) {
         int x = 0, y = 0;
         switch (d) {
-            case NO:
+            case NW:
                 y--;
                 x--;
                 break;
@@ -77,7 +77,7 @@ public class Tools {
                 y--;
                 x++;
                 break;
-            case SO:
+            case SW:
                 y++;
                 x--;
                 break;
@@ -100,21 +100,21 @@ public class Tools {
             case N:
                 return Direction.S;
             case NE:
-                return Direction.SO;
+                return Direction.SW;
             case E:
-                return Direction.O;
+                return Direction.W;
             case SE:
-                return Direction.NO;
+                return Direction.NW;
             case S:
                 return Direction.N;
-            case SO:
+            case SW:
                 return Direction.NE;
-            case O:
+            case W:
                 return Direction.E;
-            case NO:
+            case NW:
                 return Direction.SE;
         }
-        return Direction.RIEN;
+        return Direction.NODIR;
     }
 
     public static void Print(String S) {
