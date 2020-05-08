@@ -10,6 +10,7 @@ import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 /**
  *
@@ -19,6 +20,7 @@ public class InitGame extends javax.swing.JPanel {
 
     Mediator mediator;
     Tools.GameMode gameMode;
+    JFrame frame;
     
     /**
      * Creates new form InitGameAuto
@@ -31,6 +33,10 @@ public class InitGame extends javax.swing.JPanel {
         this.updateUI();
         this.mediator = mediateur;
     }
+    
+    public void setParent(JFrame frame) {
+        this.frame = frame;
+    } 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,6 +54,11 @@ public class InitGame extends javax.swing.JPanel {
         editPlayers = new javax.swing.JPanel();
 
         buttonRules.setText("Règles");
+        buttonRules.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRulesActionPerformed(evt);
+            }
+        });
 
         labelGameMode.setText("Mode de jeu");
 
@@ -133,6 +144,12 @@ public class InitGame extends javax.swing.JPanel {
     private void ButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonPlayActionPerformed
         this.mediator.initGame(this.gameMode);
     }//GEN-LAST:event_ButtonPlayActionPerformed
+
+    private void buttonRulesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRulesActionPerformed
+        RulesDialog rulesDialog = new RulesDialog(new javax.swing.JFrame(), true);
+        rulesDialog.setTitle("Règles du Quits");
+        rulesDialog.setVisible(true);
+    }//GEN-LAST:event_buttonRulesActionPerformed
 
     public ArrayList<EditPlayer> getEditsPlayers() {
         ArrayList<EditPlayer> tmp = new ArrayList<>();

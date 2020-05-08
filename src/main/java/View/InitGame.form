@@ -67,6 +67,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="R&#xe8;gles"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonRulesActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="labelGameMode">
       <Properties>
