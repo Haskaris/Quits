@@ -24,6 +24,7 @@ public class AIEnvironnement {
         this._grid = new int[5][5];
         this._currentPlayer = 0;
     }
+
     public AIEnvironnement(Board board){
         this._players = new ArrayList<>();
         this._startingPoint = new ArrayList<>();
@@ -154,6 +155,7 @@ public class AIEnvironnement {
             //int tmpTileY = tmpTile.getPosition().y;
             //Tile tileStudied = board.getGrid()[tmpTileX][0];
             Point pointStudied = new Point(tmpTileX, 0);
+            //Tools.Direction.N
             if(!movableTiles.contains(pointStudied)){
                 boolean hasMarble = false;
                 for(ArrayList<Point> playerMarble: this._playerMarble){
@@ -169,20 +171,8 @@ public class AIEnvironnement {
                     move.add(pointStudied);
                 }
             }
-            /*if (!movableTiles.contains(tileStudied)) {
-                if (!tileStudied.hasMarble()) {
-                    movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Tools.Direction.N, player));
-                }
-            }*//*
-            tileStudied = board.getGrid()[tmpTileX][4];
-            if (!movableTiles.contains(tileStudied)) {
-                if (!tileStudied.hasMarble()) {
-                    movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Tools.Direction.S, player));
-                }
-            }*/
             pointStudied = new Point(tmpTileX, 4);
+            //Tools.Direction.S
             if(!movableTiles.contains(pointStudied)){
                 boolean hasMarble = false;
                 for(ArrayList<Point> playerMarble: this._playerMarble){
@@ -200,6 +190,7 @@ public class AIEnvironnement {
                 }
             }
             pointStudied = new Point(0, tmpTileY);
+            //Tools.Direction.O
             if(!movableTiles.contains(pointStudied)){
                 boolean hasMarble = false;
                 for(ArrayList<Point> playerMarble: this._playerMarble){
@@ -216,6 +207,7 @@ public class AIEnvironnement {
                 }
             }
             pointStudied = new Point(4, tmpTileY);
+            //Tools.Direction.E
             if(!movableTiles.contains(pointStudied)){
                 boolean hasMarble = false;
                 for(ArrayList<Point> playerMarble: this._playerMarble){
@@ -230,33 +222,8 @@ public class AIEnvironnement {
                     move.add(point);
                     move.add(pointStudied);
                 }
-            }/*
-            tileStudied = board.getGrid()[0][tmpTileY];
-            if (!movableTiles.contains(tileStudied)) {
-                if (!tileStudied.hasMarble()) {
-                    movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Tools.Direction.O, player));
-                }
             }
-            tileStudied = board.getGrid()[4][tmpTileY];
-            if (!movableTiles.contains(tileStudied)) {
-                if (!tileStudied.hasMarble()) {
-                    movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Tools.Direction.E, player));
-                }
-            }*/
         }
-
-        /*for (int i = 0; i < board.GetGrille().length ; i++) {
-            if(TuileEstLibre(0,i) && !areReversed(lastMove, new Move(new Point(-1,i),false,player)))
-                moves.add(new Move(new Point(-1,i),false,player));
-            if(TuileEstLibre(board.GetGrille().length-1,i) && !areReversed(lastMove, new Move(new Point(-1,i),true,player)))
-                moves.add(new Move(new Point(-1,i),true,player));
-            if(TuileEstLibre(i,0)  && !areReversed(lastMove, new Move(new Point(i,-1),false,player)))
-                moves.add(new Move(new Point(i,-1),false,player));
-            if(TuileEstLibre(i, board.GetGrille().length-1)&& !areReversed(lastMove, new Move(new Point(i,-1),true,player)))
-                moves.add(new Move(new Point(i,-1),true,player));
-        }*/
         return listMove;
     }
 
@@ -302,8 +269,103 @@ public class AIEnvironnement {
         return !(this._grid[p.x][p.y] != -1);
     }
 
+    public void moveLine(ArrayList<Point> move){
+        //case same x
+        if(move.get(1).x == move.get(2).x){
+            //case move up move.get(2).y == 0
+            if(move.get(2).y == 0){
+                int tmp = this._grid[move.get(2).x][0];
+                for (int i = 0; i < this._grid.length - 1; i++) {
+                    //if marble on the last tile change in _playerMarble
+                    if(this._grid[move.get(2).x][i+1] != -1){
+                        for(Point point: this._playerMarble.get(this._grid[move.get(2).x][i+1])){
+                            if(point.x == move.get(2).x && point.y == i+1){
+                                point.y = i;
+                            }
+                        }
+                    }
+                    this._grid[move.get(2).x][i] = this._grid[move.get(2).x][i+1];
+                }
+                this._grid[move.get(2).x][this._grid.length - 1] = tmp;
+            } else {
+                int tmp = this._grid[move.get(2).x][this._grid.length-1];
+                for (int i = this._grid.length - 1; i > 0; i--) {
+                    //if marble on the last tile change in _playerMarble
+                    if(this._grid[move.get(2).x][i-1] != -1){
+                        for(Point point: this._playerMarble.get(this._grid[move.get(2).x][i-1])){
+                            if(point.x == move.get(2).x && point.y == i-1){
+                                point.y = i;
+                            }
+                        }
+                    }
+                    this._grid[move.get(2).x][i] = this._grid[move.get(2).x][i-1];
+                }
+                this._grid[move.get(2).x][0] = tmp;
+            }
+        } else {
+            if(move.get(2).x == 0){
+                int tmp = this._grid[0][move.get(2).y];
+                for (int i = 0; i < this._grid.length - 1; i++) {
+                    //if marble on the last tile change in _playerMarble
+                    if(this._grid[i+1][move.get(2).y] != -1){
+                        for(Point point: this._playerMarble.get(this._grid[i+1][move.get(2).y])){
+                            if(point.x == i+1 && point.y == move.get(2).y){
+                                point.x = i;
+                            }
+                        }
+                    }
+                    this._grid[i][move.get(2).y] = this._grid[i+1][move.get(2).y];
+                }
+                this._grid[this._grid.length - 1][move.get(2).y] = tmp;
+            } else {
+                int tmp = this._grid[this._grid.length-1][move.get(2).y];
+                for (int i = this._grid.length - 1; i > 0; i--) {
+                    //if marble on the last tile change in _playerMarble
+                    if(this._grid[i-1][move.get(2).y] != -1){
+                        for(Point point: this._playerMarble.get(this._grid[i-1][move.get(2).y])){
+                            if(point.x == i-1 && point.y == move.get(2).y){
+                                point.x = i;
+                            }
+                        }
+                    }
+                    this._grid[i][move.get(2).y] = this._grid[i-1][move.get(2).y];
+                }
+                this._grid[0][move.get(2).y] = tmp;
+            }
+        }
+    }
+
+    public void moveMarble(ArrayList<Point> move){
+        int marble = this._grid[move.get(0).x][move.get(0).y];
+        this._grid[move.get(0).x][move.get(0).y] = -1;
+        this._grid[move.get(1).x][move.get(1).y] = marble;
+        for(Point point: this._playerMarble.get(this._currentPlayer)){
+            if(point.x == move.get(0).x && point.y == move.get(0).y){
+                point.x = move.get(1).x;
+                point.y = move.get(1).y;
+            }
+        }
+    }
+
+    public void perform(ArrayList<Point> move) {
+        //move marble if first point not null
+        if(move.get(0) != null){
+            moveMarble(move);
+        } else {
+            moveLine(move);
+        }
+    }
+
     private Point add(Point a, Point b){
         return new Point(a.x+b.x,a.y+b.y);
+    }
+
+    public void nextPlayer(){
+        if(this._players.size() == this._currentPlayer + 1){
+            this._currentPlayer = 0;
+        } else {
+            this._currentPlayer++;
+        }
     }
 
 }
