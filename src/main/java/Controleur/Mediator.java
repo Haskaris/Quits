@@ -94,9 +94,10 @@ public class Mediator {
      * @param l
      * @param c
      */
-    public void mouseClick(int l, int c) {
+    public void mouseClick(int c, int l) {
         //this.board.moveLine(new Point(l, c), Direction.S);
-        board.playTurn(l, c);
+        System.out.println("Clicked on the case " + c + " : " + l + ".");
+        board.playTurn(c, l);
     }
 
     public void addObservateur(View.GraphicInterface aThis) {

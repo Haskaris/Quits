@@ -28,6 +28,7 @@ public class Board {
     public History history;
     private Mediator mediator;
     private Tools.GameMode gameMode;
+    private Marble selectedMarble;
 
     /**
      * Initialise un plateau Taille fixe pour le moment
@@ -131,47 +132,100 @@ public class Board {
         }*/
     }
 
-    public void playTurn(int line, int column) {
+    public void playTurn(int column, int line) {
         if (currentPlayer().getClass().equals(HumanPlayer.class)) {
-            //TODO
-            resetAvailableTiles();
-            allPotentialShifts.clear();
-            availableTiles[line][column] = 1;
-            //List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
-            List<Move> possibleMovesWithSource = new MoveCalculator(this).possibleMovesWithSource(line, column);
-            for (Move m : possibleMovesWithSource) {
-                m.Display();
-                try {
-                    Point pos = m.getPosition();
-                    if (line == pos.x && column == pos.y) {//If the selected marble is the source of the available move seleted
+            HumanPlayer player = (HumanPlayer) currentPlayer();
 
-                        Point dir = m.getCoordinatesDirection();
+            if ((column >= 0 && column <= 4 && line >= 0 && line <= 4) && grid[column][line].hasMarble()
+                    && currentPlayer().color.equals(grid[column][line].getMarble().getColor())) {
+                //The players needs to select a marble
 
-                        int x = pos.x + dir.x;
-                        int y = pos.y + dir.y;
-                        availableTiles[x][y] = 2;
-                    }
-                } catch (Exception e) {
-                    //Here we handle the tile shifting
+                resetAvailableTiles();
+                allPotentialShifts.clear();
+                availableTiles[column][line] = 1;
+                selectedMarble = grid[column][line].getMarble();
+                //List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
+                List<Move> possibleMovesWithSource = new MoveCalculator(this).possibleMovesWithSource(column, line);
+                for (Move m : possibleMovesWithSource) {
                     m.Display();
-                    allPotentialShifts.add(m);
-                    
+                    try {
+                        Point pos = m.getPosition();
+                        if (column == pos.x && line == pos.y) {//If the selected marble is the source of the available move seleted
+
+                            Point dir = m.getCoordinatesDirection();
+
+                            int x = pos.x + dir.x;
+                            int y = pos.y + dir.y;
+                            availableTiles[x][y] = 2;
+                        }
+                    } catch (Exception e) {
+                        //Here we handle the tile shifting
+                        m.Display();
+                        allPotentialShifts.add(m);
+
+                    }
 
                 }
+                diplayAvailableTiles();
+                player.setStatus(Tools.PlayerStatus.ActionSelection);
+            } else if (player.getStatus() == Tools.PlayerStatus.ActionSelection) {
+                //The player selects a good move, else they are put back to MarbleSelection status
+                if (!(column >= 0 && column <= 4 && line >= 0 && line <= 4)) {
+                    //We clicked on an arrow so we shift the rows or columns
+                    Direction d = Direction.NODIR;
+                    Point anchorSource = null;
+                    if (column == -1 && line >= 0 && line <= 4) {
+                        //Shifting towards East
+                        d = Direction.E;
+                        anchorSource = new Point(0, line);
 
+                    } else if (column == 5 && line >= 0 && line <= 4) {
+                        //Shifting towards West
+                        d = Direction.W;
+                        anchorSource = new Point(4, line);
+                    } else if (line == -1 && column >= 0 && column <= 4) {
+                        //Shifting towards South
+                        d = Direction.S;
+                        anchorSource = new Point(column, 0);
+                    } else if (line == 5 && column >= 0 && column <= 4) {
+                        //Shifting towards North
+                        d = Direction.N;
+                        anchorSource = new Point(column, 4);
+                    }
+                    moveLine(anchorSource, d);
+
+                    resetAvailableTiles();
+                    allPotentialShifts.clear();
+                    player.setStatus(Tools.PlayerStatus.MarbleSelection);
+                    nextPlayer();
+                } else {
+                    if (availableTiles[column][line] == 2) {
+                        //That's a good action, we can move the marble to the new position
+                        Point pos = selectedMarble.getPosition();
+                        grid[column][line].addMarble(selectedMarble);
+                        grid[pos.x][pos.y].removeMarble();
+                        resetAvailableTiles();
+                        allPotentialShifts.clear();
+                        player.setStatus(Tools.PlayerStatus.MarbleSelection);
+                        nextPlayer();
+                    } else {
+                        //That's not a good action, we get back to MarbleSelection, but we don't change players
+                        player.setStatus(Tools.PlayerStatus.MarbleSelection);
+                        resetAvailableTiles();
+                        allPotentialShifts.clear();
+
+                    }
+                }
             }
-            diplayAvailableTiles();
+
         } else {
             List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
             Move move = currentPlayer().Jouer(possibleMoves);
             history.doMove(move);
+            nextPlayer();
         }
         this.mediator.getGraphicInterface().update();
 
-        currentPlayer++;
-        if (currentPlayer >= (Integer) Configuration.read("Joueurs")) {
-            currentPlayer = 0;
-        }
     }
 
     /**
@@ -186,11 +240,7 @@ public class Board {
             return false;
         }
 
-        currentPlayer++;
-        //Ne marche pas car nos joueurs sont ajouté dynamiquement
-        if (currentPlayer >= (Integer) Configuration.read("Joueurs")) {
-            currentPlayer = 0;
-        }
+        nextPlayer();
         return true;
     }
 
@@ -358,6 +408,13 @@ public class Board {
                 System.out.print(availableTiles[i][j] + " ");
             }
             System.out.println("");
+        }
+    }
+
+    private void nextPlayer() {
+        currentPlayer++;
+        if (currentPlayer >= (Integer) Configuration.read("Joueurs")) {
+            currentPlayer = 0;
         }
     }
 }

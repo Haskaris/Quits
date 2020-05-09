@@ -19,6 +19,7 @@ public class ViewBoard extends BoardGraphic {
     ImageQuits arrowLeft;
     ImageQuits arrowRight;
     ImageQuits background;
+    ImageQuits selectedActions;
 
     Board board;
     int widthTile;
@@ -44,6 +45,7 @@ public class ViewBoard extends BoardGraphic {
         arrowLeft = readImage("ArrowLeft");
         defaultMarble = readImage("DefaultMarble");
         background = readImage("Background");
+        selectedActions = readImage("SelectedActions");
     }
 
     private ImageQuits readImage(String name) {
@@ -71,10 +73,9 @@ public class ViewBoard extends BoardGraphic {
 
         widthTile = Math.min(widthTile, heightTile);
         heightTile = widthTile;
-        
+
         tracer(background, 0, 0, largeur(), hauteur());
-        
-        
+
         Color allyColor = null;
         boolean isColorNull = true;
         for (int i = 0; i < 5; i++) {
@@ -88,8 +89,8 @@ public class ViewBoard extends BoardGraphic {
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                int x = j * widthTile + (widthTile / 2);
-                int y = i * heightTile + (heightTile / 2);
+                int x = i * widthTile + (widthTile / 2);
+                int y = j * heightTile + (heightTile / 2);
                 Tile currentTile = board.getGrid()[i][j];
                 if (isColorNull) {
                     allyColor = currentTile.getMarbleColor();
@@ -98,17 +99,24 @@ public class ViewBoard extends BoardGraphic {
 
                 tracer(tileImages.get(index), x, y, widthTile, heightTile);
 
-                //Display of a line that can be shifted towards positive values
-                //TODO
-                //Display of a line that can be shifted towards negative values
-                //TODO
                 if (currentTile.hasMarble()) {
-                    if (board.availableTiles[i][j] == 1) {
+                    if (board.availableTiles[i][j] == 1) {//Selected marble
                         tracer(selectedTile, x, y, widthTile, heightTile);
                         //drawBall(new Color(1f, 1f, 1f, 0.3f), x, y, widthTile, heightTile);
-
                     }
-                    drawBall(currentTile.getMarbleColor(), x, y, widthTile, heightTile);
+                    Color c = currentTile.getMarbleColor();
+                    if (c == board.currentPlayer().color) {
+                        drawBall(c, x, y, widthTile, heightTile);
+                    } else {
+                        c = new Color(
+                                c.getRed(),
+                                c.getGreen(),
+                                c.getBlue(),
+                                150);
+
+                        drawBall(c, x, y, widthTile, heightTile);
+                    }
+
                     tracer(defaultMarble, x, y, widthTile, heightTile);
                 }
                 if (board.availableTiles[i][j] == 2) {//The available moves for this marble
@@ -116,8 +124,10 @@ public class ViewBoard extends BoardGraphic {
                             allyColor.getRed(),
                             allyColor.getGreen(),
                             allyColor.getBlue(),
-                            100);
-                    drawBall(n, x, y, widthTile, heightTile);
+                            15);
+                    drawBall(n, x, y, widthTile, heightTile);//Ghost marble
+                    tracer(defaultMarble, x, y, widthTile, heightTile);
+                    tracer(selectedActions, x, y, widthTile, heightTile);
                 }
             }
         }

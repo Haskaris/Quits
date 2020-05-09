@@ -25,9 +25,13 @@ public class MouseAction extends MouseAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int l = ((e.getY() - (this.board.getHeightTile() / 2)) / this.board.getHeightTile());
-        int c = ((e.getX() - (this.board.getHeightTile() / 2)) / this.board.getWidthTile());
-        this.mediator.mouseClick(l, c);
+        float l = ((e.getY() - (this.board.getHeightTile() / 2.0f)) / this.board.getHeightTile());
+        float c = ((e.getX() - (this.board.getHeightTile() / 2.0f)) / this.board.getWidthTile());
+        if (l < 0) l = -1f;
+        if (c < 0) c = -1f;
+        
+        
+        this.mediator.mouseClick((int) c, (int) l);
         this.board.repaint();
     }
 }

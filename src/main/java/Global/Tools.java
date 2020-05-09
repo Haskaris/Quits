@@ -1,9 +1,9 @@
 package Global;
 
 import java.awt.*;
- 
+
 public class Tools {
-    
+
     public static enum GameMode {
         TwoPlayersFiveBalls,
         TwoPlayersThreeBalls,
@@ -18,6 +18,17 @@ public class Tools {
         Easy,
         Medium,
         Hard,
+    }
+    
+    /**
+     * Énumération des états du joueur
+     * Un joueur en MarbleSelection attend qu'on clique sur une bille 
+     * Un joueur en ActionSelection attend qu'on choisisse une action liée à la bille sélectoinnée
+     */
+    
+    public enum PlayerStatus {
+        MarbleSelection,
+        ActionSelection,
     }
 
     //Après audit : On pourrait le mettre en vecteur xy
