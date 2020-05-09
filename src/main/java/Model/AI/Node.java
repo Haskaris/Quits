@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Node {
 
-    enum Node_type {
+    public enum Node_type {
         MAX_NODE,
         MIN_NODE
     }

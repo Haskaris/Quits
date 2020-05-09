@@ -21,7 +21,7 @@ public class ReaderWriter {
     /**
      * Lis le contenu d'un board de jeu d'un fichier externe
      * @return 
-     * @throws IOException
+     * @throws java.io.IOException 
      */
     public Board readGame()throws IOException{
         Board board = new Board();
@@ -60,7 +60,7 @@ public class ReaderWriter {
     /**
      * Ecris le contenu d'un board de jeu dans un fichier externe
      * @param board board à sauvegarder
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public void writeGame(Board board) throws IOException{
         File out = new File(this.filepath);

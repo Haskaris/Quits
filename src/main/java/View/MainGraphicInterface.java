@@ -21,6 +21,7 @@ public class MainGraphicInterface extends JFrame {
         
         //this.setMinimumSize(new Dimension(500,500));
         initGameInterface = new InitGame(mediator);
+        initGameInterface.setParent(this);
         //gameInterface = new GameInterface(this);
         
         this.add(initGameInterface);

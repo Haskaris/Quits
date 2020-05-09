@@ -1,6 +1,7 @@
 package Model.Players;
 
 import Model.AI.AI;
+import Model.AI.Node;
 import Model.Move;
 import Model.Support.Board;
 
@@ -20,12 +21,14 @@ public class AIEasyPlayer extends AI {
 
     @Override
     public Move Jouer(List<Move> coups_possibles) {
-        try {
+        /*try {
             TimeUnit.SECONDS.sleep(1);
         }catch (Exception e) {
             System.out.println("Erreur d'attente de l'IA");
-        }
-
+        }*/
+        Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
+        calculBestMove(2, _board, node);
+        System.out.println(node.getNodeValue());
         return coups_possibles.get(new Random().nextInt(coups_possibles.size()));
     }
     

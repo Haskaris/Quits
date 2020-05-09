@@ -11,9 +11,10 @@ import java.util.List;
 import java.util.ListIterator;
 
 public abstract class AI extends Player {
-
-    private Board _board;
-    private int _max_depth;
+    //mettre en privé
+    public Board _board;
+    //mettre en privé
+    public int _max_depth;
 
     public AI(String name, Color color, Board board, int max_depth) {
         super(name, color);
@@ -29,19 +30,20 @@ public abstract class AI extends Player {
         if (depth == 0) {
             return eval_func(board);
         }
-
+        /*
         if (_max_depth == depth) {
             node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
-        }
-
-        MoveCalculator move_calculator = new MoveCalculator(this._board);
+        }*/
+        System.out.println("Move calculator : ");
+        System.out.println(board);
+        MoveCalculator move_calculator = new MoveCalculator(board);
         List<Move> _move_list =  move_calculator.coupsPossibles();
 
         ListIterator<Move> it = _move_list.listIterator();
         while(it.hasNext()) {
             Move move = it.next();
             Board new_board = board.clone();
-
+            move.Afficher();
             move.perform(new_board);
 
             Node new_node = new Node(-1, null, node, null, Node.Node_type.MIN_NODE);
@@ -50,8 +52,8 @@ public abstract class AI extends Player {
             int potential_value = calculBestMove(depth - 1, new_board, new_node);
             new_node.setNodeValue(potential_value);
 
-            if (pruning(depth, node, potential_value)) break;
-
+            //if (pruning(depth, node, potential_value)) break;
+            /*
             if (node.getNodeType() == Node.Node_type.MAX_NODE) {
                 if (potential_value > node.getNodeValue()) {
                     node.setNodeValue(potential_value);
@@ -59,14 +61,15 @@ public abstract class AI extends Player {
                 }
 
             } else {
-                if (potential_value < node.getNodeValue()) {
+                if (potential_value < node.getNodeValue() || node.getNodeValue() == -1) {
                     node.setNodeValue(potential_value);
                     node.setNodeMove(move);
                 }
-            }
+            }*/
+
 
         }
-
+        System.out.println("Fin while");
         return node.getNodeValue();
     }
 

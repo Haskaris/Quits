@@ -64,14 +64,15 @@ public class Move {
         }
     }
 
-    /*public void Afficher(){
+    public void Afficher(){
         if(marble!=null){
-            System.out.println(marble.PositionGet());
+            System.out.println(marble.getTile().getPosition());
             System.out.println(direction);
         }
         if(line != null){
             System.out.println(line);
-            System.out.println(positif);        }
-    }*/
+            //System.out.println(positif);
+        }
+    }
 
 }

@@ -1,8 +1,14 @@
 package Global;
 
 import java.awt.*;
-
+ 
 public class Tools {
+    
+    public static enum GameMode {
+        TwoPlayersFiveBalls,
+        TwoPlayersThreeBalls,
+        FourPlayersFiveBalls,
+    }
 
     /**
      * Énumération des niveaux d'ia

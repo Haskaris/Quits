@@ -112,6 +112,10 @@ public class GraphicInterface implements Runnable, Observateur {
         frame.setSize(500, 300);
         frame.setVisible(true);
     }
+    
+    public void update() {
+        boardGraphic.repaint();
+    }
 
     @Override
     public void miseAJour() {

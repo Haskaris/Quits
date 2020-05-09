@@ -66,6 +66,9 @@ public class ViewBoard extends BoardGraphic {
                 Tile currentTile = board.getGrid()[i][j];
                 int index = currentTile.getIndexOfColor();
                 tracer(tilesImage.get(index), x, y, widthTile, heightTile);
+                if (currentTile.hasMarble()) {
+                    drawBall(currentTile.getMarbleColor(), x, y, widthTile, heightTile);
+                }
             }
         }
     }

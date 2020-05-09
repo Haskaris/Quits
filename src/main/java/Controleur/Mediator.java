@@ -1,7 +1,10 @@
 package Controleur;
 
+import Global.Tools;
+import Global.Tools.AILevel;
+import Global.Tools.Direction;
+
 import Model.Players.*;
-import Global.Tools.*;
 import Model.Support.Board;
 
 import View.GraphicInterface;
@@ -12,11 +15,12 @@ import java.awt.Point;
 
 public class Mediator {
     private Board board;
-    GraphicInterface graphicInterface;
-    MainGraphicInterface mainInterface;
+    private GraphicInterface graphicInterface;
+    private MainGraphicInterface mainInterface;
     
     public Mediator() {
-        board = new Board();
+        this.board = new Board();
+        this.board.setMediator(this);
     }
     
     private Player newPlayerHuman(String playerName, Color color) {
@@ -24,7 +28,7 @@ public class Mediator {
     }
     
     private Player newPlayerAIEeasy(String playerName, Color color) {
-        return new AIEasyPlayer(playerName, color);
+        return new AIEasyPlayer(playerName, color, board);
     }
     
     private Player newPlayerAIMedium(String playerName, Color color) {
@@ -64,15 +68,34 @@ public class Mediator {
         this.mainInterface = vue;
     }
     
-    public void initGame() {
+    /**
+     * Prépare le plateau et change l'interface
+     * @param gameMode 
+     */
+    public void initGame(Tools.GameMode gameMode) {
         this.mainInterface.initGame();
+        this.board.setGameMode(gameMode);
+        this.board.initPlayers();
     } 
     
     public Board getPlateau() {
         return this.board;
     }
+    
+    public GraphicInterface getGraphicInterface() {
+        return this.graphicInterface;
+    }
 
+    /**
+     * Évenement de clique de souris sur la ligne l et la colonne c
+     * @param l
+     * @param c 
+     */
     public void mouseClick(int l, int c) {
         this.board.moveLine(new Point(l, c), Direction.S);
+    }
+
+    public void addObservateur(View.GraphicInterface aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

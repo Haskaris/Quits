@@ -25,6 +25,12 @@ public abstract class BoardGraphic extends JComponent implements Observateur {
         return new ImageQuits(ImageIO.read(in));
     }
     
+    protected void drawBall(Color c, int x, int y, int l, int h) {
+        drawable.setPaint(c);
+        drawable.fillOval(x+l/4, y+h/4, l/2, h/2);
+        drawable.drawOval(x+l/4, y+h/4, l/2, h/2);
+    }
+    
     protected void tracer(ImageQuits i, int x, int y, int l, int h) {
         drawable.drawImage(i.image(), x, y, l, h, null);
     }

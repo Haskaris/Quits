@@ -49,22 +49,22 @@ public class Board implements Cloneable{
     public void initPlayers() {
         switch(gameMode) {
             case TwoPlayersFiveBalls:
-                this.players.get(0).setStartPoint(Direction.SO);
+                this.players.get(0).setStartPoint(Tools.Direction.SO);
                 this.grid[0][2].addMarble(this.players.get(0).addMarble());
                 this.grid[2][4].addMarble(this.players.get(0).addMarble());
-                this.players.get(1).setStartPoint(Direction.NE);
+                this.players.get(1).setStartPoint(Tools.Direction.NE);
                 this.grid[2][0].addMarble(this.players.get(1).addMarble());
                 this.grid[4][2].addMarble(this.players.get(1).addMarble());
                 break;
             case TwoPlayersThreeBalls:
-                this.players.get(0).setStartPoint(Direction.SO);
-                this.players.get(1).setStartPoint(Direction.NE);
+                this.players.get(0).setStartPoint(Tools.Direction.SO);
+                this.players.get(1).setStartPoint(Tools.Direction.NE);
                 break;
             case FourPlayersFiveBalls:
-                this.players.get(0).setStartPoint(Direction.SO);
-                this.players.get(1).setStartPoint(Direction.NE);
-                this.players.get(2).setStartPoint(Direction.NO);
-                this.players.get(3).setStartPoint(Direction.SE);
+                this.players.get(0).setStartPoint(Tools.Direction.SO);
+                this.players.get(1).setStartPoint(Tools.Direction.NE);
+                this.players.get(2).setStartPoint(Tools.Direction.NO);
+                this.players.get(3).setStartPoint(Tools.Direction.SE);
                 break;
         }
         for (Player p : this.players) {
@@ -161,7 +161,7 @@ public class Board implements Cloneable{
      * @param marble
      * @param direction
      */
-    public void moveMarble(Marble marble, Direction direction){
+    public void moveMarble(Marble marble, Tools.Direction direction){
         Point startPoint = marble.getTile().getPosition();
         Point finishPoint = Tools.getNextPoint(startPoint, direction);
         grid[startPoint.x][startPoint.y].removeMarble();
@@ -185,7 +185,7 @@ public class Board implements Cloneable{
      * @param line
      * @param direction
      */
-    public void moveLine(Point line, Direction direction){
+    public void moveLine(Point line, Tools.Direction direction){
         Tile tmp = null;
         //Factoriser
         switch(direction) {
@@ -296,7 +296,7 @@ public class Board implements Cloneable{
             }
         }
     }
-
+    @Override
     public Board clone() {
         Board board = null;
         try {
