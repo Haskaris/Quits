@@ -49,16 +49,16 @@ public class AIEnvironnement {
 
             Tools.Direction direction = player.getStartPoint();
             if(direction == Tools.Direction.SO) {
-                Point p = new Point(0,0);
-                this._startingPoint.add(p);
-            } else if(direction == Tools.Direction.SE) {
                 Point p = new Point(0,4);
                 this._startingPoint.add(p);
+            } else if(direction == Tools.Direction.SE) {
+                Point p = new Point(0,0);
+                this._startingPoint.add(p);
             } else if(direction == Tools.Direction.NO) {
-                Point p = new Point(4,0);
+                Point p = new Point(4,4);
                 this._startingPoint.add(p);
             } else if(direction == Tools.Direction.NE) {
-                Point p = new Point(4,4);
+                Point p = new Point(4,0);
                 this._startingPoint.add(p);
             } else {
                 System.out.println("AIEnvironnement constructor this direction is not handle yet : " + direction);
@@ -169,6 +169,7 @@ public class AIEnvironnement {
                     move.add(null);
                     move.add(point);
                     move.add(pointStudied);
+                    listMove.add(move);
                 }
             }
             pointStudied = new Point(tmpTileX, 4);
@@ -187,6 +188,7 @@ public class AIEnvironnement {
                     move.add(null);
                     move.add(point);
                     move.add(pointStudied);
+                    listMove.add(move);
                 }
             }
             pointStudied = new Point(0, tmpTileY);
@@ -204,6 +206,7 @@ public class AIEnvironnement {
                     move.add(null);
                     move.add(point);
                     move.add(pointStudied);
+                    listMove.add(move);
                 }
             }
             pointStudied = new Point(4, tmpTileY);
@@ -221,6 +224,7 @@ public class AIEnvironnement {
                     move.add(null);
                     move.add(point);
                     move.add(pointStudied);
+                    listMove.add(move);
                 }
             }
         }
@@ -231,28 +235,33 @@ public class AIEnvironnement {
         ArrayList<ArrayList<Point>> listMove = new ArrayList<>();
         this._playerMarble.get(this._currentPlayer).forEach((pos) -> {
             //this.playerStart != Tools.Direction.NO
-            if((pos.x != 4 && pos.y != 0) && isTileFree(add(pos, new Point(pos.x-1, pos.y-1)))) {
+            //System.out.println("Pos x : " + this._startingPoint.get(this._currentPlayer).x + " pos y " + this._startingPoint.get(this._currentPlayer).y);
+            if(!(this._startingPoint.get(this._currentPlayer).x == 4 && this._startingPoint.get(this._currentPlayer).y == 4) && isTileFree(new Point(pos.x-1, pos.y-1))) {
                 ArrayList<Point> move = new ArrayList<>();
+                //System.out.println("in NO");
                 move.add(pos);
                 move.add(new Point(pos.x-1, pos.y-1));
                 listMove.add(move);
             }
             //this.playerStart != Tools.Direction.NE
-            if((pos.x != 4 && pos.y != 4) && isTileFree(add(pos,new Point(pos.x+1, pos.y-1)))) {
+            if(!(this._startingPoint.get(this._currentPlayer).x == 4 && this._startingPoint.get(this._currentPlayer).y == 0) && isTileFree(new Point(pos.x+1, pos.y-1))) {
                 ArrayList<Point> move = new ArrayList<>();
+                //System.out.println("in NE");
                 move.add(pos);
                 move.add(new Point(pos.x+1, pos.y-1));
                 listMove.add(move);
             }
             //this.playerStart != Tools.Direction.SE
-            if((pos.x != 0 && pos.y != 4) && isTileFree(add(pos,new Point(pos.x+1, pos.y+1)))) {
+            if(!(this._startingPoint.get(this._currentPlayer).x == 0 && this._startingPoint.get(this._currentPlayer).y == 0) && isTileFree(new Point(pos.x+1, pos.y+1))) {
                 ArrayList<Point> move = new ArrayList<>();
+                //System.out.println("in SE");
                 move.add(pos);
                 move.add(new Point(pos.x+1, pos.y+1));
                 listMove.add(move);
             }
             //this.playerStart != Tools.Direction.SO
-            if ((pos.x != 0 && pos.y != 0) && isTileFree(add(pos,new Point(pos.x-1, pos.y+1)))) {
+            if (!(this._startingPoint.get(this._currentPlayer).x == 0 && this._startingPoint.get(this._currentPlayer).y == 4) && isTileFree(new Point(pos.x-1, pos.y+1))) {
+                //System.out.println("in SO");
                 ArrayList<Point> move = new ArrayList<>();
                 move.add(pos);
                 move.add(new Point(pos.x-1, pos.y+1));
@@ -263,9 +272,12 @@ public class AIEnvironnement {
     }
 
     public boolean isTileFree(Point p){
+        //System.out.println("IN");
         if (p.x<0 || p.y < 0 || p.x > this._grid.length-1 || p.y > this._grid.length-1) {
+            //System.out.println("in is tile free false");
             return false;
         }
+        //System.out.println(this._grid[p.x][p.y] + " x " + p.x + " y " + p.y);
         return !(this._grid[p.x][p.y] != -1);
     }
 

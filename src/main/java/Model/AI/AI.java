@@ -50,22 +50,30 @@ public abstract class AI extends Player {
             //node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
         }
         System.out.println("Profondeur : " + depth);
-        //System.out.println("Move calculator : ");
         MoveCalculator move_calculator = new MoveCalculator(board);
         List<Move> _move_list =  move_calculator.coupsPossibles();
+        System.out.println(this.getStartPoint());
         System.out.println("Affichage coups possibles");
         for(Move m: _move_list){
             m.Afficher();
         }
         System.out.println("fin coups possibles");
-
+        System.out.println("Liste des moves environnement IA : ");
+        ArrayList<ArrayList<Point>> listMove = this._env.coupsPossibles();
+        for(ArrayList<Point> aPoint : listMove){
+            for(Point p: aPoint){
+                System.out.print(p + " ");
+            }
+            System.out.println("");
+        }
+        System.out.println("Fin des move environnement IA");
 
 
         //ListIterator<Move> it = _move_list.listIterator();
         int i = 0;
         while(i < _move_list.size()){
         //for(Move move : _move_list){
-            Move save_move = _move_list.get(i).copySpe();
+            /*Move save_move = _move_list.get(i).copySpe();
             //Cope spe ne marche pas pour jouer le move
             Move move = _move_list.get(i).copy();
             move.Afficher();
@@ -96,7 +104,7 @@ public abstract class AI extends Player {
                     node.setNodeValue(potential_value);
                     node.setNodeMove(save_move);
                 }
-            }
+            }*/
             i++;
         }
         System.out.println("Fin while");
