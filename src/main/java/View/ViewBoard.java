@@ -18,6 +18,7 @@ public class ViewBoard extends BoardGraphic {
     ImageQuits arrowDown;
     ImageQuits arrowLeft;
     ImageQuits arrowRight;
+    ImageQuits background;
 
     Board board;
     int widthTile;
@@ -42,6 +43,7 @@ public class ViewBoard extends BoardGraphic {
         arrowDown = readImage("ArrowDown");
         arrowLeft = readImage("ArrowLeft");
         defaultMarble = readImage("DefaultMarble");
+        background = readImage("Background");
     }
 
     private ImageQuits readImage(String name) {
@@ -69,6 +71,10 @@ public class ViewBoard extends BoardGraphic {
 
         widthTile = Math.min(widthTile, heightTile);
         heightTile = widthTile;
+        
+        tracer(background, 0, 0, largeur(), hauteur());
+        
+        
         Color allyColor = null;
         boolean isColorNull = true;
         for (int i = 0; i < 5; i++) {
