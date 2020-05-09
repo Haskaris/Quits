@@ -3,6 +3,7 @@ package Model.AI;
 import Model.AI.Node;
 import Model.Move;
 import Model.Players.Player;
+import Model.Support.AIEnvironnement;
 import Model.Support.Board;
 import Model.MoveCalculator;
 import Model.Support.Marble;
@@ -20,6 +21,7 @@ public abstract class AI extends Player {
     public Board _board;
     //mettre en privé
     public int _max_depth;
+    public AIEnvironnement _env;
 
     public AI(String name, Color color, Board board, int max_depth) {
         super(name, color);
@@ -38,14 +40,15 @@ public abstract class AI extends Player {
         return somme;
     }
 
-    public int calculBestMove(int depth, Board board, Node node) throws IOException {
+    public int calculBestMove(int depth, Board board, Node node) {
         if (depth == 0) {
             return eval_func(board);
         }
-        /*
         if (_max_depth == depth) {
-            node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
-        }*/
+            this._env = new AIEnvironnement(board);
+            this._env.printAIEnvironnement();
+            //node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
+        }
         System.out.println("Profondeur : " + depth);
         //System.out.println("Move calculator : ");
         MoveCalculator move_calculator = new MoveCalculator(board);
@@ -55,6 +58,9 @@ public abstract class AI extends Player {
             m.Afficher();
         }
         System.out.println("fin coups possibles");
+
+
+
         //ListIterator<Move> it = _move_list.listIterator();
         int i = 0;
         while(i < _move_list.size()){

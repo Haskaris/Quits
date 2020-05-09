@@ -309,7 +309,7 @@ public class Board implements Cloneable{
         return board;
     }
 
-        public Board copy(){
+    public Board copy(){
         Board newBoard = new Board();
         for(Tile[] i : grid){
             for(Tile currentTile : i){
