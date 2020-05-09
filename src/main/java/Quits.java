@@ -3,9 +3,10 @@ import Global.Properties;
 import Model.ReaderWriter;
 import Model.Support.Board;
 import View.MainGraphicInterface;
-//import Vue.InterfaceGraphique;
 
 import java.io.IOException;
+
+//import Vue.InterfaceGraphique;
 
 public class Quits {
     //static InterfaceGraphique interfacegraphique;
@@ -14,7 +15,7 @@ public class Quits {
     /**
      * Permet d'initialiser ka partie. Les parametres de la partie sont definies dans Configuration
      */
-    public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
+    public static void main(String[] args) throws IllegalArgumentException {
         //Properties.load();
         new MainGraphicInterface();
         //interfacegraphique = new InterfaceGraphique();

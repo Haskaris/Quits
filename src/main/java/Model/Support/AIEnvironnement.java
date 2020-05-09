@@ -1,17 +1,11 @@
 package Model.Support;
 
 import Global.Tools;
-import Model.History;
-import Model.Move;
 import Model.Players.Player;
 
 import javax.tools.Tool;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-
-import static Global.Tools.DirToPoint;
 
 public class AIEnvironnement {
     private int[][] _grid;
@@ -83,7 +77,6 @@ public class AIEnvironnement {
             for(int number: n){
                 System.out.print(number);
             }
-            System.out.println("");
         }
         System.out.println("Current player : " + this._currentPlayer);
     }
@@ -169,13 +162,9 @@ public class AIEnvironnement {
 
         //Pour chaque marble on ajoute sa ligne et sa colonne
         for(Point point: this._playerMarble.get(this._currentPlayer)) {
-            //Point pos2 = ball.getTile().getPosition();
-            //Tile tmpTile = ball.getTile();
             int tmpTileX = point.x;
-            //int tmpTileX = tmpTile.getPosition().x;
             int tmpTileY = point.y;
-            //int tmpTileY = tmpTile.getPosition().y;
-            //Tile tileStudied = board.getGrid()[tmpTileX][0];
+
             Point pointStudied = new Point(tmpTileX, 0);
             //Tools.Direction.N
             if(!movableTiles.contains(pointStudied)){
@@ -300,7 +289,7 @@ public class AIEnvironnement {
             return false;
         }
         //System.out.println(this._grid[p.x][p.y] + " x " + p.x + " y " + p.y);
-        return !(this._grid[p.x][p.y] != -1);
+        return this._grid[p.x][p.y] == -1;
     }
 
     public void moveLine(ArrayList<Point> move){
