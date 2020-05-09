@@ -23,6 +23,9 @@ public class AIEnvironnement {
         this._players = new ArrayList<>();
         this._grid = new int[5][5];
         this._currentPlayer = 0;
+        this._startingPoint = new ArrayList<>();
+        this._playerMarble = new ArrayList<>();
+
     }
 
     public AIEnvironnement(Board board){
@@ -115,6 +118,14 @@ public class AIEnvironnement {
         this._startingPoint.add(p);
     }
 
+    public ArrayList<ArrayList<Point>> getPlayerMarble(){
+        return this._playerMarble;
+    }
+
+    public void addPlayerMarble(ArrayList<Point> playerMarble){
+        this._playerMarble.add(playerMarble);
+    }
+
     public AIEnvironnement copy(){
         AIEnvironnement copyEnv = new AIEnvironnement();
         for(int player: getPlayers()){
@@ -126,9 +137,18 @@ public class AIEnvironnement {
             }
         }
         copyEnv.setCurrentPlayer(getCurrentPlayer());
+
         for(Point p: getStartingPoint()){
             Point startingPoint = new Point(p.x, p.y);
             copyEnv.addStartingPoint(startingPoint);
+
+        }
+        for(ArrayList<Point> arrayPoint : getPlayerMarble()){
+            ArrayList<Point> copyArrayPoint = new ArrayList<>();
+            for(Point p: arrayPoint){
+                copyArrayPoint.add(new Point(p.x, p.y));
+            }
+            copyEnv.addPlayerMarble(copyArrayPoint);
         }
         return copyEnv;
 
@@ -349,14 +369,22 @@ public class AIEnvironnement {
 
     public void moveMarble(ArrayList<Point> move){
         int marble = this._grid[move.get(0).x][move.get(0).y];
+        //System.out.println("before change point");
         this._grid[move.get(0).x][move.get(0).y] = -1;
         this._grid[move.get(1).x][move.get(1).y] = marble;
+        //System.out.println("after change point");
+        //System.out.println(this._playerMarble);
+        //System.out.println(this._currentPlayer);
         for(Point point: this._playerMarble.get(this._currentPlayer)){
+            //System.out.println("before change point in for statement " );
+            //System.out.println("x "+ move.get(0).x + " y " + move.get(0).y);
             if(point.x == move.get(0).x && point.y == move.get(0).y){
                 point.x = move.get(1).x;
                 point.y = move.get(1).y;
             }
+            //System.out.println("after  change point in for statement");
         }
+        //System.out.println("after change point in list");
     }
 
     public void perform(ArrayList<Point> move) {

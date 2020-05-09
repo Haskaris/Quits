@@ -3,9 +3,10 @@ package Model.Players;
 import Model.AI.AI;
 import Model.AI.Node;
 import Model.Move;
+import Model.Support.AIEnvironnement;
 import Model.Support.Board;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -27,11 +28,15 @@ public class AIEasyPlayer extends AI {
             System.out.println("Erreur d'attente de l'IA");
         }*/
         Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
-        calculBestMove(2, _board, node);
+        AIEnvironnement iaEnv  = new AIEnvironnement(this._board);
+        calculBestMove(2, iaEnv, node);
 
         System.out.println(node.getNodeValue());
         System.out.println("move");
-        node.getNodeMove().Afficher();
+        System.out.println(node.getNodeMove());
+        /*for(Point point : node.getNodeMove()){
+            System.out.println("x : " + point.x + " y : " + point.y);
+        }*/
         System.out.println("fin move");
         return coups_possibles.get(new Random().nextInt(coups_possibles.size()));
     }

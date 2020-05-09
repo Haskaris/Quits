@@ -2,6 +2,7 @@ package Model.AI;
 
 import Model.Move;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ public class Node {
     }
 
     int _node_value;
-    Move _move;
+    ArrayList<Point> _move;
     Node _parent;
     Node _child;
     Node_type _node_type;
@@ -22,7 +23,7 @@ public class Node {
      * Permet de créer un noeud de l'arbre
      * @param node_value, move, parent, node_type
      */
-    public Node(int node_value, Move move, Node parent, Node child, Node_type node_type) {
+    public Node(int node_value, ArrayList<Point> move, Node parent, Node child, Node_type node_type) {
         this._node_value = node_value;
         this._move = move;
         this._parent = parent;
@@ -38,11 +39,11 @@ public class Node {
         this._node_value = value;
     }
 
-    public Move getNodeMove() {
+    public ArrayList<Point> getNodeMove() {
         return _move;
     }
 
-    public void setNodeMove(Move move) {
+    public void setNodeMove(ArrayList<Point> move) {
         this._move = move;
     }
 
