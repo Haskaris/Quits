@@ -66,6 +66,14 @@ class CoupTest {
         board.history.doMove(player.Jouer(coupspossible));
         //LecteurRedacteur.AffichePartie(board);
     }
+
+    @Test
+    public void TestReseau() throws Exception {
+        WebSender webSender = new WebSender();
+        webSender.Send("Coucou");
+        Player player = new DistantPlayer("p", Color.RED);
+        player.Jouer(null);
+    }
 }
 
 
