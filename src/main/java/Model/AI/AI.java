@@ -5,11 +5,13 @@ import Model.Move;
 import Model.Players.Player;
 import Model.Support.Board;
 import Model.MoveCalculator;
+import Model.Support.Marble;
 
 import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -26,10 +28,17 @@ public abstract class AI extends Player {
     }
 
     public int eval_func(Board board) {
-        return 15;
+        ArrayList<Marble> marbleList = board.getPlayers().get(board.currentPlayer).getMarbles();
+        int somme = 0;
+        for(Marble marble: marbleList){
+            Point currentPoint = marble.getTile().getPosition();
+            somme += (Math.sqrt(Math.pow(4-currentPoint.x,2)+Math.pow(4-currentPoint.y, 2)));
+        }
+        System.out.println(somme);
+        return somme;
     }
 
-    public int calculBestMove(int depth, Board board, Node node)  {
+    public int calculBestMove(int depth, Board board, Node node) throws IOException {
         if (depth == 0) {
             return eval_func(board);
         }
@@ -38,43 +47,27 @@ public abstract class AI extends Player {
             node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
         }*/
         System.out.println("Profondeur : " + depth);
-        System.out.println("Move calculator : ");
+        //System.out.println("Move calculator : ");
         MoveCalculator move_calculator = new MoveCalculator(board);
         List<Move> _move_list =  move_calculator.coupsPossibles();
-        System.out.println("Move list : ");
-        for(Move m : _move_list){
+        System.out.println("Affichage coups possibles");
+        for(Move m: _move_list){
             m.Afficher();
         }
-        System.out.println("fin liste Move");
+        System.out.println("fin coups possibles");
         //ListIterator<Move> it = _move_list.listIterator();
         int i = 0;
         while(i < _move_list.size()){
         //for(Move move : _move_list){
+            Move save_move = _move_list.get(i).copySpe();
+            //Cope spe ne marche pas pour jouer le move
             Move move = _move_list.get(i).copy();
-            System.out.println("Move list in for : ");
-            for(Move m : _move_list){
-
-                m.Afficher();
-            }
-            System.out.println("fin liste Move for");
-            Board new_board = board.clone();
-            System.out.println("Move list in for 1 : ");
-            for(Move m : _move_list){
-
-                m.Afficher();
-            }
-            System.out.println("fin liste Move for 1");
-            System.out.println("Move before perform : " ) ;
             move.Afficher();
-            System.out.println("Move after perform : " ) ;
+            Board new_board = board.copy();
+
             move.perform(new_board);
             move.Afficher();
-            System.out.println("Move list in for 1 : ");
-            for(Move m : _move_list){
 
-                m.Afficher();
-            }
-            System.out.println("fin liste Move for 1");
             Node new_node = new Node(-1, null, node, null, Node.Node_type.MIN_NODE);
             node.setNodeChild(new_node);
 
@@ -82,24 +75,26 @@ public abstract class AI extends Player {
             new_node.setNodeValue(potential_value);
 
             //if (pruning(depth, node, potential_value)) break;
-            /*
+
             if (node.getNodeType() == Node.Node_type.MAX_NODE) {
-                if (potential_value > node.getNodeValue()) {
+                System.out.println("potential value " + potential_value + " current value : "+ node.getNodeValue()) ;
+                if (potential_value < node.getNodeValue() || node.getNodeValue() == -1 ) {
                     node.setNodeValue(potential_value);
-                    node.setNodeMove(move);
+                    System.out.println("depth : " + depth + " valeur : " + potential_value + " noeud : ");
+                    save_move.Afficher();
+                    node.setNodeMove(save_move);
                 }
 
             } else {
-                if (potential_value < node.getNodeValue() || node.getNodeValue() == -1) {
+                if (potential_value > node.getNodeValue() || node.getNodeValue() == -1) {
                     node.setNodeValue(potential_value);
-                    node.setNodeMove(move);
+                    node.setNodeMove(save_move);
                 }
-            }*/
+            }
             i++;
-
         }
-        //move_calculator.clearMoves();
         System.out.println("Fin while");
+
         return node.getNodeValue();
     }
 

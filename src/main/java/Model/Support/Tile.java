@@ -9,7 +9,8 @@ public class Tile {
     private Marble marble = null;
     private Point position;
     private int indexOfColor;
-    
+
+
     /**
      * Constructeur
      */
@@ -104,5 +105,15 @@ public class Tile {
      */
     public void print(OutputStream stream) throws IOException {
         stream.write(String.valueOf(this.indexOfColor).getBytes());
+    }
+
+    public Tile copy(){
+        Tile newTile = new Tile(position.x, position.y);
+
+        return newTile;
+    }
+
+    public Marble getMarble(){
+        return marble;
     }
 }

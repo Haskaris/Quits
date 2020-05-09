@@ -47,12 +47,10 @@ public class Move implements Cloneable{
     }
 
     public void perform(Board board) {
-        Afficher();
+        //Afficher();
         if(marble != null){
             board.moveMarble(marble, direction);
-        }
-        Afficher();
-        if(line != null){
+        } else if (line != null){
             board.moveLine(line, direction);
         }
     }
@@ -68,8 +66,7 @@ public class Move implements Cloneable{
 
     public void Afficher(){
         if(marble!=null){
-            System.out.println(marble.getTile().getPosition());
-            System.out.println(direction);
+            System.out.println(marble.getTile().getPosition() + " direction : " + direction);
         }
         if(line != null){
             System.out.println(line);
@@ -86,16 +83,26 @@ public class Move implements Cloneable{
         }
         return move;
     }
-
+    public Move copySpe(){
+        Move copyMove;
+        if(marble != null){
+            copyMove = new Move(marble.copy(), direction, player);
+        }
+        else {
+            copyMove = new Move(line, direction, player);
+        }
+        copyMove.nextMove = nextMove;
+        return copyMove;
+    }
     public Move copy(){
         Move copyMove;
-        if(marble == null){
+        if(marble != null){
             copyMove = new Move(marble, direction, player);
         }
         else {
             copyMove = new Move(line, direction, player);
         }
-        copyMove.nextMove = null;
+        copyMove.nextMove = nextMove;
         return copyMove;
     }
 }

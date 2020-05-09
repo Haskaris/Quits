@@ -83,13 +83,6 @@ public class MoveCalculator {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
                     moves.add(new Move(tileStudied.getPosition(), Direction.S, player));
-                    /*System.out.println("Ajout moves 2");
-                    ListIterator<Move> it2 = moves.listIterator();
-                    while(it2.hasNext()) {
-                        Move move = it2.next();
-                        //Board new_board = board.clone();
-                        move.Afficher();
-                    }*/
                 }
             }
             tileStudied = board.getGrid()[0][tmpTileY];
@@ -97,13 +90,6 @@ public class MoveCalculator {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
                     moves.add(new Move(tileStudied.getPosition(), Direction.O, player));
-                    /*System.out.println("Ajout moves 3");
-                    ListIterator<Move> it2 = moves.listIterator();
-                    while(it2.hasNext()) {
-                        Move move = it2.next();
-                        //Board new_board = board.clone();
-                        move.Afficher();
-                    }*/
                 }
             }
             tileStudied = board.getGrid()[4][tmpTileY];
@@ -111,13 +97,6 @@ public class MoveCalculator {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
                     moves.add(new Move(tileStudied.getPosition(), Direction.E, player));
-                    /*System.out.println("Ajout moves 4");
-                    ListIterator<Move> it2 = moves.listIterator();
-                    while(it2.hasNext()) {
-                        Move move = it2.next();
-                        //Board new_board = board.clone();
-                        move.Afficher();
-                    }*/
                 }
             }
         }
@@ -131,13 +110,6 @@ public class MoveCalculator {
                 moves.add(new Move(new Point(i,-1),false,player));
             if(TuileEstLibre(i, board.GetGrille().length-1)&& !areReversed(lastMove, new Move(new Point(i,-1),true,player)))
                 moves.add(new Move(new Point(i,-1),true,player));
-        }*/
-        /*System.out.println("Ajout moves 6");
-        ListIterator<Move> it= moves.listIterator();
-        while(it.hasNext()) {
-            Move move = it.next();
-            //Board new_board = board.clone();
-            move.Afficher();
         }*/
     }
 
@@ -154,41 +126,24 @@ public class MoveCalculator {
     }
 
     private void marblesMoves(){
-        /*System.out.println("Debut du calcul des coups possibles : ");
-        System.out.println("Toutes les billes : ");
-        ListIterator<Marble> it2 = marbles.listIterator();
-        while(it2.hasNext()) {
-            Point pos2 = it2.next().getTile().getPosition();
-            //Board new_board = board.clone();
-            System.out.println("Pos x : " + pos2.x + " pos y : " + pos2.y);
-        }
-        System.out.println("Fin affichage de toutes les billes ");*/
-        //List<Move> annexe = new ArrayList<>();
         this.marbles.forEach((b) -> {
             Point pos = b.getTile().getPosition();
-            //System.out.println("Pos x : " + pos.x + " pos y : " + pos.y);
             if(this.playerStart != Direction.NO && isTileFree(add(pos, DirToPoint(Direction.NO)))) {
-                //System.out.println("NO");
                 moves.add(new Move(b, Direction.NO, this.player));
             }
             if(this.playerStart != Direction.NE && isTileFree(add(pos,DirToPoint(Direction.NE)))) {
-                //System.out.println("NE");
-                //System.out.println("In ne : " + b.getTile().getPosition().x + " " + b.getTile().getPosition().y);
                 moves.add(new Move(b, Direction.NE, this.player));
             }
             if(this.playerStart != Direction.SE && isTileFree(add(pos,DirToPoint(Direction.SE)))) {
-                //System.out.println("SE");
                 moves.add(new Move(b, Direction.SE, this.player));
             }
             if (this.playerStart != Direction.SO && isTileFree(add(pos,DirToPoint(Direction.SO)))) {
-                //System.out.println("SO");
                 moves.add(new Move(b, Direction.SO, this.player));
             }
         });
     }
 
     public boolean isTileFree(Point p){
-        //System.out.println("P x : " + p.x + " p y : " + p.y);
         if (p.x<0 || p.y < 0 || p.x > board.getGrid().length-1 || p.y > board.getGrid().length-1) {
             return false;
         }

@@ -51,4 +51,11 @@ public class Marble {
         stream.write(String.valueOf(this.getTile().getPosition().y).getBytes());
         stream.write('/');
     }
+
+    public Marble copy(){
+        Marble copy = new Marble(getColor());
+        copy.setTile(tile.copy());
+        copy.getTile().addMarble(copy);
+        return copy;
+    }
 }
