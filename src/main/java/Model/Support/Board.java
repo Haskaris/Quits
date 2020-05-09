@@ -285,6 +285,7 @@ public class Board implements Cloneable{
             }
             stream.write('\n');
         }
+
     }
 
     public void load(InputStream in_stream) throws IOException  {
@@ -295,6 +296,7 @@ public class Board implements Cloneable{
                 this.grid[i][j].setIndexOfColor(indexOfColor);
             }
         }
+
     }
     @Override
     public Board clone() {

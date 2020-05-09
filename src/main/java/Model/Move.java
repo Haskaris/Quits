@@ -8,7 +8,7 @@ import static Global.Tools.*;
 
 import java.awt.*;
 
-public class Move {
+public class Move implements Cloneable{
     /**
      * Marble indique la marble a bouger (null sinon)
  direction est la direction dans laquelle cette marble doit bouger (consulter Global.Tools)
@@ -47,9 +47,11 @@ public class Move {
     }
 
     public void perform(Board board) {
+        Afficher();
         if(marble != null){
             board.moveMarble(marble, direction);
         }
+        Afficher();
         if(line != null){
             board.moveLine(line, direction);
         }
@@ -74,5 +76,26 @@ public class Move {
             //System.out.println(positif);
         }
     }
+    @Override
+    public Move clone() {
+        Move move = null;
+        try {
+            move = (Move) super.clone();
+        } catch(CloneNotSupportedException e) {
+            e.printStackTrace(System.err);
+        }
+        return move;
+    }
 
+    public Move copy(){
+        Move copyMove;
+        if(marble == null){
+            copyMove = new Move(marble, direction, player);
+        }
+        else {
+            copyMove = new Move(line, direction, player);
+        }
+        copyMove.nextMove = null;
+        return copyMove;
+    }
 }

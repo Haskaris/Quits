@@ -7,6 +7,9 @@ import Model.Support.Board;
 import Model.MoveCalculator;
 
 import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -26,7 +29,7 @@ public abstract class AI extends Player {
         return 15;
     }
 
-    public int calculBestMove(int depth, Board board, Node node) {
+    public int calculBestMove(int depth, Board board, Node node)  {
         if (depth == 0) {
             return eval_func(board);
         }
@@ -34,18 +37,44 @@ public abstract class AI extends Player {
         if (_max_depth == depth) {
             node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
         }*/
+        System.out.println("Profondeur : " + depth);
         System.out.println("Move calculator : ");
-        System.out.println(board);
         MoveCalculator move_calculator = new MoveCalculator(board);
         List<Move> _move_list =  move_calculator.coupsPossibles();
+        System.out.println("Move list : ");
+        for(Move m : _move_list){
+            m.Afficher();
+        }
+        System.out.println("fin liste Move");
+        //ListIterator<Move> it = _move_list.listIterator();
+        int i = 0;
+        while(i < _move_list.size()){
+        //for(Move move : _move_list){
+            Move move = _move_list.get(i).copy();
+            System.out.println("Move list in for : ");
+            for(Move m : _move_list){
 
-        ListIterator<Move> it = _move_list.listIterator();
-        while(it.hasNext()) {
-            Move move = it.next();
+                m.Afficher();
+            }
+            System.out.println("fin liste Move for");
             Board new_board = board.clone();
-            move.Afficher();
-            move.perform(new_board);
+            System.out.println("Move list in for 1 : ");
+            for(Move m : _move_list){
 
+                m.Afficher();
+            }
+            System.out.println("fin liste Move for 1");
+            System.out.println("Move before perform : " ) ;
+            move.Afficher();
+            System.out.println("Move after perform : " ) ;
+            move.perform(new_board);
+            move.Afficher();
+            System.out.println("Move list in for 1 : ");
+            for(Move m : _move_list){
+
+                m.Afficher();
+            }
+            System.out.println("fin liste Move for 1");
             Node new_node = new Node(-1, null, node, null, Node.Node_type.MIN_NODE);
             node.setNodeChild(new_node);
 
@@ -66,9 +95,10 @@ public abstract class AI extends Player {
                     node.setNodeMove(move);
                 }
             }*/
-
+            i++;
 
         }
+        //move_calculator.clearMoves();
         System.out.println("Fin while");
         return node.getNodeValue();
     }
