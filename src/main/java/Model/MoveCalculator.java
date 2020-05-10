@@ -43,10 +43,10 @@ public class MoveCalculator {
     public List<Move> coupsPossibles(){
         marblesMoves();
         tilesMoves();
-        System.out.println("Envoyé");
-        for(Move m : moves){
+        /*System.out.println("Envoyé");
+        /*for(Move m : moves){
             m.Afficher();
-        }
+        }*/
         return moves;
     }
 

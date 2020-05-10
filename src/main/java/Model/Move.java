@@ -73,36 +73,4 @@ public class Move implements Cloneable{
             //System.out.println(positif);
         }
     }
-    @Override
-    public Move clone() {
-        Move move = null;
-        try {
-            move = (Move) super.clone();
-        } catch(CloneNotSupportedException e) {
-            e.printStackTrace(System.err);
-        }
-        return move;
-    }
-    public Move copySpe(){
-        Move copyMove;
-        if(marble != null){
-            copyMove = new Move(marble.copy(), direction, player);
-        }
-        else {
-            copyMove = new Move(line, direction, player);
-        }
-        copyMove.nextMove = nextMove;
-        return copyMove;
-    }
-    public Move copy(){
-        Move copyMove;
-        if(marble != null){
-            copyMove = new Move(marble, direction, player);
-        }
-        else {
-            copyMove = new Move(line, direction, player);
-        }
-        copyMove.nextMove = nextMove;
-        return copyMove;
-    }
 }

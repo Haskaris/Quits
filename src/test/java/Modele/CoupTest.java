@@ -17,6 +17,7 @@ class CoupTest {
     Board board;
     Marble marble;
     Player player;
+    Player player2;
 
     @BeforeEach
     public void init(){
@@ -57,6 +58,25 @@ class CoupTest {
 
     @Test
     public void TestEntreeController() {
+        MoveCalculator mc = new MoveCalculator(board);
+        List<Move> coupspossible = mc.coupsPossibles();
+        //LecteurRedacteur.AffichePartie(board);
+        board.history.doMove(coupspossible.get(0));
+        //LecteurRedacteur.AffichePartie(board);
+        coupspossible = new MoveCalculator(board).coupsPossibles();
+        board.history.doMove(player.Jouer(coupspossible));
+        //LecteurRedacteur.AffichePartie(board);
+    }
+
+    @Test
+    public void TestJouerIA(){
+        System.out.println("Test jouer AI");
+        player2 = new AIEasyPlayer("default", Color.RED, board);
+        player2.setStartPoint(Tools.Direction.NE);
+        board.addPlayer(player2);
+        marble = player2.addMarble();
+        board.getGrid()[3][3].addMarble(marble);
+
         MoveCalculator mc = new MoveCalculator(board);
         List<Move> coupspossible = mc.coupsPossibles();
         //LecteurRedacteur.AffichePartie(board);

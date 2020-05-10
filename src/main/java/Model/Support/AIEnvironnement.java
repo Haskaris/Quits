@@ -67,6 +67,7 @@ public class AIEnvironnement {
             } else {
                 System.out.println("AIEnvironnement constructor this direction is not handle yet : " + direction);
             }
+            numCurrentPlayer++;
         }
 
         this._currentPlayer = board.currentPlayer;
@@ -446,9 +447,9 @@ public class AIEnvironnement {
 
     public void nextPlayer(){
         if(this._players.size() == this._currentPlayer + 1){
-            this._currentPlayer = 0;
+            setCurrentPlayer(0);
         } else {
-            this._currentPlayer++;
+            setCurrentPlayer(getCurrentPlayer()+1);
         }
     }
 
@@ -520,6 +521,15 @@ public class AIEnvironnement {
             } else {
                 return Tools.Direction.E;
             }
+        }
+    }
+
+    public void printBoard(){
+        for(int i = 0; i < this._grid.length; i++){
+            for(int j = 0; j < this._grid[i].length; j++){
+                System.out.print(this._grid[i][j] + " ");
+            }
+            System.out.println("");
         }
     }
 

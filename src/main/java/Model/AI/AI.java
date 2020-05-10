@@ -30,6 +30,7 @@ public abstract class AI extends Player {
     }
 
     public int eval_func(AIEnvironnement iaEnv) {
+        //a changer prendre en compte toutes les billes
         int sum = 0;
         Point goal = new Point(Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getCurrentPlayer()).x) , Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getCurrentPlayer()).y));
 
@@ -47,32 +48,35 @@ public abstract class AI extends Player {
         }
 
         ArrayList<ArrayList<Point>> listMove = iaEnv.coupsPossibles();
+        //sert au sotckage de l'arbre
         int name = node._name;
         for(ArrayList<Point> move : listMove){
+            //sert au sotckage de l'arbre
             name++;
             AIEnvironnement new_env = iaEnv.copy();
 
             new_env.perform(move);
 
-            Node new_node = new Node(-1, null, node, null, Node.Node_type.MIN_NODE, name);
+            Node new_node = new Node(-1, null, node, null, Node.Node_type.MIN_NODE, name, iaEnv.getCurrentPlayer());
             node.setNodeChild(new_node);
+            //sert au sotckage de l'arbre
             node.addNodeChild(new_node);
 
-
+            //recurence
+            //On passe au joueur suivant dans notre copie de l'environnement
+            new_env.nextPlayer();
             int potential_value = calculBestMove(depth - 1, new_env, new_node);
             new_node.setNodeValue(potential_value);
 
 
-            /*if (pruning(depth, node, potential_value)) {
-                System.out.println("On élague");
+            if (pruning(depth, node, potential_value)) {
                 break;
-            }*/
+            }
 
             if (node.getNodeType() == Node.Node_type.MAX_NODE) {
                 if (potential_value < node.getNodeValue() || node.getNodeValue() == -1 ) {
                     node.setNodeValue(potential_value);
                     node.setNodeMove(move);
-                    //System.out.println("Noeud max profondeur " + depth + " nom noeud " + node._name + " move final : " + move + " valeur " + potential_value);
                 }
 
 
@@ -80,11 +84,9 @@ public abstract class AI extends Player {
                 if (potential_value > node.getNodeValue() || node.getNodeValue() == -1) {
                     node.setNodeValue(potential_value);
                     node.setNodeMove(move);
-                    //System.out.println("Noeud min profondeur " + depth + " nom noeud " + node._name + " move final : " + move + " valeur " + potential_value);
                 }
             }
         }
-        //System.out.println("Fin while");
 
         return node.getNodeValue();
     }
@@ -101,9 +103,9 @@ public abstract class AI extends Player {
         Node.Node_type pruning_type = node.getNodeType();
 
         if (pruning_type == Node.Node_type.MAX_NODE) {
-            potential_test = node_value < p_value;
-        } else {
             potential_test = node_value > p_value;
+        } else {
+            potential_test = node_value < p_value;
         }
 
         if (_max_depth - depth >= 2) {

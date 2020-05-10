@@ -298,32 +298,4 @@ public class Board implements Cloneable{
         }
 
     }
-    @Override
-    public Board clone() {
-        Board board = null;
-        try {
-            board = (Board) super.clone();
-        } catch(CloneNotSupportedException cnse) {
-            cnse.printStackTrace(System.err);
-        }
-        return board;
-    }
-
-    public Board copy(){
-        Board newBoard = new Board();
-        for(Tile[] i : grid){
-            for(Tile currentTile : i){
-                if(currentTile.hasMarble()){
-                    Point p = currentTile.getPosition();
-                    newBoard.placeMarbleOn(currentTile.getMarble(), p.x, p.y);
-                }
-            }
-        }
-        newBoard.currentPlayer = currentPlayer;
-        for(Player p : getPlayers()){
-            newBoard.addPlayer(p);
-        }
-        newBoard.gameMode = gameMode;
-        return newBoard;
-    }
 }
