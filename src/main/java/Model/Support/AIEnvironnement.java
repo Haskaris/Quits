@@ -2,6 +2,7 @@ package Model.Support;
 
 import Global.Tools;
 import Model.Players.Player;
+import Model.Move;
 
 import javax.tools.Tool;
 import java.awt.*;
@@ -520,6 +521,7 @@ public class AIEnvironnement {
             }
             System.out.println("");
         }
+        System.out.println("");
     }
 
 }

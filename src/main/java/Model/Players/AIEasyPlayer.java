@@ -33,11 +33,9 @@ public class AIEasyPlayer extends AI {
         iaEnv.printBoard();
         System.out.println(iaEnv.getPlayers());
         calculBestMove(2, iaEnv, node);
-        node.printTree();
-        //System.out.println(node.getNodeMove());
-        //iaEnv.convertMove(node.getNodeMove(), this._board).Afficher();
+        //node.printTree();
+
         return iaEnv.convertMove(node.getNodeMove(), this._board);
-        //return coups_possibles.get(new Random().nextInt(coups_possibles.size()));
     }
     
     /**

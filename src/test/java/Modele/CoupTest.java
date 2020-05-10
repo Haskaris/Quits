@@ -77,14 +77,13 @@ class CoupTest {
         marble = player2.addMarble();
         board.getGrid()[3][3].addMarble(marble);
 
-        MoveCalculator mc = new MoveCalculator(board);
+        /*MoveCalculator mc = new MoveCalculator(board);
         List<Move> coupspossible = mc.coupsPossibles();
-        //LecteurRedacteur.AffichePartie(board);
         board.history.doMove(coupspossible.get(0));
-        //LecteurRedacteur.AffichePartie(board);
         coupspossible = new MoveCalculator(board).coupsPossibles();
-        board.history.doMove(player.Jouer(coupspossible));
-        //LecteurRedacteur.AffichePartie(board);
+        board.history.doMove(player.Jouer(coupspossible));*/
+
+        board.playGame();
     }
 }
 

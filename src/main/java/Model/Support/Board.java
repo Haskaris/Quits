@@ -115,12 +115,11 @@ public class Board implements Cloneable{
      * Plante l'ihm
      */
     public void playGame(){
-        /*while(endRound()){
+        while(endRound()){
             List<Move> possiblesMoves = new MoveCalculator(this).coupsPossibles();
             Move coup = currentPlayer().Jouer(possiblesMoves);
             history.doMove(coup);
-            //LecteurRedacteur.AffichePartie(this);
-        }*/
+        }
     }
     
     public void playTurn() {
