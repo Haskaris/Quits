@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class AIEasyPlayer extends AI {
 
     public AIEasyPlayer(String name, Color color, Board board) {
-        super(name, color, board, 2);
+        super(name, color, board, 5);
     }
 
     @Override
@@ -27,9 +27,10 @@ public class AIEasyPlayer extends AI {
         }catch (Exception e) {
             System.out.println("Erreur d'attente de l'IA");
         }*/
-        Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE);
+        Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE, 0);
         AIEnvironnement iaEnv  = new AIEnvironnement(this._board);
-        calculBestMove(2, iaEnv, node);
+
+        calculBestMove(5, iaEnv, node);
 
         System.out.println(node.getNodeValue());
         System.out.println("move");
@@ -38,6 +39,7 @@ public class AIEasyPlayer extends AI {
             System.out.println("x : " + point.x + " y : " + point.y);
         }*/
         System.out.println("fin move");
+        node.printTree();
         return coups_possibles.get(new Random().nextInt(coups_possibles.size()));
     }
     
