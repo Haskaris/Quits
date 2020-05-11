@@ -18,6 +18,13 @@ public class History {
         past = c;
         future = null;
     }
+    
+    public void addToHistory(Move c){
+        if(c == null) return; // Correspond a une impossibilite de se deplacer pour le player. Rien n'est enregistre
+        c.nextMove = past;
+        past = c;
+        future = null;
+    }
 
     public void undo(){
         if(isEmptyPast())return;
