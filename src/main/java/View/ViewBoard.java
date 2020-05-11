@@ -112,7 +112,7 @@ public class ViewBoard extends BoardGraphic {
                                 c.getRed(),
                                 c.getGreen(),
                                 c.getBlue(),
-                                150);
+                                100);
 
                         drawBall(c, x, y, widthTile, heightTile);
                     }
