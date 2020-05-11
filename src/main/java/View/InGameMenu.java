@@ -5,17 +5,31 @@
  */
 package View;
 
+import Controleur.FileGestion;
+import Controleur.Mediator;
+import Model.Support.Board;
+import java.io.File;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author Mathis
  */
 public class InGameMenu extends javax.swing.JPanel {
+    Mediator mediator;
+    private final JFileChooser fc;
 
     /**
      * Creates new form InGameMenu
+     * @param mediator
      */
-    public InGameMenu() {
+    public InGameMenu(Mediator mediator) {
         initComponents();
+        this.mediator = mediator;
+        super.setVisible(false);
+        this.fc = new JFileChooser();
+        this.fc.setAcceptAllFileFilterUsed(false);
+        this.fc.setFileFilter(new SaveFilter());
     }
 
     /**
@@ -32,10 +46,21 @@ public class InGameMenu extends javax.swing.JPanel {
         startOverButton = new javax.swing.JButton();
         historyButton = new javax.swing.JButton();
         settingsButton = new javax.swing.JButton();
+        quitButton = new javax.swing.JButton();
 
         saveButton.setText("Sauvegarder");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
         loadButton.setText("Charger");
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadButtonActionPerformed(evt);
+            }
+        });
 
         startOverButton.setText("Recommencer");
 
@@ -45,6 +70,13 @@ public class InGameMenu extends javax.swing.JPanel {
         settingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settingsButtonActionPerformed(evt);
+            }
+        });
+
+        quitButton.setText("Quitter");
+        quitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitButtonActionPerformed(evt);
             }
         });
 
@@ -59,7 +91,8 @@ public class InGameMenu extends javax.swing.JPanel {
                     .addComponent(settingsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(historyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(loadButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(quitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -67,15 +100,17 @@ public class InGameMenu extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(saveButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(loadButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(startOverButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(historyButton)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(settingsButton)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(quitButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -83,10 +118,41 @@ public class InGameMenu extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_settingsButtonActionPerformed
 
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        System.out.println("Je vais save");
+        int returnVal = fc.showOpenDialog(this);
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            System.out.println("Je veux le nom " + file.getName() + ".");
+            this.mediator.saveGame(file.getName());
+        } else {
+            System.out.println("Ah bah non");
+        }
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+        System.out.println("Je vais load");
+        int returnVal = fc.showOpenDialog(this);
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            System.out.println("Je veux le fichier " + file.getName() + ".");
+            this.mediator.loadGame(file.getName());
+        } else {
+            System.out.println("Ah bah non");
+        }
+    }//GEN-LAST:event_loadButtonActionPerformed
+
+    private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
+        this.mediator.quitGame();
+    }//GEN-LAST:event_quitButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton historyButton;
     private javax.swing.JButton loadButton;
+    private javax.swing.JButton quitButton;
     private javax.swing.JButton saveButton;
     private javax.swing.JButton settingsButton;
     private javax.swing.JButton startOverButton;

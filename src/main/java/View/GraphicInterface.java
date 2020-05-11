@@ -5,9 +5,12 @@
  */
 package View;
 
+import Controleur.FileGestion;
 import Controleur.Mediator;
+
 import Model.Players.Player;
 import Model.Support.Board;
+
 import Paterns.Observateur;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -26,7 +29,6 @@ import javax.swing.SwingUtilities;
  * @author Mathis
  */
 public class GraphicInterface implements Runnable, Observateur {
-    Board board;
     Mediator mediator;
     
     JFrame frame;
@@ -37,93 +39,89 @@ public class GraphicInterface implements Runnable, Observateur {
     JToggleButton menu;
     JButton undo, redo;
     InGameMenu inGameMenu;
-
     
-    GraphicInterface(Board plateau, Mediator m) {
-        this.board = plateau;
+    
+    GraphicInterface(Mediator m) {
         this.mediator = m;
     }
 
     public static void start(Mediator m) {
-        GraphicInterface vue = new GraphicInterface(m.getPlateau(), m);
-        m.addGraphicInterface(vue);
-        SwingUtilities.invokeLater(vue);
+        GraphicInterface view = new GraphicInterface(m);
+        m.setGraphicInterface(view);
+        SwingUtilities.invokeLater(view);
     }
-
+    
+    /**
+     * Néttoie la fenêtre et recrée une partie avec les nouveaux paramètres
+     * du mediateur
+     */
+    public void reset() {
+        this.frame.removeAll();
+        this.createMenu();
+        this.createPlayers();
+        this.createBoard();
+    }
 
     @Override
     public void run() {
         // Eléments de l'interface
-        frame = new JFrame("Quits");
-        boardGraphic = new ViewBoard(this.board);
-        inGameMenu = new InGameMenu();
-        inGameMenu.setVisible(false);
+        this.frame = new JFrame("Quits");
+        this.inGameMenu = new InGameMenu(this.mediator);
 
-        // Texte et contrôles à droite de la fenêtre
-        Box boxPlayer = Box.createVerticalBox();
-
-        for(Player player : this.board.getPlayers()) {
-            try {
-                JLabel titre = new JLabel(player.name);
-                titre.setAlignmentX(Component.CENTER_ALIGNMENT);
-                boxPlayer.add(titre);
-            } catch (Exception e) {
-                System.out.println("Un joueur est vide");
-            }
-        }
+        this.createPlayers();
+        this.createMenu();
+        this.createBoard();
         
-        Box totalMenu = Box.createHorizontalBox();
-        
-        Box boxMenu = Box.createVerticalBox();
-        menu = new JToggleButton("Menu");
-        menu.setAlignmentX(Component.LEFT_ALIGNMENT);
-        menu.addActionListener((ActionEvent e) -> {
-            inGameMenu.setVisible(!inGameMenu.isVisible());
-        });
-        
-        undo = new JButton("Défaire");
-        undo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        undo.setFocusable(false);
-        redo = new JButton("Refaire");
-        redo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        redo.setFocusable(false);
-        boxMenu.add(menu);
-        boxMenu.add(undo);
-        boxMenu.add(redo);
-        totalMenu.add(boxMenu);
-        totalMenu.add(inGameMenu);
-        
-        // Annuler / refaire
-        //BoutonAnnuler annuler = new BoutonAnnuler(j);
-        //annuler.setFocusable(false);
-        //BoutonRefaire refaire = new BoutonRefaire(j);
-        //refaire.setFocusable(false);
-        //Box annulerRefaire = Box.createHorizontalBox();
-        //annulerRefaire.add(annuler);
-        //annulerRefaire.add(refaire);
-        //annulerRefaire.setAlignmentX(Component.CENTER_ALIGNMENT);
-        //boiteTexte.add(annulerRefaire);
-
-        // Retransmission des évènements au contrôleur
-        boardGraphic.addMouseListener(new MouseAction(boardGraphic, mediator));
-        //frame.addKeyListener(new AdaptateurClavier(control));
-        //Timer chrono = new Timer(16, new AdaptateurTemps(control));
-        //IA.addActionListener(new AdaptateurIA(control));
-        //animation.addActionListener(new AdaptateurAnimations(control));
-        //prochain.addActionListener(new AdaptateurProchain(control));
-        //annuler.addActionListener(new AdaptateurAnnuler(control));
-        //refaire.addActionListener(new AdaptateurRefaire(control));
-
         // Mise en place de l'interface
-        frame.add(totalMenu, BorderLayout.WEST);
-        frame.add(boxPlayer, BorderLayout.EAST);
-        frame.add(boardGraphic);
         //j.ajouteObservateur(this);
         //chrono.start();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 300);
         frame.setVisible(true);
+    }
+    
+    private void createMenu() {
+        Box totalMenu = Box.createHorizontalBox();
+        
+        Box boxMenu = Box.createVerticalBox();
+        this.menu = new JToggleButton("Menu");
+        this.menu.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.menu.addActionListener((ActionEvent e) -> {
+            this.inGameMenu.setVisible(!this.inGameMenu.isVisible());
+        });
+        
+        this.undo = new JButton("Défaire");
+        this.undo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.undo.setFocusable(false);
+        this.redo = new JButton("Refaire");
+        this.redo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.redo.setFocusable(false);
+        boxMenu.add(this.menu);
+        boxMenu.add(this.undo);
+        boxMenu.add(this.redo);
+        totalMenu.add(boxMenu);
+        totalMenu.add(this.inGameMenu);
+        
+        this.frame.add(totalMenu, BorderLayout.WEST);
+    }
+    
+    private void createPlayers() {
+        Box boxPlayer = Box.createVerticalBox();
+
+        this.mediator.getBoard().getPlayers().forEach((player) -> {
+            JLabel titre = new JLabel(player.name);
+            titre.setAlignmentX(Component.CENTER_ALIGNMENT);
+            boxPlayer.add(titre);
+        });
+        
+        this.frame.add(boxPlayer, BorderLayout.EAST);
+    }
+    
+    private void createBoard() {
+        this.boardGraphic = new ViewBoard(this.mediator.getBoard());
+        this.boardGraphic.addMouseListener(new MouseAction(this.boardGraphic, this.mediator));
+        this.frame.add(this.boardGraphic);
     }
     
     public void update() {
