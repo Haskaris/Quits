@@ -12,6 +12,8 @@ import Paterns.Observateur;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,6 +36,7 @@ public class GraphicInterface implements Runnable, Observateur {
     
     JToggleButton menu;
     JButton undo, redo;
+    InGameMenu inGameMenu;
 
     
     GraphicInterface(Board plateau, Mediator m) {
@@ -53,6 +56,8 @@ public class GraphicInterface implements Runnable, Observateur {
         // Eléments de l'interface
         frame = new JFrame("Quits");
         boardGraphic = new ViewBoard(this.board);
+        inGameMenu = new InGameMenu();
+        inGameMenu.setVisible(false);
 
         // Texte et contrôles à droite de la fenêtre
         Box boxPlayer = Box.createVerticalBox();
@@ -67,10 +72,15 @@ public class GraphicInterface implements Runnable, Observateur {
             }
         }
         
+        Box totalMenu = Box.createHorizontalBox();
+        
         Box boxMenu = Box.createVerticalBox();
         menu = new JToggleButton("Menu");
         menu.setAlignmentX(Component.LEFT_ALIGNMENT);
-        menu.setFocusable(false);
+        menu.addActionListener((ActionEvent e) -> {
+            inGameMenu.setVisible(!inGameMenu.isVisible());
+        });
+        
         undo = new JButton("Défaire");
         undo.setAlignmentX(Component.LEFT_ALIGNMENT);
         undo.setFocusable(false);
@@ -80,6 +90,8 @@ public class GraphicInterface implements Runnable, Observateur {
         boxMenu.add(menu);
         boxMenu.add(undo);
         boxMenu.add(redo);
+        totalMenu.add(boxMenu);
+        totalMenu.add(inGameMenu);
         
         // Annuler / refaire
         //BoutonAnnuler annuler = new BoutonAnnuler(j);
@@ -103,7 +115,7 @@ public class GraphicInterface implements Runnable, Observateur {
         //refaire.addActionListener(new AdaptateurRefaire(control));
 
         // Mise en place de l'interface
-        frame.add(boxMenu, BorderLayout.WEST);
+        frame.add(totalMenu, BorderLayout.WEST);
         frame.add(boxPlayer, BorderLayout.EAST);
         frame.add(boardGraphic);
         //j.ajouteObservateur(this);
