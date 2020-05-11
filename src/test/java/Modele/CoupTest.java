@@ -5,6 +5,7 @@ import Model.*;
 import Model.Support.*;
 import Model.Players.*;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ class CoupTest {
 
     @Test
     public void TestCoup() {
-        Move c = new Move(marble, Tools.Direction.NO, player);
+        Move c = new Move(marble, Tools.Direction.NO, player.name);
         c.perform(board);
         assertFalse(board.getGrid()[2][2].hasMarble());
         assertTrue(board.getGrid()[1][1].hasMarble());
@@ -44,8 +45,8 @@ class CoupTest {
     @Test
     public void TestHistorique() {
         History historique = new History(board);
-        Move c1 = new Move(marble, Tools.Direction.NO, player);
-        Move c2 = new Move(marble, Tools.Direction.SO, player);
+        Move c1 = new Move(marble, Tools.Direction.NO, player.name);
+        Move c2 = new Move(marble, Tools.Direction.SO, player.name);
         historique.doMove(c1);
         historique.doMove(c2);
         historique.undo();
@@ -68,11 +69,18 @@ class CoupTest {
     }
 
     @Test
+    public void TestSerialization(){
+        Move m = new Move(new Point(1,1), Tools.Direction.NO,player.name);
+        SerializationUtils.serialize(m);
+    }
+
+    @Test
     public void TestReseau() throws Exception {
         WebSender webSender = new WebSender();
-        webSender.Send("Coucou");
+        webSender.Send(new Move(new Point(1,1), Tools.Direction.NO,player.name));
         Player player = new DistantPlayer("p", Color.RED);
-        player.Jouer(null);
+        Move m = player.Jouer(null);
+        m.print();
     }
 }
 

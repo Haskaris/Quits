@@ -7,8 +7,9 @@ import Model.Support.Board;
 import static Global.Tools.*;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Move {
+public class Move implements Serializable {
     /**
      * Marble indique la marble a bouger (null sinon)
  direction est la direction dans laquelle cette marble doit bouger (consulter Global.Tools)
@@ -19,31 +20,31 @@ public class Move {
     Marble marble = null;
     Direction direction;
     Point line = null;
-    Player player;
+    String playername;
     Move nextMove;
 
     /**
      * On veut jouer un deplacement de marble
      * @param marble Bille à déplacer
      * @param direction Direction du mouvement
-     * @param player Responsable du mouvement
+     * @param playername Responsable du mouvement
     */
-    public Move(Marble marble, Direction direction, Player player) {
+    public Move(Marble marble, Direction direction, String playername) {
         this.marble = marble;
         this.direction = direction;
-        this.player = player;
+        this.playername = playername;
     }
 
     /**
      * On veut jouer un deplacement de ligne
      * @param line Bille à déplacer
      * @param direction Direction du mouvement
-     * @param player Responsable du mouvement
+     * @param playername Responsable du mouvement
     */
-    public Move(Point line, Direction direction, Player player) {
+    public Move(Point line, Direction direction, String playername) {
         this.line = line;
         this.direction = direction;
-        this.player = player;
+        this.playername = playername;
     }
 
     public void perform(Board board) {
@@ -64,14 +65,14 @@ public class Move {
         }
     }
 
-    /*public void Afficher(){
-        if(marble!=null){
-            System.out.println(marble.PositionGet());
+    public void print() {
+        if (marble != null) {
+            System.out.println(marble.getTile().getPosition());
             System.out.println(direction);
         }
-        if(line != null){
+        if (line != null) {
             System.out.println(line);
-            System.out.println(positif);        }
-    }*/
-
+            System.out.println(direction);
+        }
+    }
 }

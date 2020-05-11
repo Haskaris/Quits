@@ -56,28 +56,28 @@ public class MoveCalculator {
             if (!movableTiles.contains(tileStudied)) {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Direction.N, player));
+                    moves.add(new Move(tileStudied.getPosition(), Direction.N, player.name));
                 }
             }
             tileStudied = board.getGrid()[tmpTileX][4];
             if (!movableTiles.contains(tileStudied)) {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Direction.S, player));
+                    moves.add(new Move(tileStudied.getPosition(), Direction.S, player.name));
                 }
             }
             tileStudied = board.getGrid()[0][tmpTileY];
             if (!movableTiles.contains(tileStudied)) {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Direction.O, player));
+                    moves.add(new Move(tileStudied.getPosition(), Direction.O, player.name));
                 }
             }
             tileStudied = board.getGrid()[4][tmpTileY];
             if (!movableTiles.contains(tileStudied)) {
                 if (!tileStudied.hasMarble()) {
                     movableTiles.add(tileStudied);
-                    moves.add(new Move(tileStudied.getPosition(), Direction.E, player));
+                    moves.add(new Move(tileStudied.getPosition(), Direction.E, player.name));
                 }
             }
         }
@@ -110,16 +110,16 @@ public class MoveCalculator {
         this.marbles.forEach((b) -> {
             Point pos = b.getTile().getPosition();
             if(this.playerStart != Direction.NO && isTileFree(add(pos, DirToPoint(Direction.NO)))) {
-                this.moves.add(new Move(b, Direction.NO, this.player));
+                this.moves.add(new Move(b, Direction.NO, this.player.name));
             }
             if(this.playerStart != Direction.NE && isTileFree(add(pos,DirToPoint(Direction.NE)))) {
-                this.moves.add(new Move(b, Direction.NE, this.player));
+                this.moves.add(new Move(b, Direction.NE, this.player.name));
             }
             if(this.playerStart != Direction.SE && isTileFree(add(pos,DirToPoint(Direction.SE)))) {
-                this.moves.add(new Move(b, Direction.SE, this.player));
+                this.moves.add(new Move(b, Direction.SE, this.player.name));
             }
             if (this.playerStart != Direction.SO && isTileFree(add(pos,DirToPoint(Direction.SO)))) {
-                this.moves.add(new Move(b, Direction.SO, this.player));
+                this.moves.add(new Move(b, Direction.SO, this.player.name));
             }
         });
     }

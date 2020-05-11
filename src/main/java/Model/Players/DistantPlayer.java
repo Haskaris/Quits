@@ -5,6 +5,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -18,9 +19,25 @@ public class DistantPlayer extends Player {
     }
 
     private final static String QUEUE_NAME = "QQ";
+    private static Move message;
 
     @Override
     public Move Jouer( List<Move> coups_possibles) {
+        message = null;
+        webReceiver();
+
+        while (message == null){
+            try {
+                wait(1000);
+            }catch (Exception e){
+                System.out.println("Erreur d'attente du réseau");
+            }
+        }
+
+        return message;
+    }
+
+    private void webReceiver(){
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         try {
@@ -31,18 +48,20 @@ public class DistantPlayer extends Player {
             System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String message = new String(delivery.getBody(), "UTF-8");
+                message = SerializationUtils.deserialize(delivery.getBody());
                 System.out.println(" [x] Received '" + message + "'");
             };
             channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
             });
+
         }catch (Exception e){
             System.out.println("Erreur de reception des données");
         }
-
-        return null;
     }
-    
+
+
+
+
     /**
      * S'imprime dans la sortie stream
      * @param stream
