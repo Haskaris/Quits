@@ -19,37 +19,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
+
     private Tile[][] grid;
     private ArrayList<Player> players;
     public int currentPlayer;
     public History history;
     private Mediator mediator;
     private Tools.GameMode gameMode;
+    public ArrayList<Move> allPotentialShifts;
+    public Marble selectedMarble;
+    public int[][] availableTiles;
 
     /**
-     * Initialise un plateau
-     * Taille fixe pour le moment
+     * Initialise un plateau Taille fixe pour le moment
      */
-    public Board(){
+    public Board() {
         players = new ArrayList<>();
 
         grid = new Tile[5][5];
-        for (int i = 0; i < 5; i++)
-            for (int j = 0; j < 5; j++)
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 grid[i][j] = new Tile(i, j);
+            }
+        }
+        allPotentialShifts = new ArrayList<>();
+
+        availableTiles = new int[5][5];
+        resetAvailableTiles();
 
         history = new History(this);
         currentPlayer = 0;
     }
-    
+
     /**
-     * Initialise les joueurs (billes et position)
-     * en fonction du mode de jeu
+     * Initialise les joueurs (billes et position) en fonction du mode de jeu
      */
     public void initPlayers() {
-        switch(gameMode) {
+        switch (gameMode) {
             case TwoPlayersFiveBalls:
-                this.players.get(0).setStartPoint(Tools.Direction.SO);
+                this.players.get(0).setStartPoint(Tools.Direction.SW);
                 this.grid[0][2].addMarble(this.players.get(0).addMarble());
                 this.grid[2][4].addMarble(this.players.get(0).addMarble());
                 this.players.get(1).setStartPoint(Tools.Direction.NE);
@@ -57,13 +65,13 @@ public class Board {
                 this.grid[4][2].addMarble(this.players.get(1).addMarble());
                 break;
             case TwoPlayersThreeBalls:
-                this.players.get(0).setStartPoint(Tools.Direction.SO);
+                this.players.get(0).setStartPoint(Tools.Direction.SW);
                 this.players.get(1).setStartPoint(Tools.Direction.NE);
                 break;
             case FourPlayersFiveBalls:
-                this.players.get(0).setStartPoint(Tools.Direction.SO);
+                this.players.get(0).setStartPoint(Tools.Direction.SW);
                 this.players.get(1).setStartPoint(Tools.Direction.NE);
-                this.players.get(2).setStartPoint(Tools.Direction.NO);
+                this.players.get(2).setStartPoint(Tools.Direction.NW);
                 this.players.get(3).setStartPoint(Tools.Direction.SE);
                 break;
         }
@@ -71,15 +79,16 @@ public class Board {
             init3Marbles(p);
         }
     }
-    
+
     /**
-     * Positionne les 3 billes récurentes des joueurs en fonction de leur
-     * point de départ. LE POINT DE DÉPART DOIT ÊTRE INITIALISÉ
+     * Positionne les 3 billes récurentes des joueurs en fonction de leur point
+     * de départ. LE POINT DE DÉPART DOIT ÊTRE INITIALISÉ
+     *
      * @param p Player
      */
     private void init3Marbles(Player p) {
         switch (p.getStartPoint()) {
-            case SO:
+            case SW:
                 this.grid[0][3].addMarble(p.addMarble());
                 this.grid[1][3].addMarble(p.addMarble());
                 this.grid[1][4].addMarble(p.addMarble());
@@ -89,7 +98,7 @@ public class Board {
                 this.grid[3][1].addMarble(p.addMarble());
                 this.grid[4][1].addMarble(p.addMarble());
                 break;
-            case NO:
+            case NW:
                 this.grid[1][0].addMarble(p.addMarble());
                 this.grid[0][1].addMarble(p.addMarble());
                 this.grid[1][1].addMarble(p.addMarble());
@@ -101,20 +110,19 @@ public class Board {
                 break;
         }
     }
-    
+
     public void setGameMode(Tools.GameMode gameMode) {
         this.gameMode = gameMode;
     }
-    
+
     public void setMediator(Mediator m) {
         this.mediator = m;
     }
 
     /**
-     * Joue les tours de la partie. S'arrete à la fin
-     * Plante l'ihm
+     * Joue les tours de la partie. S'arrete à la fin Plante l'ihm
      */
-    public void playGame(){
+    public void playGame() {
         /*while(endRound()){
             List<Move> possiblesMoves = new MoveCalculator(this).coupsPossibles();
             Move coup = currentPlayer().Jouer(possiblesMoves);
@@ -122,100 +130,104 @@ public class Board {
             //LecteurRedacteur.AffichePartie(this);
         }*/
     }
-    
-    public void playTurn() {
+
+    public void playTurn(int column, int line) {
         if (currentPlayer().getClass().equals(HumanPlayer.class)) {
-            
+            HumanPlayer player = (HumanPlayer) currentPlayer();
+
+            player.Jouer(this, column, line);
+
         } else {
-            List<Move> possibleMove = new MoveCalculator(this).coupsPossibles();
-            Move move = currentPlayer().Jouer(possibleMove);
+            List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
+            Move move = currentPlayer().Jouer(possibleMoves);
             history.doMove(move);
+            nextPlayer();
         }
         this.mediator.getGraphicInterface().update();
-        
-        currentPlayer ++;
-        if(currentPlayer>=(Integer)Configuration.read("Joueurs"))
-            currentPlayer =0;
+
     }
 
     /**
-     * Clot un tour. Verifie les conditions de victoire et passe au joueur suivant
+     * Clot un tour. Verifie les conditions de victoire et passe au joueur
+     * suivant
      */
-    private boolean endRound(){
+    private boolean endRound() {
         boolean isEnded = currentPlayer().getMarbles().isEmpty();
 
-        if(isEnded){
+        if (isEnded) {
             System.out.println("Joueur " + currentPlayer + " a gagné");
             return false;
         }
 
-        currentPlayer ++;
-        //Ne marche pas car nos joueurs sont ajouté dynamiquement
-        if(currentPlayer>=(Integer)Configuration.read("Joueurs"))
-            currentPlayer =0;
+        nextPlayer();
         return true;
     }
 
     /**
      * Deplace la marble précisée, dans la direction précisé.
+     *
      * @param marble
      * @param direction
      */
-    public void moveMarble(Marble marble, Tools.Direction direction){
+    public void moveMarble(Marble marble, Tools.Direction direction) {
         Point startPoint = marble.getTile().getPosition();
         Point finishPoint = Tools.getNextPoint(startPoint, direction);
         grid[startPoint.x][startPoint.y].removeMarble();
         grid[finishPoint.x][finishPoint.y].addMarble(marble);
     }
-    
+
     /**
-     * DEPRECATED
-     * Mets à jours les positions des tuiles
+     * DEPRECATED Mets à jours les positions des tuiles
      */
     private void updatePosition() {
-        for(int i = 0; i <  5; i++) {
-            for(int j = 0; j < 5; j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 grid[i][j].updatePosition(i, j);
             }
         }
     }
-    
+
+    public Tile[][] getGrid() {
+        return grid;
+    }
+
     /**
      * Deplace la line précisée, dans le sens précisé.
+     *
      * @param line
      * @param direction
      */
-    public void moveLine(Point line, Tools.Direction direction){
+    public void moveLine(Point line, Tools.Direction direction) {
         Tile tmp = null;
         //Factoriser
-        switch(direction) {
+        switch (direction) {
             case N:
                 tmp = grid[line.x][0];
                 for (int i = 0; i < grid.length - 1; i++) {
-                    grid[line.x][i] = grid[line.x][i+1] ;
+                    grid[line.x][i] = grid[line.x][i + 1];
                 }
                 grid[line.x][grid.length - 1] = tmp;
                 break;
             case S:
                 tmp = grid[line.x][grid.length - 1];
-                for (int i = grid.length-1; i>0; i--) {
-                    grid[line.x][i] = grid[line.x][i-1];
+                for (int i = grid.length - 1; i > 0; i--) {
+                    grid[line.x][i] = grid[line.x][i - 1];
                 }
                 grid[line.x][0] = tmp;
                 break;
             case E:
-                tmp = grid[grid.length-1][line.y];
-                for (int i = grid.length-1; i>0; i--) {
-                    grid[i][line.y] = grid[i-1][line.y];
+                tmp = grid[grid.length - 1][line.y];
+                for (int i = grid.length - 1; i > 0; i--) {
+                    grid[i][line.y] = grid[i - 1][line.y];
                 }
                 grid[0][line.y] = tmp;
                 break;
-            case O:
+            case W:
                 tmp = grid[0][line.y];
                 for (int i = 0; i < grid.length - 1; i++) {
-                    grid[i][line.y] = grid[i+1][line.y] ;
+                    grid[i][line.y] = grid[i + 1][line.y];
                 }
-                grid[grid.length-1][line.y] = tmp;
+                grid[grid.length - 1][line.y] = tmp;
                 break;
         }
         updatePosition();
@@ -223,34 +235,35 @@ public class Board {
 
     /**
      * Place une bille aux coordonnées X Y
+     *
      * @param b
      * @param x
      * @param y
      */
-    public void placeMarbleOn(Marble b, int x, int y){
+    public void placeMarbleOn(Marble b, int x, int y) {
         grid[x][y].addMarble(b);
     }
 
     /**
      * Retourne l'objet du joueur courant
+     *
      * @return Player
      */
-    public Player currentPlayer(){
+    public Player currentPlayer() {
         return getPlayer(currentPlayer);
     }
 
     /**
      * Retourne la grille
+     *
      * @return Tile[][]
      */
-    public Tile[][] getGrid(){
-        return grid;
-    }
 
     //Plus simple si on utilise un arrayList non?
     /**
      * Ajoute un joueur à la liste des joueurs
-     * @param player 
+     *
+     * @param player
      */
     public void addPlayer(Player player) {
         this.players.add(player);
@@ -258,42 +271,70 @@ public class Board {
 
     /**
      * Retourne le joueur à l'index désiré
+     *
      * @param index
      * @return Player
      */
     public Player getPlayer(int index) {
         return this.players.get(index);
     }
-    
+
     /**
      * Retourne la liste des joueurs
-     * @return 
+     *
+     * @return
      */
     public ArrayList<Player> getPlayers() {
         return this.players;
     }
-    
+
     /**
      * S'imprime dans la sortie stream
+     *
      * @param stream
-     * @throws IOException 
+     * @throws IOException
      */
     public void print(OutputStream stream) throws IOException {
-        for(int i = 0; i < 5; i++) {
-            for(int j = 0; j < 5; j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 this.grid[i][j].print(stream);
             }
             stream.write('\n');
         }
     }
 
-    public void load(InputStream in_stream) throws IOException  {
-        for(int i = 0; i < 5; i++) {
+    public void load(InputStream in_stream) throws IOException {
+        for (int i = 0; i < 5; i++) {
             String indexLine = ReaderWriter.readLine(in_stream);
-            for(int j = 0; j < 5; j++) {
+            for (int j = 0; j < 5; j++) {
                 int indexOfColor = Character.getNumericValue(indexLine.charAt(j));
                 this.grid[i][j].setIndexOfColor(indexOfColor);
             }
+        }
+    }
+
+    public void resetAvailableTiles() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                availableTiles[i][j] = 0;
+            }
+        }
+    }
+
+    public void diplayAvailableTiles() {
+        System.out.println("#########################");
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(availableTiles[i][j] + " ");
+            }
+            System.out.println("");
+        }
+    }
+
+    public void nextPlayer() {
+        currentPlayer++;
+        if (currentPlayer >= players.size()) {
+            currentPlayer = 0;
         }
     }
 }

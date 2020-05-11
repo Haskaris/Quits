@@ -30,7 +30,7 @@ class LecteurRedacteurTest {
             Board board = new Board();
             
             Player tmpPlayer0 = new AINormalPlayer(namePlayer0Test, colorPlayer0Test);
-            tmpPlayer0.setStartPoint(Tools.Direction.SO);
+            tmpPlayer0.setStartPoint(Tools.Direction.SW);
             Player tmpPlayer1 = new AINormalPlayer(namePlayer1Test, colorPlayer1Test);
             tmpPlayer1.setStartPoint(Tools.Direction.NE);
             

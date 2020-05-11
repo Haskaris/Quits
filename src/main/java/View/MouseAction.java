@@ -14,19 +14,24 @@ import java.awt.event.MouseEvent;
  * @author Mathis
  */
 public class MouseAction extends MouseAdapter {
+
     BoardGraphic board;
     Mediator mediator;
-    
+
     MouseAction(BoardGraphic board, Mediator mediator) {
         this.board = board;
         this.mediator = mediator;
     }
-    
+
     @Override
     public void mousePressed(MouseEvent e) {
-        int l = e.getY() / this.board.hauteurCase();
-        int c = e.getX() / this.board.largeurCase();
-        this.mediator.mouseClick(l, c);
+        float l = ((e.getY() - (this.board.getHeightTile() / 2.0f)) / this.board.getHeightTile());
+        float c = ((e.getX() - (this.board.getHeightTile() / 2.0f)) / this.board.getWidthTile());
+        if (l < 0) l = -1f;
+        if (c < 0) c = -1f;
+        
+        
+        this.mediator.mouseClick((int) c, (int) l);
         this.board.repaint();
     }
 }
