@@ -133,7 +133,6 @@ public class HumanPlayer extends Player {
                     this.setStatus(Tools.PlayerStatus.MarbleSelection);
                     board.resetAvailableTiles();
                     board.allPotentialShifts.clear();
-
                 }
             }
         }
