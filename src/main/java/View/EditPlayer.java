@@ -43,6 +43,16 @@ public class EditPlayer extends javax.swing.JPanel {
         jButton = new javax.swing.JButton();
 
         jTextField1.setText(this.playerName);
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         aiLevelList.setMaximumRowCount(4);
         aiLevelList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Humain", "Ordinateur facile", "Ordinateur normal", "Ordinateur difficile" }));
@@ -103,6 +113,14 @@ public class EditPlayer extends javax.swing.JPanel {
                 break;
         }
     }//GEN-LAST:event_aiLevelListItemStateChanged
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        //TODO : Je n'arrive pas à la supprimer
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        this.playerName = jTextField1.getText();
+    }//GEN-LAST:event_jTextField1KeyTyped
 
     public void updateButtonColor(Color c) {
         this.jButton.setBackground(c);

@@ -6,6 +6,7 @@ import Model.Support.Board;
 import Model.Support.Tile;
 import java.awt.Color;
 import java.awt.Point;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -43,13 +44,13 @@ public class ViewBoard extends BoardGraphic {
     }
 
     private ImageQuits readImage(String name) {
-        String ressource = (String) Configuration.instance().read(name);
+        String ressource = (String) Configuration.read(name);
         Configuration.instance().logger().info("Image " + ressource + " read as " + name);
         InputStream in = Configuration.charge(ressource);
         try {
             // Chargement d'une image utilisable dans Swing
             return super.readImage(in);
-        } catch (Exception e) {
+        } catch (IOException e) {
             Configuration.instance().logger().severe("Image " + ressource + " impossible to charge.");
             System.exit(1);
         }

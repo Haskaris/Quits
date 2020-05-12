@@ -23,6 +23,7 @@ public class FileGestion {
     
     /**
      * Charge une partie
+     * @param fileName
      * @return 
      */
     public Board loadGame(String fileName){
@@ -36,6 +37,7 @@ public class FileGestion {
     
     /**
      * Enregistre une partie
+     * @param fileName
      */
     public void saveGame(String fileName) {
         try {

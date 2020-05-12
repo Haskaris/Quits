@@ -71,7 +71,6 @@ public class Move {
             board.moveMarble(marble, direction);
         }
         if (line != null) {
-            Display();
             board.moveLine(line, direction);
         }
     }
@@ -81,7 +80,6 @@ public class Move {
             board.moveMarble(marble, reverse(direction));
         }
         if (line != null) {
-            Display();
             board.moveLine(line, reverse(direction));
         }
     }
@@ -112,8 +110,6 @@ public class Move {
             System.out.println(direction);
         }
         if (line != null) {
-            //System.out.println(line);
-            //System.out.println(direction);
             int number = -1;
             String cardinalPoint = "";
             String isRowOrCol = "";
@@ -146,9 +142,6 @@ public class Move {
                     System.out.println("Erreur");
                     break;
             }
-
-            System.out.println(isRowOrCol + " n°" + number + " shiftable towards " + cardinalPoint + ".");
-
         }
     }
     

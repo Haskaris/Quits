@@ -5,6 +5,8 @@
  */
 package View;
 
+import View.Dialogs.RulesDialog;
+import View.Filters.SaveFilter;
 import Controleur.Mediator;
 import Global.Tools;
 import java.awt.Color;

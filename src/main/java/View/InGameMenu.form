@@ -71,15 +71,20 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Recommencer"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startOverButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="historyButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Historique"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="settingsButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Options"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="settingsButtonActionPerformed"/>

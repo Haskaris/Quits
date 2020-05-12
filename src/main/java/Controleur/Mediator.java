@@ -10,7 +10,7 @@ import View.EditPlayer;
 
 import View.GraphicInterface;
 import View.MainGraphicInterface;
-import View.VictoryDialog;
+import View.Dialogs.VictoryDialog;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -94,19 +94,26 @@ public class Mediator {
 
     public void loadGame(String fileName) {
         this.board = this.fileGestion.loadGame(fileName);
+        this.board.setMediator(this);
         if (this.graphicInterface != null) {
             this.graphicInterface.reset();
         } else {
             this.mainGraphicInterface.startGame();
         }
     }
-    
-    public void quitGame() {
-        this.fileGestion.quitGame();
-    }
 
     public void saveGame(String fileName) {
         this.fileGestion.saveGame(fileName);
+    }
+    
+    public void resetGame() {
+        this.board.reset();;
+        this.board.initFromGameMode();
+        this.graphicInterface.update();
+    }
+    
+    public void quitGame() {
+        this.fileGestion.quitGame();
     }
     
     public void setGraphicInterface(GraphicInterface view) {
@@ -125,9 +132,9 @@ public class Mediator {
     public void initGame(Tools.GameMode gameMode) {
         //Prépare le plateau
         ArrayList<EditPlayer> tmp = this.mainGraphicInterface.getEditsPlayers();
-        for (EditPlayer e : tmp) {
+        tmp.forEach((e) -> {
             this.addPlayer(e.playerName, e.playerColor, e.aiLevel);
-        }
+        });
         this.board.setGameMode(gameMode);
         this.board.initFromGameMode();
         
@@ -187,5 +194,9 @@ public class Mediator {
         VictoryDialog VD = new VictoryDialog(this.mainGraphicInterface, true);
         VD.setVictoryText(this.board.getCurrentPlayer().name + " A GAGNÉ !!");
         VD.setVisible(true);
+        
+        if (VD.getReturnStatus() == 1) {
+            this.resetGame();
+        }
     }
 }

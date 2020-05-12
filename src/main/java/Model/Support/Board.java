@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Board {
@@ -118,18 +119,6 @@ public class Board {
 
     public void setMediator(Mediator m) {
         this.mediator = m;
-    }
-
-    /**
-     * Joue les tours de la partie. S'arrete à la fin Plante l'ihm
-     */
-    public void playGame() {
-        /*while(endRound()){
-            List<Move> possiblesMoves = new MoveCalculator(this).coupsPossibles();
-            Move coup = getCurrentPlayer().Jouer(possiblesMoves);
-            history.doMove(coup);
-            //LecteurRedacteur.AffichePartie(this);
-        }*/
     }
 
     public void playTurn(int column, int line) {
@@ -328,6 +317,16 @@ public class Board {
      * @throws IOException
      */
     public void print(OutputStream stream) throws IOException {
+        //Je print le mode de jeu
+        stream.write(this.gameMode.name().getBytes());
+        
+        stream.write(" ".getBytes());
+        
+        //Je print le joueur courant
+        stream.write(String.valueOf(this.currentPlayer).getBytes());
+        
+        stream.write('\n');
+        //Je print la couleur des tuiles
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 this.grid[i][j].print(stream);
@@ -343,6 +342,10 @@ public class Board {
      * @throws IOException 
      */
     public void load(InputStream in_stream) throws IOException {
+        String[] paramLine = ReaderWriter.readLine(in_stream).split(" ");
+        this.gameMode = Tools.GameMode.valueOf(paramLine[0]);
+        this.currentPlayer = Integer.parseInt(paramLine[1]);
+        
         for (int i = 0; i < 5; i++) {
             String indexLine = ReaderWriter.readLine(in_stream);
             for (int j = 0; j < 5; j++) {
@@ -360,16 +363,9 @@ public class Board {
         }
     }
 
-    public void diplayAvailableTiles() {
-        System.out.println("#########################");
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print(availableTiles[i][j] + " ");
-            }
-            System.out.println("");
-        }
-    }
-
+    /**
+     * Move forward in the player list
+     */
     public void nextPlayer() {
         currentPlayer++;
         if (currentPlayer >= players.size()) {
@@ -377,6 +373,9 @@ public class Board {
         }
     }
     
+    /**
+     * Move backward in the player list
+     */
     public void previousPlayer() {
         currentPlayer--;
         if (currentPlayer < 0) {
@@ -389,5 +388,19 @@ public class Board {
      */
     public History getHistory() {
         return history;
+    }
+
+    public void reset() {
+        //J'enlève toutes les billes du plateau
+        for(int i = 0; i < 5; i++) {
+            for(int j = 0; j < 5; j++) {
+                if (this.grid[i][j].hasMarble()) {
+                    this.grid[i][j].removeMarble();
+                }
+            }
+        }
+        
+        //Je remets le joueur courant au début
+        this.currentPlayer = 0;
     }
 }

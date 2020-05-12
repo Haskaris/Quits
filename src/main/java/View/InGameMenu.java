@@ -5,6 +5,7 @@
  */
 package View;
 
+import View.Filters.SaveFilter;
 import Controleur.FileGestion;
 import Controleur.Mediator;
 import Model.Support.Board;
@@ -63,10 +64,17 @@ public class InGameMenu extends javax.swing.JPanel {
         });
 
         startOverButton.setText("Recommencer");
+        startOverButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startOverButtonActionPerformed(evt);
+            }
+        });
 
         historyButton.setText("Historique");
+        historyButton.setEnabled(false);
 
         settingsButton.setText("Options");
+        settingsButton.setEnabled(false);
         settingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settingsButtonActionPerformed(evt);
@@ -119,34 +127,30 @@ public class InGameMenu extends javax.swing.JPanel {
     }//GEN-LAST:event_settingsButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        System.out.println("Je vais save");
         int returnVal = fc.showOpenDialog(this);
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            System.out.println("Je veux le nom " + file.getName() + ".");
             this.mediator.saveGame(file.getName());
-        } else {
-            System.out.println("Ah bah non");
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        System.out.println("Je vais load");
         int returnVal = fc.showOpenDialog(this);
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            System.out.println("Je veux le fichier " + file.getName() + ".");
             this.mediator.loadGame(file.getName());
-        } else {
-            System.out.println("Ah bah non");
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         this.mediator.quitGame();
     }//GEN-LAST:event_quitButtonActionPerformed
+
+    private void startOverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startOverButtonActionPerformed
+        this.mediator.resetGame();
+    }//GEN-LAST:event_startOverButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

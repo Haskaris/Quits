@@ -14,10 +14,12 @@ import Model.Support.Board;
 
 import Paterns.Observateur;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -41,9 +43,14 @@ public class GraphicInterface implements Runnable, Observateur {
     JButton undo, redo;
     InGameMenu inGameMenu;
     
+    ArrayList<JLabel> names;
+    
+    Box totalMenu, boxPlayer;
+    
     
     GraphicInterface(Mediator m) {
         this.mediator = m;
+        this.names = new ArrayList<>();
     }
 
     public static void start(Mediator m) {
@@ -57,15 +64,15 @@ public class GraphicInterface implements Runnable, Observateur {
      * du mediateur
      */
     public void reset() {
-        this.frame.removeAll();
-        this.createMenu();
-        this.createPlayers();
-        this.createBoard();
+        //Je supprime la fenêtre
+        this.frame.dispose();
+        
+        //Je refais la fenêtre
+        this.run();
     }
 
     @Override
     public void run() {
-        // Eléments de l'interface
         this.frame = new JFrame("Quits");
         this.inGameMenu = new InGameMenu(this.mediator);
 
@@ -80,10 +87,11 @@ public class GraphicInterface implements Runnable, Observateur {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 300);
         frame.setVisible(true);
+        this.update();
     }
     
     private void createMenu() {
-        Box totalMenu = Box.createHorizontalBox();
+        totalMenu = Box.createHorizontalBox();
         
         Box boxMenu = Box.createVerticalBox();
         this.menu = new JToggleButton("Menu");
@@ -118,12 +126,13 @@ public class GraphicInterface implements Runnable, Observateur {
     }
     
     private void createPlayers() {
-        Box boxPlayer = Box.createVerticalBox();
+        boxPlayer = Box.createVerticalBox();
 
         this.mediator.getBoard().getPlayers().forEach((player) -> {
             JLabel titre = new JLabel(player.name);
             titre.setAlignmentX(Component.CENTER_ALIGNMENT);
             boxPlayer.add(titre);
+            this.names.add(titre);
         });
         
         this.frame.add(boxPlayer, BorderLayout.EAST);
@@ -139,6 +148,10 @@ public class GraphicInterface implements Runnable, Observateur {
         boardGraphic.repaint();
         this.undo.setEnabled(this.mediator.canUndo());
         this.redo.setEnabled(this.mediator.canRedo());
+        this.names.forEach((name) -> {
+            name.setForeground(Color.black);
+        });
+        this.names.get(this.mediator.getBoard().currentPlayer).setForeground(Color.red);
     }
 
     @Override
