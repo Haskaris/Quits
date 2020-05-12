@@ -19,13 +19,12 @@ public class Tools {
         Medium,
         Hard,
     }
-    
+
     /**
-     * Énumération des états du joueur
-     * Un joueur en MarbleSelection attend qu'on clique sur une bille 
-     * Un joueur en ActionSelection attend qu'on choisisse une action liée à la bille sélectoinnée
+     * Énumération des états du joueur Un joueur en MarbleSelection attend qu'on
+     * clique sur une bille Un joueur en ActionSelection attend qu'on choisisse
+     * une action liée à la bille sélectoinnée
      */
-    
     public enum PlayerStatus {
         MarbleSelection,
         ActionSelection,
@@ -142,5 +141,31 @@ public class Tools {
 
     public static void Print(Object o) {
         System.out.println(o.toString());
+    }
+
+    public static Direction PointToDir(Point p) {
+        if (p.x == 1 && p.y == 0) {
+            return Direction.E;
+        } else if (p.x == -1 && p.y == 0) {
+            return Direction.W;
+        } else if (p.x == -1 && p.y == -1) {
+            return Direction.NW;
+        } else if (p.x == 0 && p.y == -1) {
+            return Direction.N;
+        } else if (p.x == 1 && p.y == -1) {
+            return Direction.NE;
+        } else if (p.x == -1 && p.y == 1) {
+            return Direction.SW;
+        } else if (p.x == 0 && p.y == 1) {
+            return Direction.S;
+        } else if (p.x == 1 && p.y == 1) {
+            return Direction.SE;
+        } else {
+            return Direction.NODIR;
+        }
+    }
+
+    public static Point PointToPointDiff(Point start, Point end) {
+        return new Point(end.x - start.x, end.y - start.y);
     }
 }

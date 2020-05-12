@@ -18,12 +18,11 @@ import java.util.List;
 public class HumanPlayer extends Player {
 
     private PlayerStatus status;
-    
 
     public HumanPlayer(String name, Color color) {
         super(name, color);
         status = PlayerStatus.MarbleSelection;
-        
+
     }
 
     public void setStatus(PlayerStatus status) {
@@ -55,7 +54,7 @@ public class HumanPlayer extends Player {
 
     public void Jouer(Board board, int column, int line) {
         Tile[][] grid = board.getGrid();
-        
+
         if ((column >= 0 && column <= 4 && line >= 0 && line <= 4) && grid[column][line].hasMarble()
                 && color.equals(grid[column][line].getMarble().getColor())) {
             //The players needs to select a marble
@@ -81,7 +80,7 @@ public class HumanPlayer extends Player {
                 } catch (Exception e) {
                     //Here we handle the tile shifting
                     m.Display();
-                   board.allPotentialShifts.add(m);
+                    board.allPotentialShifts.add(m);
 
                 }
 
@@ -116,6 +115,7 @@ public class HumanPlayer extends Player {
 
                 board.resetAvailableTiles();
                 board.allPotentialShifts.clear();
+                board.history.addToHistory(new Move(grid[anchorSource.x][anchorSource.y].getMarble(), d, this));
                 this.setStatus(Tools.PlayerStatus.MarbleSelection);
                 board.nextPlayer();
             } else {
@@ -127,6 +127,13 @@ public class HumanPlayer extends Player {
                     board.resetAvailableTiles();
                     board.allPotentialShifts.clear();
                     this.setStatus(Tools.PlayerStatus.MarbleSelection);
+
+                    board.history.addToHistory(
+                            new Move(board.selectedMarble,
+                                    Tools.PointToDir(Tools.PointToPointDiff(pos, new Point(column, line))),
+                                    this)
+                    );
+
                     board.nextPlayer();
                 } else {
                     //That's not a good action, we get back to MarbleSelection, but we don't change players
@@ -137,7 +144,5 @@ public class HumanPlayer extends Player {
             }
         }
     }
-
-   
 
 }
