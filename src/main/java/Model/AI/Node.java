@@ -13,7 +13,7 @@ public class Node {
         MIN_NODE
     }
 
-    int _node_value;
+    float _node_value;
     int _name;
     ArrayList<Point> _move;
     Node _parent;
@@ -40,11 +40,11 @@ public class Node {
         this._childList.add(child);
     }
 
-    public int getNodeValue() {
+    public float getNodeValue() {
         return _node_value;
     }
 
-    public void setNodeValue(int value) {
+    public void setNodeValue(float value) {
         this._node_value = value;
     }
 

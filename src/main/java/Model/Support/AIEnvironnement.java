@@ -6,24 +6,62 @@ import Model.Move;
 
 import javax.tools.Tool;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AIEnvironnement {
+    /**
+     * Contient le plateau actuel
+     * -1 si la case est vide
+     * un nombre >= 0 si la case contient une bille
+     * le numéro de la bille correspond au numéro du joueur
+     * */
     private int[][] _grid;
+    /**
+     * Liste de tous les joueurs
+     * un numéro correspond à un joueur
+     * */
     private ArrayList<Integer> _players;
+    /**
+     * Liste contenant toutes les billes d'un joueur
+     * le joueur i peut accéder à sa liste de bille avec
+     * _playerMarble.get(i)
+     * */
     private ArrayList<ArrayList<Point>> _playerMarble;
+    /**
+     * Numéro du joueur courant
+     * */
     public int _currentPlayer;
+    /**
+     * Liste contenant les points de départ des différents joueurs
+     * le joueur i peut accéder à son point de départ avec
+     * _startingPoint.get(i)
+     * */
     private ArrayList<Point> _startingPoint;
+    /**
+     * Numéro du joueur correspondant à l'IA qui doit renvoyer le coup
+     * (le joueur courant du Board actuel)
+     * */
+    private int _iaPlayer;
 
+    /**
+     * Initialise l'AIEnvironnement avec des paramètres vide
+     * @return ArrayList<Integer>
+     */
     public AIEnvironnement(){
         this._players = new ArrayList<>();
         this._grid = new int[5][5];
         this._currentPlayer = 0;
+        this._iaPlayer = 0;
         this._startingPoint = new ArrayList<>();
         this._playerMarble = new ArrayList<>();
 
     }
 
+    /**
+     * Créé l'environnement de l'IA à partir du tableau de jeu actuel
+     * @param board
+     */
     public AIEnvironnement(Board board){
         this._players = new ArrayList<>();
         this._startingPoint = new ArrayList<>();
@@ -66,8 +104,12 @@ public class AIEnvironnement {
         }
 
         this._currentPlayer = board.currentPlayer;
+        this._iaPlayer = board.currentPlayer;
     }
 
+    /**
+     * Affiche l'environnment de l'IA
+     */
     public void printAIEnvironnement(){
         System.out.println("Player list : ");
         for(int n : this._players){
@@ -82,46 +124,92 @@ public class AIEnvironnement {
         System.out.println("Current player : " + this._currentPlayer);
     }
 
+    /**
+     * Renvoi la liste de tous les joeuurs
+     * @return ArrayList<Integer>
+     */
     public ArrayList<Integer> getPlayers(){
         return this._players;
     }
 
+    /**
+     * Renvoi le numéro du joueur courant
+     * @return int
+     */
     public int getCurrentPlayer(){
         return this._currentPlayer;
     }
 
+    /**
+     * Renvoi le plateau
+     * @return int[][]
+     */
     public int[][] getGrid(){
         return this._grid;
     }
 
+    /**
+     * Ajoute un joueur à la liste des joueurs
+     * @param numPlayer
+     */
     public void addPlayer(int numPlayer){
         this._players.add(numPlayer);
     }
 
+    /**
+     * Change la valeur d'une case du plateau
+     * @param x
+     * @param x
+     * @param value
+     */
     public void setNumberInGrid(int x, int y, int value){
         this._grid[x][y] = value;
     }
 
+    /**
+     * Change le joueur courant
+     * @param numCurrentPlayer
+     */
     public void setCurrentPlayer(int numCurrentPlayer){
         this._currentPlayer = numCurrentPlayer;
     }
 
+    /**
+     * Renvoi la liste des points de départ
+     * @return ArrayList<Point>
+     */
     public ArrayList<Point> getStartingPoint(){
         return this._startingPoint;
     }
 
+    /**
+     * Ajoute un point de départ dans la liste _startingPoint
+     * @param p
+     */
     public void addStartingPoint(Point p){
         this._startingPoint.add(p);
     }
 
+    /**
+     * Renvoi la liste de toutes les billes de tous les joueurs
+     * @return ArrayList<ArrayList<Point>>
+     */
     public ArrayList<ArrayList<Point>> getPlayerMarble(){
         return this._playerMarble;
     }
 
+    /**
+     * Ajoute une liste de bille à la liste des billes des joueurs
+     * @param playerMarble
+     */
     public void addPlayerMarble(ArrayList<Point> playerMarble){
         this._playerMarble.add(playerMarble);
     }
 
+    /**
+     * Renvoi un objet AIEnvironnement qui est une copie de l'AIEnvironnement appelant cette méthode
+     * @return AIEnvironnement
+     */
     public AIEnvironnement copy(){
         AIEnvironnement copyEnv = new AIEnvironnement();
         for(int player: getPlayers()){
@@ -133,6 +221,8 @@ public class AIEnvironnement {
             }
         }
         copyEnv.setCurrentPlayer(getCurrentPlayer());
+
+        copyEnv.setIaPlayer(getIaPlayer());
 
         for(Point p: getStartingPoint()){
             Point startingPoint = new Point(p.x, p.y);
@@ -146,10 +236,31 @@ public class AIEnvironnement {
             }
             copyEnv.addPlayerMarble(copyArrayPoint);
         }
+
         return copyEnv;
 
     }
 
+    /**
+     * Change la valeur de l'attribut _iaPlayer
+     * @param iaPlayer
+     */
+    public void setIaPlayer(int iaPlayer){
+        this._iaPlayer = iaPlayer;
+    }
+
+    /**
+     * Renvoi la valeur du joueur ia
+     * @return int
+     */
+    public int getIaPlayer(){
+        return this._iaPlayer;
+    }
+
+    /**
+     * Renvoi la liste de tous les coups possibles
+     * @return ArrayList<ArrayListe<Point>>
+     */
     public ArrayList<ArrayList<Point>> coupsPossibles(){
         ArrayList<ArrayList<Point>> listMove = new ArrayList<>();
         listMove.addAll(marblesMoves());
@@ -157,6 +268,10 @@ public class AIEnvironnement {
         return listMove;
     }
 
+    /**
+     * Renvoi la liste de tous les déplacements de billes possibles
+     * @return ArrayList<ArrayListe<Point>>
+     */
     private ArrayList<ArrayList<Point>> tilesMoves() {
         ArrayList<ArrayList<Point>> listMove = new ArrayList<>();
         ArrayList<Point> movableTiles = new ArrayList<>();
@@ -243,6 +358,10 @@ public class AIEnvironnement {
         return listMove;
     }
 
+    /**
+     * Renvoi la liste de tous les déplacements de tuiles possibles
+     * @return ArrayList<ArrayListe<Point>>
+     */
     private ArrayList<ArrayList<Point>> marblesMoves(){
         ArrayList<ArrayList<Point>> listMove = new ArrayList<>();
         this._playerMarble.get(this._currentPlayer).forEach((pos) -> {
@@ -283,6 +402,11 @@ public class AIEnvironnement {
         return listMove;
     }
 
+    /**
+     * Renvoi vrai si la case du plateau ne contient pas de bille
+     * @param p
+     * @return boolean
+     */
     public boolean isTileFree(Point p){
         //System.out.println("IN");
         if (p.x<0 || p.y < 0 || p.x > this._grid.length-1 || p.y > this._grid.length-1) {
@@ -293,7 +417,11 @@ public class AIEnvironnement {
         return this._grid[p.x][p.y] == -1;
     }
 
-    public void moveLine(ArrayList<Point> move){
+    /**
+     * Joue un déplacement de tuile
+     * @param move
+     */
+    private void moveLine(ArrayList<Point> move){
         //case same x
         if(move.get(1).x == move.get(2).x){
             //case move up move.get(2).y == 0
@@ -395,7 +523,11 @@ public class AIEnvironnement {
         }
     }
 
-    public void moveMarble(ArrayList<Point> move){
+    /**
+     * Joue un déplacement de bille
+     * @param move
+     */
+    private void moveMarble(ArrayList<Point> move){
         int marble = this._grid[move.get(0).x][move.get(0).y];
         //System.out.println("before change point");
         this._grid[move.get(0).x][move.get(0).y] = -1;
@@ -422,6 +554,10 @@ public class AIEnvironnement {
         }
     }
 
+    /**
+     * Joue un déplacement
+     * @param move
+     */
     public void perform(ArrayList<Point> move) {
         //move marble if first point not null
         if(move.get(0) != null){
@@ -431,10 +567,19 @@ public class AIEnvironnement {
         }
     }
 
+    /**
+     * Renvoi un point correspondant à l'addition de coordonnée de 2 points
+     * @param a
+     * @param b
+     * @return Point
+     */
     private Point add(Point a, Point b){
         return new Point(a.x+b.x,a.y+b.y);
     }
 
+    /**
+     * Change la valeur du joueur courant pour passer au joueur suivant
+     */
     public void nextPlayer(){
         if(this._players.size() == this._currentPlayer + 1){
             setCurrentPlayer(0);
@@ -443,6 +588,11 @@ public class AIEnvironnement {
         }
     }
 
+    /**
+     * Retourne vrai si la bille se trouve sur le but du joueur courant
+     * @param marble
+     * @return boolean
+     */
     public boolean onGoal(Point marble){
         Point goal = new Point(Math.abs(4-getStartingPoint().get(getCurrentPlayer()).x) , Math.abs(4-getStartingPoint().get(getCurrentPlayer()).y));
         if(goal.x == marble.x && goal.y == marble.y){
@@ -451,6 +601,12 @@ public class AIEnvironnement {
         return false;
     }
 
+    /**
+     * Renvoi vrai si la bille se trouve sur le but du joueur indiqué
+     * @param marble
+     * @param numPlayerMarble
+     * @return boolean
+     */
     public boolean onGoalPlayer(Point marble, int numPlayerMarble){
         Point goal = new Point(Math.abs(4-getStartingPoint().get(numPlayerMarble).x) , Math.abs(4-getStartingPoint().get(numPlayerMarble).y));
         if(goal.x == marble.x && goal.y == marble.y){
@@ -459,6 +615,12 @@ public class AIEnvironnement {
         return false;
     }
 
+    /**
+     * Renvoi le mouvement converti en Move pour le board
+     * @param move
+     * @param board
+     * @return Move
+     */
     public Move convertMove(ArrayList<Point> move, Board board){
         Move convertMove = null;
         //case move line
@@ -477,7 +639,13 @@ public class AIEnvironnement {
         return convertMove;
     }
 
-    public Tools.Direction convertDirectionMarble(Point pMarble, Point pDir){
+    /**
+     * Renvoi la direction pour une bille (NE, SE, SE, SO)
+     * @param pMarble
+     * @param pDir
+     * @return Tools.Direction
+     */
+    private Tools.Direction convertDirectionMarble(Point pMarble, Point pDir){
         int x = (pDir.x - pMarble.x);
         int y = (pDir.y - pMarble.y);
         if(x == -1){
@@ -498,7 +666,13 @@ public class AIEnvironnement {
         }
     }
 
-    public Tools.Direction convertDirectionLine(Point pMarble, Point pDir){
+    /**
+     * Renvoi la direction pour une tuile (N,S,E,O)
+     * @param pMarble
+     * @param pDir
+     * @return Tools.Direction
+     */
+    private Tools.Direction convertDirectionLine(Point pMarble, Point pDir){
         if(pMarble.x == pDir.x){
             if(pDir.y == 0){
                 return Tools.Direction.N;
@@ -514,6 +688,9 @@ public class AIEnvironnement {
         }
     }
 
+    /**
+     * Affiche le plateau actuel
+     */
     public void printBoard(){
         for(int i = 0; i < this._grid.length; i++){
             for(int j = 0; j < this._grid[i].length; j++){

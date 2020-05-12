@@ -29,20 +29,37 @@ public abstract class AI extends Player {
         this._max_depth = max_depth;
     }
 
-    public int eval_func(AIEnvironnement iaEnv) {
+    public float eval_func(AIEnvironnement iaEnv) {
+        //with float we can do 1/current number for other player and choose de good one
         //a changer prendre en compte toutes les billes
-        int sum = 0;
-        Point goal = new Point(Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getCurrentPlayer()).x) , Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getCurrentPlayer()).y));
+
+        float sum = 0;
+        Point goal = new Point(Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getIaPlayer()).x) , Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getIaPlayer()).y));
 
         //ArrayList<Marble> marbleList = board.getPlayers().get(board.currentPlayer).getMarbles();
-        for(Point currentPoint: iaEnv.getPlayerMarble().get(iaEnv.getCurrentPlayer())){
+        //sum for the AI player
+        for(Point currentPoint: iaEnv.getPlayerMarble().get(iaEnv.getIaPlayer())){
             sum += (Math.sqrt(Math.pow(goal.x-currentPoint.x,2)+Math.pow(goal.y-currentPoint.y, 2)));
         }
+        //sum for other player
+        for(int i = 0; i < iaEnv.getPlayerMarble().size(); i++){
+            if(i == iaEnv.getIaPlayer()){
+                continue;
+            } else {
+                goal.x = Math.abs(4-iaEnv.getStartingPoint().get(i).x);
+                goal.y = Math.abs(4-iaEnv.getStartingPoint().get(i).y);
+                for(Point currentPoint: iaEnv.getPlayerMarble().get(i)){
+                    //on ajoute l'opposé car on veut que les autres joueur soient loin de gagner
+                    sum += 1/((Math.sqrt(Math.pow(goal.x - currentPoint.x,2) + Math.pow(goal.y - currentPoint.y, 2))));
+                }
+            }
+        }
+
         //System.out.println(sum);
         return sum;
     }
 
-    public int calculBestMove(int depth, AIEnvironnement iaEnv, Node node) {
+    public float calculBestMove(int depth, AIEnvironnement iaEnv, Node node) {
         if (depth == 0) {
             return eval_func(iaEnv);
         }
@@ -65,7 +82,7 @@ public abstract class AI extends Player {
             //recurence
             //On passe au joueur suivant dans notre copie de l'environnement
             new_env.nextPlayer();
-            int potential_value = calculBestMove(depth - 1, new_env, new_node);
+            float potential_value = calculBestMove(depth - 1, new_env, new_node);
             new_node.setNodeValue(potential_value);
 
 
@@ -91,7 +108,7 @@ public abstract class AI extends Player {
         return node.getNodeValue();
     }
 
-    public boolean pruning(int depth, Node node, int p_value) {
+    public boolean pruning(int depth, Node node, float p_value) {
         // Enlève le nullpointer exception
         if (node.getNodeParent() == null) {
             return false;
@@ -99,7 +116,7 @@ public abstract class AI extends Player {
 
         boolean potential_test;
 
-        int node_value = node.getNodeParent().getNodeValue();
+        float node_value = node.getNodeParent().getNodeValue();
         Node.Node_type pruning_type = node.getNodeType();
 
         if (pruning_type == Node.Node_type.MAX_NODE) {
