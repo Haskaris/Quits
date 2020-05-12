@@ -68,43 +68,48 @@ public class AIEnvironnement {
         this._playerMarble = new ArrayList<>();
 
         this._grid = new int[5][5];
+        //initialisation du plateau
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 this._grid[i][j] = -1;
             }
         }
+
+        //On crée la liste des joueurs
         int numCurrentPlayer = 0;
         for(Player player : board.getPlayers()){
-            this._players.add(numCurrentPlayer);
+            addPlayer(numCurrentPlayer);
+            //On crée la liste des billes du joueurs courant et on les ajoute au plateau
             ArrayList<Point> listMarble = new ArrayList<>();
             for(Marble marble: player.getMarbles()){
                 Point pos = marble.getTile().getPosition();
-                this._grid[pos.x][pos.y] = numCurrentPlayer;
+                setNumberInGrid(pos.x, pos.y, numCurrentPlayer);
                 listMarble.add(pos);
             }
-            this._playerMarble.add(listMarble);
+            //on ajoute la liste dans la liste contenant toutes les billes de chaque joueurs
+            addPlayerMarble(listMarble);
 
+            //On ajoute le point de départ à la liste des points de départ des joueurs
             Tools.Direction direction = player.getStartPoint();
+            Point p = null;
             if(direction == Tools.Direction.SO) {
-                Point p = new Point(0,4);
-                this._startingPoint.add(p);
+                p = new Point(0,4);
             } else if(direction == Tools.Direction.SE) {
-                Point p = new Point(0,0);
-                this._startingPoint.add(p);
+                p = new Point(0,0);
             } else if(direction == Tools.Direction.NO) {
-                Point p = new Point(4,4);
-                this._startingPoint.add(p);
+                p = new Point(4,4);
             } else if(direction == Tools.Direction.NE) {
-                Point p = new Point(4,0);
-                this._startingPoint.add(p);
+                p = new Point(4,0);
             } else {
+                //Dans le cas ou le point de départ ne correspond à aucun point connu
                 System.out.println("AIEnvironnement constructor this direction is not handle yet : " + direction);
             }
+            addStartingPoint(p);
             numCurrentPlayer++;
         }
 
-        this._currentPlayer = board.currentPlayer;
-        this._iaPlayer = board.currentPlayer;
+        setCurrentPlayer(board.currentPlayer);
+        setIaPlayer(board.currentPlayer);
     }
 
     /**
@@ -183,6 +188,15 @@ public class AIEnvironnement {
     }
 
     /**
+     * Retourne le point de départ du joueur donné
+     * @param player
+     * @return Point
+     * */
+    public Point getOnePlayerStartingPoint(int player) {
+        return getStartingPoint().get(player);
+    }
+
+    /**
      * Ajoute un point de départ dans la liste _startingPoint
      * @param p
      */
@@ -212,23 +226,29 @@ public class AIEnvironnement {
      */
     public AIEnvironnement copy(){
         AIEnvironnement copyEnv = new AIEnvironnement();
+        //on copie la liste des joueurs dans le nouvel environnement
         for(int player: getPlayers()){
             copyEnv.addPlayer(player);
         }
+        //On copie le plateau dans le nouvel environnement
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < 5; j++){
                 copyEnv.setNumberInGrid(i,j, getGrid()[i][j]);
             }
         }
+        //On copie le joueur courant
         copyEnv.setCurrentPlayer(getCurrentPlayer());
 
+        //On copie l'IA de départ
         copyEnv.setIaPlayer(getIaPlayer());
 
+        //On copie les points de départ
         for(Point p: getStartingPoint()){
             Point startingPoint = new Point(p.x, p.y);
             copyEnv.addStartingPoint(startingPoint);
 
         }
+        //On copie les billes de chaque joueur
         for(ArrayList<Point> arrayPoint : getPlayerMarble()){
             ArrayList<Point> copyArrayPoint = new ArrayList<>();
             for(Point p: arrayPoint){
@@ -269,6 +289,41 @@ public class AIEnvironnement {
     }
 
     /**
+     * Renvoi la liste des billes d'un joueur
+     * @param player
+     * @return ArrayListe<Point>
+     */
+    public ArrayList<Point> getOnePlayerMarble(int player){
+        return getPlayerMarble().get(player);
+    }
+
+    /**
+     * Ajoute un coup si il est possible
+     * @param listMove
+     * @param movableTiles
+     * @param pointStudied
+     * @param point
+     */
+    private void addMoveTiles(ArrayList<ArrayList<Point>> listMove, ArrayList<Point> movableTiles, Point pointStudied, Point point){
+        if(!movableTiles.contains(pointStudied)){
+            boolean hasMarble = false;
+            for(ArrayList<Point> playerMarble: getPlayerMarble()){
+                if(playerMarble.contains(pointStudied)){
+                    hasMarble = true;
+                }
+            }
+            if(!hasMarble){
+                movableTiles.add(pointStudied);
+                ArrayList<Point> move = new ArrayList<>();
+                move.add(null);
+                move.add(point);
+                move.add(pointStudied);
+                listMove.add(move);
+            }
+        }
+    }
+
+    /**
      * Renvoi la liste de tous les déplacements de billes possibles
      * @return ArrayList<ArrayListe<Point>>
      */
@@ -277,15 +332,16 @@ public class AIEnvironnement {
         ArrayList<Point> movableTiles = new ArrayList<>();
 
         //Pour chaque marble on ajoute sa ligne et sa colonne
-        for(Point point: this._playerMarble.get(this._currentPlayer)) {
+        for(Point point: getOnePlayerMarble(getCurrentPlayer())){
             int tmpTileX = point.x;
             int tmpTileY = point.y;
 
             Point pointStudied = new Point(tmpTileX, 0);
             //Tools.Direction.N
-            if(!movableTiles.contains(pointStudied)){
+
+            /*if(!movableTiles.contains(pointStudied)){
                 boolean hasMarble = false;
-                for(ArrayList<Point> playerMarble: this._playerMarble){
+                for(ArrayList<Point> playerMarble: getPlayerMarble()){
                     if(playerMarble.contains(pointStudied)){
                         hasMarble = true;
                     }
@@ -298,12 +354,15 @@ public class AIEnvironnement {
                     move.add(pointStudied);
                     listMove.add(move);
                 }
-            }
+            }*/
+            addMoveTiles(listMove, movableTiles, pointStudied, point);
+
             pointStudied = new Point(tmpTileX, 4);
             //Tools.Direction.S
-            if(!movableTiles.contains(pointStudied)){
+            addMoveTiles(listMove, movableTiles, pointStudied, point);
+            /*if(!movableTiles.contains(pointStudied)){
                 boolean hasMarble = false;
-                for(ArrayList<Point> playerMarble: this._playerMarble){
+                for(ArrayList<Point> playerMarble: getPlayerMarble()){
                     if(playerMarble.contains(pointStudied)){
                         hasMarble = true;
                     }
@@ -311,18 +370,19 @@ public class AIEnvironnement {
                 if(!hasMarble){
                     movableTiles.add(pointStudied);
                     ArrayList<Point> move = new ArrayList<>();
-
                     move.add(null);
                     move.add(point);
                     move.add(pointStudied);
                     listMove.add(move);
                 }
-            }
+            }*/
             pointStudied = new Point(0, tmpTileY);
             //Tools.Direction.O
+            addMoveTiles(listMove, movableTiles, pointStudied, point);
+            /*
             if(!movableTiles.contains(pointStudied)){
                 boolean hasMarble = false;
-                for(ArrayList<Point> playerMarble: this._playerMarble){
+                for(ArrayList<Point> playerMarble: getPlayerMarble()){
                     if(playerMarble.contains(pointStudied)){
                         hasMarble = true;
                     }
@@ -335,12 +395,14 @@ public class AIEnvironnement {
                     move.add(pointStudied);
                     listMove.add(move);
                 }
-            }
+            }*/
             pointStudied = new Point(4, tmpTileY);
             //Tools.Direction.E
+            addMoveTiles(listMove, movableTiles, pointStudied, point);
+            /*
             if(!movableTiles.contains(pointStudied)){
                 boolean hasMarble = false;
-                for(ArrayList<Point> playerMarble: this._playerMarble){
+                for(ArrayList<Point> playerMarble: getPlayerMarble()){
                     if(playerMarble.contains(pointStudied)){
                         hasMarble = true;
                     }
@@ -353,9 +415,20 @@ public class AIEnvironnement {
                     move.add(pointStudied);
                     listMove.add(move);
                 }
-            }
+            }*/
         }
         return listMove;
+    }
+
+    /**
+     * Ajoute les points dans le move courant
+     * @param move
+     * @param pos
+     * @param direction
+     */
+    private void addPointInMove(ArrayList<Point> move, Point pos, Point direction){
+        move.add(pos);
+        move.add(direction);
     }
 
     /**
@@ -364,42 +437,41 @@ public class AIEnvironnement {
      */
     private ArrayList<ArrayList<Point>> marblesMoves(){
         ArrayList<ArrayList<Point>> listMove = new ArrayList<>();
-        this._playerMarble.get(this._currentPlayer).forEach((pos) -> {
+        getOnePlayerMarble(getCurrentPlayer()).forEach((pos) -> {
             //this.playerStart != Tools.Direction.NO
-            //System.out.println("Pos x : " + this._startingPoint.get(this._currentPlayer).x + " pos y " + this._startingPoint.get(this._currentPlayer).y);
-            if(!(this._startingPoint.get(this._currentPlayer).x == 4 && this._startingPoint.get(this._currentPlayer).y == 4) && isTileFree(new Point(pos.x-1, pos.y-1))) {
+            if(!(getOnePlayerStartingPoint(getCurrentPlayer()).x == 4 && getOnePlayerStartingPoint(getCurrentPlayer()).y == 4) && isTileFree(new Point(pos.x-1, pos.y-1))) {
                 ArrayList<Point> move = new ArrayList<>();
-                //System.out.println("in NO");
-                move.add(pos);
-                move.add(new Point(pos.x-1, pos.y-1));
+                addPointInMove(move, pos, new Point(pos.x-1, pos.y-1));
                 listMove.add(move);
             }
             //this.playerStart != Tools.Direction.NE
-            if(!(this._startingPoint.get(this._currentPlayer).x == 4 && this._startingPoint.get(this._currentPlayer).y == 0) && isTileFree(new Point(pos.x+1, pos.y-1))) {
+            if(!(getOnePlayerStartingPoint(getCurrentPlayer()).x == 4 && getOnePlayerStartingPoint(getCurrentPlayer()).y == 0) && isTileFree(new Point(pos.x+1, pos.y-1))) {
                 ArrayList<Point> move = new ArrayList<>();
-                //System.out.println("in NE");
-                move.add(pos);
-                move.add(new Point(pos.x+1, pos.y-1));
+                addPointInMove(move, pos, new Point(pos.x+1, pos.y-1));
                 listMove.add(move);
             }
             //this.playerStart != Tools.Direction.SE
-            if(!(this._startingPoint.get(this._currentPlayer).x == 0 && this._startingPoint.get(this._currentPlayer).y == 0) && isTileFree(new Point(pos.x+1, pos.y+1))) {
+            if(!(getOnePlayerStartingPoint(getCurrentPlayer()).x == 0 && getOnePlayerStartingPoint(getCurrentPlayer()).y == 0) && isTileFree(new Point(pos.x+1, pos.y+1))) {
                 ArrayList<Point> move = new ArrayList<>();
-                //System.out.println("in SE");
-                move.add(pos);
-                move.add(new Point(pos.x+1, pos.y+1));
+                addPointInMove(move, pos, new Point(pos.x+1, pos.y+1));
                 listMove.add(move);
             }
             //this.playerStart != Tools.Direction.SO
-            if (!(this._startingPoint.get(this._currentPlayer).x == 0 && this._startingPoint.get(this._currentPlayer).y == 4) && isTileFree(new Point(pos.x-1, pos.y+1))) {
-                //System.out.println("in SO");
+            if (!(getOnePlayerStartingPoint(getCurrentPlayer()).x == 0 && getOnePlayerStartingPoint(getCurrentPlayer()).y == 4) && isTileFree(new Point(pos.x-1, pos.y+1))) {
                 ArrayList<Point> move = new ArrayList<>();
-                move.add(pos);
-                move.add(new Point(pos.x-1, pos.y+1));
+                addPointInMove(move, pos, new Point(pos.x-1, pos.y+1));
                 listMove.add(move);
             }
         });
         return listMove;
+    }
+
+    /**
+     * Retourne la taille du plateau de jeu
+     * @return int
+     */
+    private int getGridLength(){
+        return this._grid.length;
     }
 
     /**
@@ -408,15 +480,13 @@ public class AIEnvironnement {
      * @return boolean
      */
     public boolean isTileFree(Point p){
-        //System.out.println("IN");
-        if (p.x<0 || p.y < 0 || p.x > this._grid.length-1 || p.y > this._grid.length-1) {
-            //System.out.println("in is tile free false");
+        if (p.x<0 || p.y < 0 || p.x > getGridLength()-1 || p.y > getGridLength()-1) {
             return false;
         }
-        //System.out.println(this._grid[p.x][p.y] + " x " + p.x + " y " + p.y);
         return this._grid[p.x][p.y] == -1;
     }
 
+    //Je ne vois pas comment factoriser cette fonction
     /**
      * Joue un déplacement de tuile
      * @param move
@@ -529,28 +599,19 @@ public class AIEnvironnement {
      */
     private void moveMarble(ArrayList<Point> move){
         int marble = this._grid[move.get(0).x][move.get(0).y];
-        //System.out.println("before change point");
-        this._grid[move.get(0).x][move.get(0).y] = -1;
+        setNumberInGrid(move.get(0).x, move.get(0).y, -1);
         //test finish marble on goal
         if(onGoal(move.get(1))){
             //remove marble from marble player of current player
             this._playerMarble.get(this._currentPlayer).remove(move.get(0));
         } else {
-            this._grid[move.get(1).x][move.get(1).y] = marble;
-
-            //System.out.println("after change point");
-            //System.out.println(this._playerMarble);
-            //System.out.println(this._currentPlayer);
-            for(Point point: this._playerMarble.get(this._currentPlayer)){
-                //System.out.println("before change point in for statement " );
-                //System.out.println("x "+ move.get(0).x + " y " + move.get(0).y);
+            setNumberInGrid(move.get(1).x, move.get(1).y, marble);
+            for(Point point: getOnePlayerMarble(getCurrentPlayer())){
                 if(point.x == move.get(0).x && point.y == move.get(0).y){
                     point.x = move.get(1).x;
                     point.y = move.get(1).y;
                 }
-                //System.out.println("after  change point in for statement");
             }
-            //System.out.println("after change point in list");
         }
     }
 
@@ -692,7 +753,7 @@ public class AIEnvironnement {
      * Affiche le plateau actuel
      */
     public void printBoard(){
-        for(int i = 0; i < this._grid.length; i++){
+        for(int i = 0; i < getGridLength(); i++){
             for(int j = 0; j < this._grid[i].length; j++){
                 System.out.print(this._grid[i][j] + " ");
             }
