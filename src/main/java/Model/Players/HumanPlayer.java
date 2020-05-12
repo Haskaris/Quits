@@ -90,7 +90,8 @@ public class HumanPlayer extends Player {
         } else if (this.getStatus() == Tools.PlayerStatus.ActionSelection) {
             //The player selects a good move, else they are put back to MarbleSelection status
             if (!(column >= 0 && column <= 4 && line >= 0 && line <= 4)) {
-                //We clicked on an arrow so we shift the rows or columns
+                //We clicked on an arrow so we shift the rows or columns if its a valid move
+
                 Tools.Direction d = Tools.Direction.NODIR;
                 Point anchorSource = null;
                 if (column == -1 && line >= 0 && line <= 4) {
@@ -111,13 +112,19 @@ public class HumanPlayer extends Player {
                     d = Tools.Direction.N;
                     anchorSource = new Point(column, 4);
                 }
-                board.moveLine(anchorSource, d);
+                
+                Move move = new Move(new Point(Tools.findAppropriateCoordinatesForTileShifts(column), Tools.findAppropriateCoordinatesForTileShifts(line)), d, this);
+                
+                if (moveExists(move, board.allPotentialShifts)) {
+                    System.out.println("C'EST BON");
+                    board.moveLine(anchorSource, d);
 
-                board.resetAvailableTiles();
-                board.allPotentialShifts.clear();
-                board.history.addToHistory(new Move(grid[anchorSource.x][anchorSource.y].getMarble(), d, this));
-                this.setStatus(Tools.PlayerStatus.MarbleSelection);
-                board.nextPlayer();
+                    board.resetAvailableTiles();
+                    board.allPotentialShifts.clear();
+                    board.history.addToHistory(move);
+                    this.setStatus(Tools.PlayerStatus.MarbleSelection);
+                    board.nextPlayer();
+                }
             } else {
                 if (board.availableTiles[column][line] == 2) {
                     //That's a good action, we can move the marble to the new position
@@ -144,6 +151,18 @@ public class HumanPlayer extends Player {
                 }
             }
         }
+    }
+
+    private boolean moveExists(Move myM, ArrayList<Move> allMoves) {
+        boolean found = false;
+
+        for (Move m : allMoves) {
+            if (m.isEqual(myM)) {
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 
 }

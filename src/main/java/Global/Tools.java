@@ -168,4 +168,16 @@ public class Tools {
     public static Point PointToPointDiff(Point start, Point end) {
         return new Point(end.x - start.x, end.y - start.y);
     }
+
+    public static int findAppropriateCoordinatesForTileShifts(int value) {
+
+        if (value > 4) {
+            return 0;
+        }
+        if (value < 0) {
+            return 4;
+        }
+        return value;
+
+    }
 }
