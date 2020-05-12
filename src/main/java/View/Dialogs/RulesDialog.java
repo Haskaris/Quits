@@ -79,7 +79,7 @@ public class RulesDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("<html><b>But du jeu :</b><br> Sortir 1 ou 3 billes (ça dépend du nombre de bille de base)<br><br> <b>Déplacement des billes :</b><br> Chaque bille se déplace en diagonale<br><br> <b>Déplacement des tuiles :</b><br> Un joueur peut déplacer une rangée si'il possède une bille sur cette dernière<br> Une rangée peut être déplacée si la tuile sortant ne possède pas de bille<br> Le déplacement se fait horizontalement ou verticalement<br> </html>");
+        jLabel1.setText("<html><b>But du jeu :</b><br> \nAvoir deux billes restantes sur le plateau<br><br> \n<b>Comment sortir une bille :</b><br> \nPour sortir une bille, il faudra la déplacer dans le coin opposé à votre position de départ.<br>\nCe coin sera coloré de votre couleur.<br><br>\n<b>Déplacement des billes :</b>\n<br> Chaque bille se déplace en diagonale<br><br>\n<b>Déplacement des tuiles :</b><br>\nUn joueur peut déplacer une rangée de tuile si'il possède une bille sur cette dernière<br> Une rangée peut être déplacée si la tuile sortante ne possède pas de bille<br> Le déplacement se fait horizontalement ou verticalement<br> </html>");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

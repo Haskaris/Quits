@@ -63,7 +63,7 @@ public class HumanPlayer extends Player {
             board.allPotentialShifts.clear();
             board.availableTiles[column][line] = 1;
             board.selectedMarble = grid[column][line].getMarble();
-            //List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
+            
             List<Move> possibleMovesWithSource = new MoveCalculator(board).possibleMovesWithSource(column, line);
             for (Move m : possibleMovesWithSource) {
                 try {
@@ -110,13 +110,13 @@ public class HumanPlayer extends Player {
 
                 board.resetAvailableTiles();
                 board.allPotentialShifts.clear();
-                
+
                 board.getHistory().doMove(
                         new Move(grid[anchorSource.x][anchorSource.y].getPosition(), d, this)
                 );
+                board.endTurn();
                 
                 this.setStatus(Tools.PlayerStatus.MarbleSelection);
-                board.endTurn();
             } else {
                 if (board.availableTiles[column][line] == 2) {
                     //That's a good action, we can move the marble to the new position
@@ -142,5 +142,4 @@ public class HumanPlayer extends Player {
             }
         }
     }
-
 }

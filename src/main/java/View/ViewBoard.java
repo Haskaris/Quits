@@ -59,6 +59,31 @@ public class ViewBoard extends BoardGraphic {
 
     @Override
     void drawBoard() {
+        float[] sRGB = board.getCurrentPlayer().color.getRGBComponents(null);
+        Color currentColor = new Color(sRGB[0], sRGB[1], sRGB[2], 0.2f);
+        
+        int currentXObjective = -1;
+        int currentYObjective = -1;
+        
+        switch(board.getCurrentPlayer().getStartPoint()) {
+            case NE:
+                currentXObjective = 0;
+                currentYObjective = 4;
+                break;
+            case NW:
+                currentXObjective = 4;
+                currentYObjective = 4;
+                break;
+            case SE:
+                currentXObjective = 0;
+                currentYObjective = 0;
+                break;
+            case SW:
+                currentXObjective = 4;
+                currentYObjective = 0;
+                break;
+        }
+        
         if (shifts == null) {
             shifts = new Vecteur[5][5];
         }
@@ -93,11 +118,14 @@ public class ViewBoard extends BoardGraphic {
                 int index = currentTile.getIndexOfColor();
 
                 tracer(tileImages.get(index), x, y, widthTile, heightTile);
+                
+                if (i == currentXObjective && j == currentYObjective) {
+                    drawRect(currentColor, x, y, widthTile, heightTile);
+                }
 
                 if (currentTile.hasMarble()) {
                     if (board.availableTiles[i][j] == 1) {//Selected marble
                         tracer(selectedTile, x, y, widthTile, heightTile);
-                        //drawBall(new Color(1f, 1f, 1f, 0.3f), x, y, widthTile, heightTile);
                     }
                     Color c = currentTile.getMarbleColor();
                     if (c == board.getCurrentPlayer().color) {
@@ -126,8 +154,8 @@ public class ViewBoard extends BoardGraphic {
                 }
             }
         }
+        
         for (Move m : board.allPotentialShifts) {
-
             Point p = m.getLine();
             int rowOrColIndex = -1;
             switch (m.getDirection()) {
@@ -155,7 +183,6 @@ public class ViewBoard extends BoardGraphic {
                 default:
                     break;
             }
-
         }
 
     }
