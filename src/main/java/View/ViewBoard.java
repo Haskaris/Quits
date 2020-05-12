@@ -12,14 +12,8 @@ import java.util.ArrayList;
 public class ViewBoard extends BoardGraphic {
 
     ArrayList<ImageQuits> tileImages;
-    ImageQuits defaultMarble;
-    ImageQuits selectedTile;
-    ImageQuits arrowUp;
-    ImageQuits arrowDown;
-    ImageQuits arrowLeft;
-    ImageQuits arrowRight;
-    ImageQuits background;
-    ImageQuits selectedActions;
+    private ImageQuits defaultMarble, selectedTile, arrowUp, arrowDown,
+            arrowLeft, arrowRight, background, selectedActions;
 
     Board board;
     int widthTile;
@@ -166,12 +160,12 @@ public class ViewBoard extends BoardGraphic {
     }
 
     @Override
-    int getHeightTile() {
+    public int getHeightTile() {
         return heightTile;
     }
 
     @Override
-    int getWidthTile() {
+    public int getWidthTile() {
         return widthTile;
     }
 

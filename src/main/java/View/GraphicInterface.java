@@ -5,6 +5,7 @@
  */
 package View;
 
+import View.Action.MouseAction;
 import Controleur.FileGestion;
 import Controleur.Mediator;
 
@@ -94,9 +95,19 @@ public class GraphicInterface implements Runnable, Observateur {
         this.undo = new JButton("Défaire");
         this.undo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.undo.setFocusable(false);
+        this.undo.setEnabled(this.mediator.canUndo());
+        this.undo.addActionListener((ActionEvent e) -> {
+            this.mediator.undo();
+        });
+        
         this.redo = new JButton("Refaire");
         this.redo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.redo.setFocusable(false);
+        this.redo.setEnabled(this.mediator.canRedo());
+        this.redo.addActionListener((ActionEvent e) -> {
+            this.mediator.redo();
+        });
+        
         boxMenu.add(this.menu);
         boxMenu.add(this.undo);
         boxMenu.add(this.redo);
@@ -126,11 +137,13 @@ public class GraphicInterface implements Runnable, Observateur {
     
     public void update() {
         boardGraphic.repaint();
+        this.undo.setEnabled(this.mediator.canUndo());
+        this.redo.setEnabled(this.mediator.canRedo());
     }
 
     @Override
     public void miseAJour() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Oui
     }
     
 }

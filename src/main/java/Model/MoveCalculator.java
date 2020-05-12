@@ -27,7 +27,7 @@ public class MoveCalculator {
         this.marbles = this.player.getMarbles();
         this.playerStart = player.getStartPoint();
         this.moves = new ArrayList<>();
-        this.lastMove = this.board.history.lastMove();
+        this.lastMove = this.board.getHistory().lastMove();
     }
 
     /**

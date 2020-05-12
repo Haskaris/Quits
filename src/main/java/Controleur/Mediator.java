@@ -5,6 +5,7 @@ import Global.Tools.AILevel;
 
 import Model.Players.*;
 import Model.Support.Board;
+import Paterns.Observateur;
 import View.EditPlayer;
 
 import View.GraphicInterface;
@@ -161,7 +162,25 @@ public class Mediator {
         return this.board.getPlayer(index);
     }
     
-    public void addObservateur(View.GraphicInterface aThis) {
+    public void addObservateur(Observateur a) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean canUndo() {
+        return !this.board.getHistory().isEmptyPast();
+    }
+
+    public boolean canRedo() {
+        return !this.board.getHistory().isEmptyFuture();
+    }
+
+    public void undo() {
+        this.board.getHistory().undo();
+        this.graphicInterface.update();
+    }
+
+    public void redo() {
+        this.board.getHistory().redo();
+        this.graphicInterface.update();
     }
 }

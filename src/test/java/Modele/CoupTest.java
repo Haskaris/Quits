@@ -60,10 +60,10 @@ class CoupTest {
         MoveCalculator mc = new MoveCalculator(board);
         List<Move> coupspossible = mc.possibleMoves();
         //LecteurRedacteur.AffichePartie(board);
-        board.history.doMove(coupspossible.get(0));
+        board.getHistory().doMove(coupspossible.get(0));
         //LecteurRedacteur.AffichePartie(board);
         coupspossible = new MoveCalculator(board).possibleMoves();
-        board.history.doMove(player.Jouer(coupspossible));
+        board.getHistory().doMove(player.Jouer(coupspossible));
         //LecteurRedacteur.AffichePartie(board);
     }
 }

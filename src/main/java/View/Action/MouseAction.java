@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package View;
+package View.Action;
 
 import Controleur.Mediator;
+import View.BoardGraphic;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,7 +19,7 @@ public class MouseAction extends MouseAdapter {
     BoardGraphic board;
     Mediator mediator;
 
-    MouseAction(BoardGraphic board, Mediator mediator) {
+    public MouseAction(BoardGraphic board, Mediator mediator) {
         this.board = board;
         this.mediator = mediator;
     }

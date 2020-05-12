@@ -66,7 +66,6 @@ public class HumanPlayer extends Player {
             //List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
             List<Move> possibleMovesWithSource = new MoveCalculator(board).possibleMovesWithSource(column, line);
             for (Move m : possibleMovesWithSource) {
-                m.Display();
                 try {
                     Point pos = m.getPosition();
                     if (column == pos.x && line == pos.y) {//If the selected marble is the source of the available move seleted
@@ -79,11 +78,8 @@ public class HumanPlayer extends Player {
                     }
                 } catch (Exception e) {
                     //Here we handle the tile shifting
-                    m.Display();
                     board.allPotentialShifts.add(m);
-
                 }
-
             }
             board.diplayAvailableTiles();
             this.setStatus(Tools.PlayerStatus.ActionSelection);
@@ -111,29 +107,31 @@ public class HumanPlayer extends Player {
                     d = Tools.Direction.N;
                     anchorSource = new Point(column, 4);
                 }
-                board.moveLine(anchorSource, d);
 
                 board.resetAvailableTiles();
                 board.allPotentialShifts.clear();
-                board.history.addToHistory(new Move(grid[anchorSource.x][anchorSource.y].getMarble(), d, this));
+                
+                board.getHistory().doMove(
+                        new Move(grid[anchorSource.x][anchorSource.y].getPosition(), d, this)
+                );
+                
                 this.setStatus(Tools.PlayerStatus.MarbleSelection);
                 board.nextPlayer();
             } else {
                 if (board.availableTiles[column][line] == 2) {
                     //That's a good action, we can move the marble to the new position
                     Point pos = board.selectedMarble.getPosition();
-                    grid[column][line].addMarble(board.selectedMarble);
-                    grid[pos.x][pos.y].removeMarble();
+                    
                     board.resetAvailableTiles();
                     board.allPotentialShifts.clear();
-                    this.setStatus(Tools.PlayerStatus.MarbleSelection);
 
-                    board.history.addToHistory(
+                    board.getHistory().doMove(
                             new Move(board.selectedMarble,
                                     Tools.PointToDir(Tools.PointToPointDiff(pos, new Point(column, line))),
                                     this)
                     );
 
+                    this.setStatus(Tools.PlayerStatus.MarbleSelection);
                     board.nextPlayer();
                 } else {
                     //That's not a good action, we get back to MarbleSelection, but we don't change players

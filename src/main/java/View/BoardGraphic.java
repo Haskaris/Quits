@@ -75,9 +75,9 @@ public abstract class BoardGraphic extends JComponent implements Observateur {
     // tracerNiveau est la partie indépendante de Swing du dessin qui se trouve dans le descendant
     abstract void drawBoard();
 
-    abstract int getHeightTile();
+    public abstract int getHeightTile();
 
-    abstract int getWidthTile();
+    public abstract int getWidthTile();
 
     // Méthodes pour les animations
     // décale un des éléments d'une fraction de case (pour les animations)

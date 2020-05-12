@@ -23,7 +23,7 @@ public class Board {
     private Tile[][] grid;
     private ArrayList<Player> players;
     public int currentPlayer;
-    public History history;
+    private History history;
     private Mediator mediator;
     private Tools.GameMode gameMode;
     public ArrayList<Move> allPotentialShifts;
@@ -140,11 +140,10 @@ public class Board {
         } else {
             List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
             Move move = currentPlayer().Jouer(possibleMoves);
-            history.doMove(move);
+            getHistory().doMove(move);
             nextPlayer();
         }
         this.mediator.getGraphicInterface().update();
-
     }
 
     /**
@@ -272,8 +271,8 @@ public class Board {
     /**
      * Retourne le joueur à l'index désiré
      *
-     * @param index
-     * @return Player
+     * @param index Index du joueur souhaité
+     * @return Joueur à l'index indiqué
      */
     public Player getPlayer(int index) {
         return this.players.get(index);
@@ -282,7 +281,7 @@ public class Board {
     /**
      * Retourne la liste des joueurs
      *
-     * @return
+     * @return Liste des joueurs du plateau
      */
     public ArrayList<Player> getPlayers() {
         return this.players;
@@ -303,6 +302,12 @@ public class Board {
         }
     }
 
+    /**
+     * Charge le plateau à partir de l'entrée stream
+     * 
+     * @param in_stream
+     * @throws IOException 
+     */
     public void load(InputStream in_stream) throws IOException {
         for (int i = 0; i < 5; i++) {
             String indexLine = ReaderWriter.readLine(in_stream);
@@ -336,5 +341,19 @@ public class Board {
         if (currentPlayer >= players.size()) {
             currentPlayer = 0;
         }
+    }
+    
+    public void previousPlayer() {
+        currentPlayer--;
+        if (currentPlayer < 0) {
+            currentPlayer = players.size() - 1;
+        }
+    }
+
+    /**
+     * @return the history
+     */
+    public History getHistory() {
+        return history;
     }
 }

@@ -11,18 +11,34 @@ import java.awt.*;
 public class Move {
 
     /**
-     * Marble indique la marble a bouger (null sinon) direction est la direction
-     * dans laquelle cette marble doit bouger (consulter Global.Tools) Point
-     * indique la line a bouger (null sinon) (ex : (-1,2) indique la colonne 2,
-     * (0,-1) la ligne 0) positif est vrai si la line bouge vers le positif
-     * (chaque indice i deviendra i+1) et inversement si faux player indique le
-     * player responsable du coup
+     * Indique si une bille doit être bougé dans ce mouvement
      */
     Marble marble = null;
-    Direction direction;
+    
+    /**
+     * Indique si une ligne doit être bougé dans ce mouvement
+     */
     Point line = null;
+    
+    /**
+     * Indique la direction du mouvement
+     */
+    Direction direction;
+    
+    /**
+     * Joueur responsable du mouvement
+     */
     Player player;
+    
+    /**
+     * Prochain mouvement de la pile
+     */
     Move nextMove;
+    
+    /**
+     * Mouvement précédent de la pile
+     */
+    Move lastMove;
 
     /**
      * On veut jouer un deplacement de marble
@@ -55,6 +71,7 @@ public class Move {
             board.moveMarble(marble, direction);
         }
         if (line != null) {
+            Display();
             board.moveLine(line, direction);
         }
     }
@@ -64,6 +81,7 @@ public class Move {
             board.moveMarble(marble, reverse(direction));
         }
         if (line != null) {
+            Display();
             board.moveLine(line, reverse(direction));
         }
     }

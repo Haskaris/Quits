@@ -2,57 +2,104 @@ package Model;
 
 import Model.Support.Board;
 
+/**
+ * Classe permettant la gestion de l'historique
+ * @author Mathis
+ */
 public class History {
-    Board board;
-    Move past;
-    Move future;
+    private final Board board;
+    private Move past;
+    private Move future;
 
+    /**
+     * Constructeur
+     * @param board 
+     */
     public History(Board board){
         this.board = board;
     }
 
+    /**
+     * Effectue le coup c et l'ajoute à l'historique
+     * @param c 
+     */
     public void doMove(Move c){
-        if(c == null) return; // Correspond a une impossibilite de se deplacer pour le player. Rien n'est enregistre
+        if(c == null)
+            return; // Correspond a une impossibilite de se deplacer pour le player. Rien n'est enregistre
         c.perform(board);
-        c.nextMove = past;
-        past = c;
-        future = null;
+        this.addToHistory(c);
     }
     
-    public void addToHistory(Move c){
-        if(c == null) return; // Correspond a une impossibilite de se deplacer pour le player. Rien n'est enregistre
-        c.nextMove = past;
-        past = c;
-        future = null;
+    /**
+     * Ajoute un coup à l'historique
+     * @param m
+     */
+    public void addToHistory(Move m) {
+        //Le prochaine mouvement dans la liste chainée est mis à jour
+        if (!isEmptyPast()) {
+            this.past.nextMove = m;
+        }
+        
+        //Le dernier mouvement effectué est m
+        this.past = m;
+        
+        //Future est null car on écrase le futur
+        this.future = null;
     }
 
+    /**
+     * Permet d'anuller la dernière action
+     */
     public void undo(){
-        if(isEmptyPast())return;
-        Move c = past.nextMove;
-        past.nextMove = null;
-        future = past;
-        past = c;
-        future.cancel(board);
+        if(isEmptyPast())
+            return;
+        
+        //J'annule le dernier mouvement
+        this.past.cancel(this.board);
+        
+        //Le dernier mouvement devient donc mon nouveau futur
+        this.future = past;
+        
+        //Le dernier mouvement avant ce mouvement, devient le nouveau passé
+        this.past = this.past.lastMove;
+        
+        this.board.previousPlayer();
     }
 
+    /**
+     * Permet de refaire une action annulée
+     */
     public void redo(){
-        if(isEmptyFuture())return;
-        Move c = future.nextMove;
-        future.nextMove = null;
-        past = future;
-        future = c;
-        past.perform(board);
+        if(isEmptyFuture())
+            return;
+        
+        //Je refais le dernier mouvement
+        this.future.perform(board);
+        
+        //Le prochain mouvement est donc mon nouveau dernier mouvement
+        this.past = this.future;
+        
+        //Le future mouvement est donc 
+        this.future = this.future.nextMove;
+        
+        this.board.nextPlayer();
     }
 
     public boolean isEmptyPast(){
-        return past == null;
+        return this.past == null;
     }
     
     public boolean isEmptyFuture(){
-        return future == null;
+        return this.future == null;
     }
     
+    /**
+     * Retourne le dernier coup, null sinon
+     * @return 
+     */
     public Move lastMove(){
         return past;
     }
+    
+    
 }
