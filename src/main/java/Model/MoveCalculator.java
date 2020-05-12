@@ -23,7 +23,7 @@ public class MoveCalculator {
 
     public MoveCalculator(Board board/*, Player _joueur*/) {
         this.board = board;
-        this.player = this.board.currentPlayer();
+        this.player = this.board.getCurrentPlayer();
         this.marbles = this.player.getMarbles();
         this.playerStart = player.getStartPoint();
         this.moves = new ArrayList<>();

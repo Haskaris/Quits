@@ -81,7 +81,7 @@ public class HumanPlayer extends Player {
                     board.allPotentialShifts.add(m);
                 }
             }
-            board.diplayAvailableTiles();
+            //board.diplayAvailableTiles();
             this.setStatus(Tools.PlayerStatus.ActionSelection);
         } else if (this.getStatus() == Tools.PlayerStatus.ActionSelection) {
             //The player selects a good move, else they are put back to MarbleSelection status
@@ -116,7 +116,7 @@ public class HumanPlayer extends Player {
                 );
                 
                 this.setStatus(Tools.PlayerStatus.MarbleSelection);
-                board.nextPlayer();
+                board.endTurn();
             } else {
                 if (board.availableTiles[column][line] == 2) {
                     //That's a good action, we can move the marble to the new position
@@ -132,7 +132,7 @@ public class HumanPlayer extends Player {
                     );
 
                     this.setStatus(Tools.PlayerStatus.MarbleSelection);
-                    board.nextPlayer();
+                    board.endTurn();
                 } else {
                     //That's not a good action, we get back to MarbleSelection, but we don't change players
                     this.setStatus(Tools.PlayerStatus.MarbleSelection);

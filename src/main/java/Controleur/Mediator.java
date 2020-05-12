@@ -10,6 +10,7 @@ import View.EditPlayer;
 
 import View.GraphicInterface;
 import View.MainGraphicInterface;
+import View.VictoryDialog;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class Mediator {
             this.addPlayer(e.playerName, e.playerColor, e.aiLevel);
         }
         this.board.setGameMode(gameMode);
-        this.board.initPlayers();
+        this.board.initFromGameMode();
         
         //Change l'interface et lance la partie
         this.mainGraphicInterface.startGame();
@@ -141,8 +142,6 @@ public class Mediator {
      * @param c
      */
     public void mouseClick(int c, int l) {
-        //this.board.moveLine(new Point(l, c), Direction.S);
-        System.out.println("Clicked on the case " + c + " : " + l + ".");
         board.playTurn(c, l);
     }
 
@@ -182,5 +181,11 @@ public class Mediator {
     public void redo() {
         this.board.getHistory().redo();
         this.graphicInterface.update();
+    }
+
+    public void endGame() {
+        VictoryDialog VD = new VictoryDialog(this.mainGraphicInterface, true);
+        VD.setVictoryText(this.board.getCurrentPlayer().name + " A GAGNÉ !!");
+        VD.setVisible(true);
     }
 }

@@ -99,7 +99,7 @@ public class ViewBoard extends BoardGraphic {
                         //drawBall(new Color(1f, 1f, 1f, 0.3f), x, y, widthTile, heightTile);
                     }
                     Color c = currentTile.getMarbleColor();
-                    if (c == board.currentPlayer().color) {
+                    if (c == board.getCurrentPlayer().color) {
                         drawBall(c, x, y, widthTile, heightTile);
                     } else {
                         c = new Color(

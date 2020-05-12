@@ -29,6 +29,7 @@ public class Board {
     public ArrayList<Move> allPotentialShifts;
     public Marble selectedMarble;
     public int[][] availableTiles;
+    private int marbleEndObjectiv = 2;
 
     /**
      * Initialise un plateau Taille fixe pour le moment
@@ -52,9 +53,9 @@ public class Board {
     }
 
     /**
-     * Initialise les joueurs (billes et position) en fonction du mode de jeu
+     * Initialise le jeu en fonction du mode de jeu
      */
-    public void initPlayers() {
+    public void initFromGameMode() {
         switch (gameMode) {
             case TwoPlayersFiveBalls:
                 this.players.get(0).setStartPoint(Tools.Direction.SW);
@@ -125,21 +126,21 @@ public class Board {
     public void playGame() {
         /*while(endRound()){
             List<Move> possiblesMoves = new MoveCalculator(this).coupsPossibles();
-            Move coup = currentPlayer().Jouer(possiblesMoves);
+            Move coup = getCurrentPlayer().Jouer(possiblesMoves);
             history.doMove(coup);
             //LecteurRedacteur.AffichePartie(this);
         }*/
     }
 
     public void playTurn(int column, int line) {
-        if (currentPlayer().getClass().equals(HumanPlayer.class)) {
-            HumanPlayer player = (HumanPlayer) currentPlayer();
+        if (getCurrentPlayer().getClass().equals(HumanPlayer.class)) {
+            HumanPlayer player = (HumanPlayer) getCurrentPlayer();
 
             player.Jouer(this, column, line);
 
         } else {
             List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
-            Move move = currentPlayer().Jouer(possibleMoves);
+            Move move = getCurrentPlayer().Jouer(possibleMoves);
             getHistory().doMove(move);
             nextPlayer();
         }
@@ -150,11 +151,44 @@ public class Board {
      * Clot un tour. Verifie les conditions de victoire et passe au joueur
      * suivant
      */
-    private boolean endRound() {
-        boolean isEnded = currentPlayer().getMarbles().isEmpty();
+    public boolean endTurn() {
+        boolean isEnded = false;
+        
+        switch(getCurrentPlayer().getStartPoint()) {
+            case SW:
+                if (this.grid[4][0].hasMarble() && 
+                        this.grid[4][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                    this.getCurrentPlayer().removeMarble(this.grid[4][0].removeMarble());
+                    System.out.println("DEL");
+                }
+                break;
+            case NW:
+                if (this.grid[4][4].hasMarble() && 
+                        this.grid[4][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                    this.getCurrentPlayer().removeMarble(this.grid[4][4].removeMarble());
+                    System.out.println("DEL");
+                }
+                break;
+            case NE:
+                if (this.grid[0][4].hasMarble() && 
+                        this.grid[0][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                    this.getCurrentPlayer().removeMarble(this.grid[0][4].removeMarble());
+                    System.out.println("DEL");
+                }
+                break;
+            case SE:
+                if (this.grid[0][0].hasMarble() && 
+                        this.grid[0][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                    this.getCurrentPlayer().removeMarble(this.grid[0][0].removeMarble());
+                    System.out.println("DEL");
+                }
+                break;
+        }
+        
+        isEnded = getCurrentPlayer().getMarbles().size() == marbleEndObjectiv;
 
         if (isEnded) {
-            System.out.println("Joueur " + currentPlayer + " a gagné");
+            this.mediator.endGame();
             return false;
         }
 
@@ -172,7 +206,7 @@ public class Board {
         Point startPoint = marble.getTile().getPosition();
         Point finishPoint = Tools.getNextPoint(startPoint, direction);
         grid[startPoint.x][startPoint.y].removeMarble();
-        grid[finishPoint.x][finishPoint.y].addMarble(marble);
+        this.grid[finishPoint.x][finishPoint.y].addMarble(marble);
     }
 
     /**
@@ -248,7 +282,7 @@ public class Board {
      *
      * @return Player
      */
-    public Player currentPlayer() {
+    public Player getCurrentPlayer() {
         return getPlayer(currentPlayer);
     }
 

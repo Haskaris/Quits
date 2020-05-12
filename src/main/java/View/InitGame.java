@@ -170,15 +170,11 @@ public class InitGame extends javax.swing.JPanel {
     }//GEN-LAST:event_buttonRulesActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        System.out.println("Je vais load");
         int returnVal = fc.showOpenDialog(this);
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            System.out.println("Je veux le fichier " + file.getName() + ".");
             this.mediator.loadGame(file.getName());
-        } else {
-            System.out.println("Ah bah non");
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
