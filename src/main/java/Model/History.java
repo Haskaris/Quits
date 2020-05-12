@@ -38,6 +38,7 @@ public class History {
         //Le prochaine mouvement dans la liste chainée est mis à jour
         if (!isEmptyPast()) {
             this.past.nextMove = m;
+            m.lastMove = this.past;
         }
         
         //Le dernier mouvement effectué est m
