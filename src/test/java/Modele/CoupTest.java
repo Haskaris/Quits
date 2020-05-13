@@ -58,6 +58,11 @@ class CoupTest {
 
     @Test
     public void TestEntreeController() {
+        player2 = new AIEasyPlayer("default", Color.RED, board);
+        player2.setStartPoint(Tools.Direction.NE);
+        board.addPlayer(player2);
+        marble = player2.addMarble();
+        board.getGrid()[3][3].addMarble(marble);
         MoveCalculator mc = new MoveCalculator(board);
         List<Move> coupspossible = mc.coupsPossibles();
         //LecteurRedacteur.AffichePartie(board);
@@ -68,7 +73,7 @@ class CoupTest {
         //LecteurRedacteur.AffichePartie(board);
     }
 
-    @Test
+    /*@Test
     public void TestJouerIA(){
         System.out.println("Test jouer AI");
         player2 = new AIEasyPlayer("default", Color.RED, board);
@@ -82,9 +87,9 @@ class CoupTest {
         board.history.doMove(coupspossible.get(0));
         coupspossible = new MoveCalculator(board).coupsPossibles();
         board.history.doMove(player.Jouer(coupspossible));*/
-
+/*
         board.playGame();
-    }
+    }*/
 }
 
 

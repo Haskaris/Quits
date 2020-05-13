@@ -93,13 +93,13 @@ public class AIEnvironnement {
             Tools.Direction direction = player.getStartPoint();
             Point p = null;
             if(direction == Tools.Direction.SO) {
-                p = new Point(0,4);
-            } else if(direction == Tools.Direction.SE) {
-                p = new Point(0,0);
-            } else if(direction == Tools.Direction.NO) {
-                p = new Point(4,4);
-            } else if(direction == Tools.Direction.NE) {
                 p = new Point(4,0);
+            } else if(direction == Tools.Direction.SE) {
+                p = new Point(4,4);
+            } else if(direction == Tools.Direction.NO) {
+                p = new Point(0,0);
+            } else if(direction == Tools.Direction.NE) {
+                p = new Point(0,4);
             } else {
                 //Dans le cas ou le point de départ ne correspond à aucun point connu
                 System.out.println("AIEnvironnement constructor this direction is not handle yet : " + direction);
@@ -713,7 +713,7 @@ public class AIEnvironnement {
             //case o
             if(y == 1){
                 //case S
-                return Tools.Direction.SO;
+                return Tools.Direction.NE;
             } else {
                 return Tools.Direction.NO;
             }
@@ -722,7 +722,7 @@ public class AIEnvironnement {
             if (y == 1){
                 return Tools.Direction.SE;
             } else {
-                return Tools.Direction.NE;
+                return Tools.Direction.SO;
             }
         }
     }
@@ -734,17 +734,19 @@ public class AIEnvironnement {
      * @return Tools.Direction
      */
     private Tools.Direction convertDirectionLine(Point pMarble, Point pDir){
+        //1 1
+        //1 4
         if(pMarble.x == pDir.x){
             if(pDir.y == 0){
-                return Tools.Direction.N;
-            } else {
-                return Tools.Direction.S;
-            }
-        } else {
-            if(pDir.x == 0){
                 return Tools.Direction.O;
             } else {
                 return Tools.Direction.E;
+            }
+        } else {
+            if(pDir.x == 0){
+                return Tools.Direction.N;
+            } else {
+                return Tools.Direction.S;
             }
         }
     }
