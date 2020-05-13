@@ -23,7 +23,7 @@ public class Tile {
      */
     private void setRandomIndexOfColor() {
         Random random = new Random();
-        this.setIndexOfColor(random.nextInt(8));
+        this.setIndexOfColor(random.nextInt(3));
     }
     
     /**
@@ -57,6 +57,10 @@ public class Tile {
         Marble tmp = marble;
         marble = null;
         return tmp;
+    }
+    
+    public Marble getMarble() {
+        return marble;
     }
     
     /**

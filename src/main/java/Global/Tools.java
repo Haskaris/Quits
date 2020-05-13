@@ -4,6 +4,12 @@ import java.awt.*;
 
 public class Tools {
 
+    public static enum GameMode {
+        TwoPlayersFiveBalls,
+        TwoPlayersThreeBalls,
+        FourPlayersFiveBalls,
+    }
+
     /**
      * Énumération des niveaux d'ia
      */
@@ -12,6 +18,16 @@ public class Tools {
         Easy,
         Medium,
         Hard,
+    }
+
+    /**
+     * Énumération des états du joueur Un joueur en MarbleSelection attend qu'on
+     * clique sur une bille Un joueur en ActionSelection attend qu'on choisisse
+     * une action liée à la bille sélectoinnée
+     */
+    public enum PlayerStatus {
+        MarbleSelection,
+        ActionSelection,
     }
 
     //Après audit : On pourrait le mettre en vecteur xy
@@ -27,16 +43,16 @@ public class Tools {
         E,
         SE,
         S,
-        SO,
-        O,
-        NO,
-        RIEN;
+        SW,
+        W,
+        NW,
+        NODIR;
     }
 
     public static Point getNextPoint(Point p, Direction d) {
         Point tmp = new Point();
         switch (d) {
-            case NO:
+            case NW:
                 tmp.x = p.x - 1;
                 tmp.y = p.y - 1;
                 break;
@@ -48,7 +64,7 @@ public class Tools {
                 tmp.x = p.x + 1;
                 tmp.y = p.y + 1;
                 break;
-            case SO:
+            case SW:
                 tmp.x = p.x - 1;
                 tmp.y = p.y + 1;
                 break;
@@ -63,7 +79,7 @@ public class Tools {
     public static Point DirToPoint(Direction d) {
         int x = 0, y = 0;
         switch (d) {
-            case NO:
+            case NW:
                 y--;
                 x--;
                 break;
@@ -71,7 +87,7 @@ public class Tools {
                 y--;
                 x++;
                 break;
-            case SO:
+            case SW:
                 y++;
                 x--;
                 break;
@@ -94,21 +110,21 @@ public class Tools {
             case N:
                 return Direction.S;
             case NE:
-                return Direction.SO;
+                return Direction.SW;
             case E:
-                return Direction.O;
+                return Direction.W;
             case SE:
-                return Direction.NO;
+                return Direction.NW;
             case S:
                 return Direction.N;
-            case SO:
+            case SW:
                 return Direction.NE;
-            case O:
+            case W:
                 return Direction.E;
-            case NO:
+            case NW:
                 return Direction.SE;
         }
-        return Direction.RIEN;
+        return Direction.NODIR;
     }
 
     public static void Print(String S) {
@@ -125,5 +141,31 @@ public class Tools {
 
     public static void Print(Object o) {
         System.out.println(o.toString());
+    }
+
+    public static Direction PointToDir(Point p) {
+        if (p.x == 1 && p.y == 0) {
+            return Direction.E;
+        } else if (p.x == -1 && p.y == 0) {
+            return Direction.W;
+        } else if (p.x == -1 && p.y == -1) {
+            return Direction.NW;
+        } else if (p.x == 0 && p.y == -1) {
+            return Direction.N;
+        } else if (p.x == 1 && p.y == -1) {
+            return Direction.NE;
+        } else if (p.x == -1 && p.y == 1) {
+            return Direction.SW;
+        } else if (p.x == 0 && p.y == 1) {
+            return Direction.S;
+        } else if (p.x == 1 && p.y == 1) {
+            return Direction.SE;
+        } else {
+            return Direction.NODIR;
+        }
+    }
+
+    public static Point PointToPointDiff(Point start, Point end) {
+        return new Point(end.x - start.x, end.y - start.y);
     }
 }

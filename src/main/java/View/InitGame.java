@@ -6,9 +6,13 @@
 package View;
 
 import Controleur.Mediator;
+import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 /**
  *
@@ -17,16 +21,28 @@ import java.util.ArrayList;
 public class InitGame extends javax.swing.JPanel {
 
     Mediator mediator;
+    Tools.GameMode gameMode;
+    JFrame frame;
+    private final JFileChooser fc;
     
     /**
      * Creates new form InitGameAuto
+     * @param frame
+     * @param mediateur
      */
-    public InitGame(Mediator mediateur) {
+    public InitGame(JFrame frame, Mediator mediateur) {
         initComponents();
+        this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
         this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
         this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
-        this.updateUI();
         this.mediator = mediateur;
+        this.frame = frame;
+        
+        this.fc = new JFileChooser();
+        this.fc.setAcceptAllFileFilterUsed(false);
+        this.fc.setFileFilter(new SaveFilter());
+        
+        this.updateUI();
     }
 
     /**
@@ -43,8 +59,14 @@ public class InitGame extends javax.swing.JPanel {
         ButtonPlay = new javax.swing.JButton();
         gameModeList = new javax.swing.JComboBox<>();
         editPlayers = new javax.swing.JPanel();
+        loadButton = new javax.swing.JButton();
 
         buttonRules.setText("Règles");
+        buttonRules.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonRulesActionPerformed(evt);
+            }
+        });
 
         labelGameMode.setText("Mode de jeu");
 
@@ -64,6 +86,13 @@ public class InitGame extends javax.swing.JPanel {
 
         editPlayers.setLayout(new javax.swing.BoxLayout(editPlayers, javax.swing.BoxLayout.Y_AXIS));
 
+        loadButton.setText("Charger");
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,7 +111,8 @@ public class InitGame extends javax.swing.JPanel {
                         .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ButtonPlay)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(loadButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -98,7 +128,9 @@ public class InitGame extends javax.swing.JPanel {
                             .addComponent(gameModeList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
                 .addGap(15, 15, 15)
-                .addComponent(ButtonPlay)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButtonPlay)
+                    .addComponent(loadButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -109,24 +141,42 @@ public class InitGame extends javax.swing.JPanel {
                 case 0:
                     this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
                     this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
                     break;
                 case 1:
                     this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
                     this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.gameMode = Tools.GameMode.TwoPlayersThreeBalls;
                     break;
                 case 2:
                     this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
                     this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
                     this.editPlayers.add(new EditPlayer("JoueurC", Color.YELLOW));
                     this.editPlayers.add(new EditPlayer("JoueurD", Color.GREEN));
+                    this.gameMode = Tools.GameMode.FourPlayersFiveBalls;
                     break;
             }
         this.updateUI();
     }//GEN-LAST:event_gameModeListItemStateChanged
 
     private void ButtonPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonPlayActionPerformed
-        this.mediator.initGame();
+        this.mediator.initGame(this.gameMode);
     }//GEN-LAST:event_ButtonPlayActionPerformed
+
+    private void buttonRulesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRulesActionPerformed
+        RulesDialog rulesDialog = new RulesDialog(new javax.swing.JFrame(), true);
+        rulesDialog.setTitle("Règles du Quits");
+        rulesDialog.setVisible(true);
+    }//GEN-LAST:event_buttonRulesActionPerformed
+
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+        int returnVal = fc.showOpenDialog(this);
+        
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            this.mediator.loadGame(file.getName());
+        }
+    }//GEN-LAST:event_loadButtonActionPerformed
 
     public ArrayList<EditPlayer> getEditsPlayers() {
         ArrayList<EditPlayer> tmp = new ArrayList<>();
@@ -149,5 +199,6 @@ public class InitGame extends javax.swing.JPanel {
     private javax.swing.JPanel editPlayers;
     private javax.swing.JComboBox<String> gameModeList;
     private javax.swing.JLabel labelGameMode;
+    private javax.swing.JButton loadButton;
     // End of variables declaration//GEN-END:variables
 }

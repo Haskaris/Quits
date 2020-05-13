@@ -40,6 +40,10 @@ public class Marble {
         return this.tile;
     }
     
+    public Point getPosition() {
+        return this.tile.getPosition();
+    }
+    
     /**
      * S'imprime dans la sortie stream
      * @param stream
