@@ -99,7 +99,7 @@
           <StringArray count="3">
             <StringItem index="0" value="2 joueurs 5 billes"/>
             <StringItem index="1" value="2 joueurs 3 billes"/>
-            <StringItem index="2" value="4 joueurs"/>
+            <StringItem index="2" value="4 joueurs 3 billes"/>
           </StringArray>
         </Property>
       </Properties>

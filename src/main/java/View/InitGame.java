@@ -92,7 +92,7 @@ public class InitGame extends javax.swing.JPanel {
             }
         });
 
-        gameModeList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2 joueurs 5 billes", "2 joueurs 3 billes", "4 joueurs" }));
+        gameModeList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2 joueurs 5 billes", "2 joueurs 3 billes", "4 joueurs 3 billes" }));
         gameModeList.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 gameModeListItemStateChanged(evt);
