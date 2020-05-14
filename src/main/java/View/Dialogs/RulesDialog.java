@@ -30,6 +30,8 @@ public class RulesDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form RulesDialog
+     * @param parent
+     * @param modal
      */
     public RulesDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -45,6 +47,8 @@ public class RulesDialog extends javax.swing.JDialog {
                 doClose(RET_CANCEL);
             }
         });
+        
+        super.setLocationRelativeTo(null);
     }
 
     /**
@@ -64,7 +68,24 @@ public class RulesDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         okButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        goalLabel = new javax.swing.JLabel();
+        modGame = new javax.swing.JLabel();
+        modGamePicture1 = new javax.swing.JLabel();
+        modGamePicture2 = new javax.swing.JLabel();
+        modGamePicture3 = new javax.swing.JLabel();
+        modGameLabel1 = new javax.swing.JLabel();
+        modGameLabel2 = new javax.swing.JLabel();
+        modGameLabel3 = new javax.swing.JLabel();
+        modGame7 = new javax.swing.JLabel();
+        movePicture1 = new javax.swing.JLabel();
+        movePicture2 = new javax.swing.JLabel();
+        movePicture3 = new javax.swing.JLabel();
+        modGameLabel4 = new javax.swing.JLabel();
+        modGameLabel5 = new javax.swing.JLabel();
+        modGameLabel6 = new javax.swing.JLabel();
+        modGameLabel7 = new javax.swing.JLabel();
+        modGameLabel8 = new javax.swing.JLabel();
+        modGameLabel9 = new javax.swing.JLabel();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -79,7 +100,78 @@ public class RulesDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel1.setText("<html><b>But du jeu :</b><br> \nAvoir deux billes restantes sur le plateau<br><br> \n<b>Comment sortir une bille :</b><br> \nPour sortir une bille, il faudra la déplacer dans le coin opposé à votre position de départ.<br>\nCe coin sera coloré de votre couleur.<br><br>\n<b>Déplacement des billes :</b>\n<br> Chaque bille se déplace en diagonale<br><br>\n<b>Déplacement des tuiles :</b><br>\nUn joueur peut déplacer une rangée de tuile si'il possède une bille sur cette dernière<br> Une rangée peut être déplacée si la tuile sortante ne possède pas de bille<br> Le déplacement se fait horizontalement ou verticalement<br> </html>");
+        goalLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        goalLabel.setText("<html><b>But du jeu :</b><br>  Avoir deux billes restantes sur le plateau en les<br>sortants grâce à la tuile colorée</html>");
+
+        modGame.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        modGame.setText("<html><b>Modes de jeux :</b></html>");
+
+        modGamePicture1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_2J5B.png"))); // NOI18N
+
+        modGamePicture2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_2J3B.png"))); // NOI18N
+
+        modGamePicture3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_4J3B.png"))); // NOI18N
+
+        modGameLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel1.setText("2 joueurs 5 billes");
+
+        modGameLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel2.setText("2 joueurs 3 billes");
+
+        modGameLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel3.setText("4 joueurs 3 billes");
+
+        modGame7.setText("<html><b>Déplacements :</b></html>");
+
+        movePicture1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_MB.png"))); // NOI18N
+        movePicture1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                movePicture1MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                movePicture1MouseExited(evt);
+            }
+        });
+
+        movePicture2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_ML_H.png"))); // NOI18N
+        movePicture2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                movePicture2MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                movePicture2MouseExited(evt);
+            }
+        });
+
+        movePicture3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_ML_V.png"))); // NOI18N
+        movePicture3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                movePicture3MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                movePicture3MouseExited(evt);
+            }
+        });
+
+        modGameLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel4.setText("Une rangée");
+
+        modGameLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel5.setText("Une rangée");
+
+        modGameLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel6.setText("Une bille");
+        modGameLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        modGameLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel7.setText("en diagonale");
+        modGameLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        modGameLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel8.setText("horizontalement");
+
+        modGameLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        modGameLabel9.setText("verticalement");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,18 +180,86 @@ public class RulesDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(goalLabel)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(modGame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(modGame7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(modGameLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(movePicture1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(movePicture2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(movePicture3))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(modGameLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(modGameLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(modGameLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(modGameLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(modGameLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(modGameLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(modGamePicture1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(modGamePicture2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(modGamePicture3))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(modGameLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(modGameLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(goalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(modGame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(modGamePicture1)
+                    .addComponent(modGamePicture2)
+                    .addComponent(modGamePicture3))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(modGameLabel1)
+                    .addComponent(modGameLabel3)
+                    .addComponent(modGameLabel2))
+                .addGap(18, 18, 18)
+                .addComponent(modGame7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(movePicture1)
+                    .addComponent(movePicture2)
+                    .addComponent(movePicture3))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(modGameLabel6)
+                    .addComponent(modGameLabel4)
+                    .addComponent(modGameLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(modGameLabel7)
+                    .addComponent(modGameLabel9)
+                    .addComponent(modGameLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(okButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         getRootPane().setDefaultButton(okButton);
@@ -117,6 +277,30 @@ public class RulesDialog extends javax.swing.JDialog {
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
+
+    private void movePicture1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movePicture1MouseEntered
+        this.movePicture1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_MB_A.png")));
+    }//GEN-LAST:event_movePicture1MouseEntered
+
+    private void movePicture1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movePicture1MouseExited
+        this.movePicture1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_MB.png")));
+    }//GEN-LAST:event_movePicture1MouseExited
+
+    private void movePicture2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movePicture2MouseEntered
+        this.movePicture2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_ML_H_A.png")));
+    }//GEN-LAST:event_movePicture2MouseEntered
+
+    private void movePicture2MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movePicture2MouseExited
+        this.movePicture2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_ML_H.png")));
+    }//GEN-LAST:event_movePicture2MouseExited
+
+    private void movePicture3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movePicture3MouseEntered
+        this.movePicture3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_ML_V_A.png")));
+    }//GEN-LAST:event_movePicture3MouseEntered
+
+    private void movePicture3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movePicture3MouseExited
+        this.movePicture3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_ML_V.png")));
+    }//GEN-LAST:event_movePicture3MouseExited
     
     private void doClose(int retStatus) {
         returnStatus = retStatus;
@@ -125,7 +309,24 @@ public class RulesDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel goalLabel;
+    private javax.swing.JLabel modGame;
+    private javax.swing.JLabel modGame7;
+    private javax.swing.JLabel modGameLabel1;
+    private javax.swing.JLabel modGameLabel2;
+    private javax.swing.JLabel modGameLabel3;
+    private javax.swing.JLabel modGameLabel4;
+    private javax.swing.JLabel modGameLabel5;
+    private javax.swing.JLabel modGameLabel6;
+    private javax.swing.JLabel modGameLabel7;
+    private javax.swing.JLabel modGameLabel8;
+    private javax.swing.JLabel modGameLabel9;
+    private javax.swing.JLabel modGamePicture1;
+    private javax.swing.JLabel modGamePicture2;
+    private javax.swing.JLabel modGamePicture3;
+    private javax.swing.JLabel movePicture1;
+    private javax.swing.JLabel movePicture2;
+    private javax.swing.JLabel movePicture3;
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
 

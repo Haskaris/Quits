@@ -34,6 +34,7 @@ public class VictoryDialog extends javax.swing.JDialog {
      */
     public VictoryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        
         initComponents();
 
         // Close the dialog when Esc is pressed
@@ -46,6 +47,7 @@ public class VictoryDialog extends javax.swing.JDialog {
                 doClose(DO_NOTHING);
             }
         });
+        super.setLocationRelativeTo(null);
     }
 
     /**

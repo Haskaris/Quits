@@ -5,6 +5,7 @@ import Global.Tools.AILevel;
 
 import Model.Players.*;
 import Model.Support.Board;
+import Model.Support.Marble;
 import Paterns.Observateur;
 import View.Dialogs.RulesDialog;
 import View.EditPlayer;
@@ -92,9 +93,8 @@ public class Mediator {
 
     /**
      * Évenement de clique de souris sur la ligne l et la colonne c
-     *
-     * @param l
-     * @param c
+     * @param c colonne où le clique a été effectué
+     * @param l ligne où le clique a été effectué
      */
     public void mouseClick(int c, int l) {
         board.playTurn(c, l);

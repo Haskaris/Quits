@@ -30,7 +30,7 @@ public class GraphicInterface implements Runnable, Observateur {
     Mediator mediator;
     
     JFrame frame;
-    BoardGraphic boardGraphic;
+    public BoardGraphic boardGraphic;
     
     boolean maximized;
     

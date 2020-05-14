@@ -24,6 +24,7 @@ public class MainGraphicInterface extends JFrame {
         
         super.add(initGame);
         super.pack();
+        super.setLocationRelativeTo(null);
         super.setVisible(true);
     }
     

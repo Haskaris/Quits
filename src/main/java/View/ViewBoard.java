@@ -6,9 +6,12 @@ import Model.Support.Board;
 import Model.Support.Tile;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import javax.swing.Timer;
 
 public class ViewBoard extends BoardGraphic {
 
@@ -165,7 +168,6 @@ public class ViewBoard extends BoardGraphic {
                     tracer(arrowDown, widthTile * rowOrColIndex + (widthTile / 2), 0, widthTile, heightTile / 2);
                     break;
                 case N:
-
                     rowOrColIndex = p.x;
                     //Display a down arrow on the upper part of the board
                     tracer(arrowUp, widthTile * rowOrColIndex + (widthTile / 2), (int) (widthTile * 5.5), widthTile, heightTile / 2);
@@ -184,7 +186,6 @@ public class ViewBoard extends BoardGraphic {
                     break;
             }
         }
-
     }
 
     @Override
