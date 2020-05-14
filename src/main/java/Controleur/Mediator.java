@@ -195,8 +195,18 @@ public class Mediator {
         VD.setVictoryText(this.board.getCurrentPlayer().name + " A GAGNÉ !!");
         VD.setVisible(true);
         
-        if (VD.getReturnStatus() == 1) {
-            this.resetGame();
+        switch(VD.getReturnStatus()) {
+            case 0:
+                this.quitGame();
+                break;
+            case 1:
+                this.resetGame();
+                break;
+            case 2:
+                //Well, we do nothing :x
+                break;
+            default:
+                System.out.println("AH, une erreure innatendue a spawn");
         }
     }
 }

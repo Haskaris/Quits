@@ -19,13 +19,18 @@ import javax.swing.KeyStroke;
  */
 public class VictoryDialog extends javax.swing.JDialog {
 
+    public static final int QUIT = 0;
     /**
      * A return status code - returned if OK button has been pressed
      */
-    public static final int RET_OK = 1;
+    public static final int PLAY_AGAIN = 1;
+    
+    public static final int DO_NOTHING = 2;
 
     /**
      * Creates new form VictoryDialog
+     * @param parent
+     * @param modal
      */
     public VictoryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -38,13 +43,13 @@ public class VictoryDialog extends javax.swing.JDialog {
         ActionMap actionMap = getRootPane().getActionMap();
         actionMap.put(cancelName, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                doClose(RET_OK);
+                doClose(DO_NOTHING);
             }
         });
     }
 
     /**
-     * @return the return status of this dialog - one of RET_OK or RET_CANCEL
+     * @return the return status of this dialog - one of PLAY_AGAIN or RET_CANCEL
      */
     public int getReturnStatus() {
         return returnStatus;
@@ -59,8 +64,9 @@ public class VictoryDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        okButton = new javax.swing.JButton();
+        playAgainButton = new javax.swing.JButton();
         victoryText = new javax.swing.JLabel();
+        quitButton = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -68,10 +74,19 @@ public class VictoryDialog extends javax.swing.JDialog {
             }
         });
 
-        okButton.setText("FÉLICITATION");
-        okButton.addActionListener(new java.awt.event.ActionListener() {
+        playAgainButton.setText("Rejouer");
+        playAgainButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                okButtonActionPerformed(evt);
+                playAgainButtonActionPerformed(evt);
+            }
+        });
+
+        victoryText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        quitButton.setText("Quitter");
+        quitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitButtonActionPerformed(evt);
             }
         });
 
@@ -81,36 +96,45 @@ public class VictoryDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(victoryText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(okButton, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                        .addComponent(playAgainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(victoryText, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                .addComponent(victoryText, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(okButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(playAgainButton)
+                    .addComponent(quitButton))
                 .addContainerGap())
         );
 
-        getRootPane().setDefaultButton(okButton);
+        getRootPane().setDefaultButton(playAgainButton);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-        doClose(RET_OK);
-    }//GEN-LAST:event_okButtonActionPerformed
+    private void playAgainButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playAgainButtonActionPerformed
+        doClose(PLAY_AGAIN);
+    }//GEN-LAST:event_playAgainButtonActionPerformed
 
     /**
      * Closes the dialog
      */
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
-        doClose(RET_OK);
+        doClose(DO_NOTHING);
     }//GEN-LAST:event_closeDialog
+
+    private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
+        doClose(QUIT);
+    }//GEN-LAST:event_quitButtonActionPerformed
     
     private void doClose(int retStatus) {
         returnStatus = retStatus;
@@ -119,11 +143,12 @@ public class VictoryDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton okButton;
+    private javax.swing.JButton playAgainButton;
+    private javax.swing.JButton quitButton;
     private javax.swing.JLabel victoryText;
     // End of variables declaration//GEN-END:variables
 
-    private int returnStatus = RET_OK;
+    private int returnStatus = PLAY_AGAIN;
 
     public void setVictoryText(String string) {
         this.victoryText.setText(string);

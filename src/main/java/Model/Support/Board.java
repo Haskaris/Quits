@@ -391,6 +391,9 @@ public class Board {
     }
 
     public void reset() {
+        //J'enlève tous les coups qui ont été fait
+        this.history = new History(this);
+        
         //J'enlève toutes les billes du plateau
         for(int i = 0; i < 5; i++) {
             for(int j = 0; j < 5; j++) {
