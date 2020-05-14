@@ -107,7 +107,7 @@ public class Mediator {
     }
     
     public void resetGame() {
-        this.board.reset();;
+        this.board.reset();
         this.board.initFromGameMode();
         this.graphicInterface.update();
     }

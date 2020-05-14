@@ -400,6 +400,11 @@ public class Board {
             }
         }
         
+        //J'enlève toutes les billes de chaque joueur
+        this.players.forEach((p) -> {
+            p.getMarbles().clear();
+        });
+        
         //Je remets le joueur courant au début
         this.currentPlayer = 0;
     }
