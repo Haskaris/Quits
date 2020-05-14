@@ -5,17 +5,14 @@
  */
 package View;
 
-import View.Dialogs.RulesDialog;
 import View.Filters.SaveFilter;
 import Controleur.Mediator;
 import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 
 /**
  *
@@ -34,7 +31,7 @@ public class InitGame extends javax.swing.JPanel {
      * @param frame
      * @param mediateur
      */
-    public InitGame(MainGraphicInterface frame, Mediator mediateur) {
+    InitGame(MainGraphicInterface frame, Mediator mediateur) {
         initComponents();
         this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
         this.listOfEditPlayers = new ArrayList<>();
@@ -182,9 +179,7 @@ public class InitGame extends javax.swing.JPanel {
     }//GEN-LAST:event_ButtonPlayActionPerformed
 
     private void buttonRulesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRulesActionPerformed
-        RulesDialog rulesDialog = new RulesDialog(new javax.swing.JFrame(), true);
-        rulesDialog.setTitle("Règles du Quits");
-        rulesDialog.setVisible(true);
+        this.mediator.rules();
     }//GEN-LAST:event_buttonRulesActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
@@ -213,6 +208,20 @@ public class InitGame extends javax.swing.JPanel {
             }
         }
         return tmp;
+    }
+    
+    public void reset() {
+        this.editPlayers.removeAll();
+        this.listOfEditPlayers.clear();
+        
+        //Ajout des editPlayers dans la liste de sauvegarde
+        this.listOfEditPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur B", Color.RED));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur C", Color.YELLOW));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur D", Color.GREEN));
+        
+        this.editPlayers.add(this.listOfEditPlayers.get(0));
+        this.editPlayers.add(this.listOfEditPlayers.get(1));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

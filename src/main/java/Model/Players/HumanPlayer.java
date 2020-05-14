@@ -109,7 +109,10 @@ public class HumanPlayer extends Player {
                     anchorSource = new Point(column, 4);
                 }
                 
-                Move move = new Move(new Point(Tools.findAppropriateCoordinatesForTileShifts(column), Tools.findAppropriateCoordinatesForTileShifts(line)), d, this);
+                Move move = new Move(
+                        new Point(Tools.findAppropriateCoordinatesForTileShifts(column),
+                                Tools.findAppropriateCoordinatesForTileShifts(line)), 
+                                d, this);
                 
                 if (moveExists(move, board.allPotentialShifts)) {
                     board.resetAvailableTiles();

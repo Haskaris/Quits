@@ -6,24 +6,25 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class MainGraphicInterface extends JFrame {
-    private final InitGame initGame;
+    private InitGame initGame;
     private final Mediator mediator;
     
+    /**
+     * Constructeur
+     */
     public MainGraphicInterface() {
         super("Quits");
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.mediator = new Mediator(this);
         
         super.setMinimumSize(new Dimension(675, 225));
-        initGame = new InitGame(this, mediator);
+        super.setSize(675, 225);
+        
+        this.initGame = new InitGame(this, mediator);
         
         super.add(initGame);
         super.pack();
         super.setVisible(true);
-    }
-    
-    public ArrayList<EditPlayer> getEditsPlayers() {
-        return this.initGame.getEditsPlayers();
     }
     
     /**
@@ -36,12 +37,22 @@ public class MainGraphicInterface extends JFrame {
     }
     
     /**
-     * Uptade the minimum size
+     * Mets à jour la taille actuelle de la fenêtre et sa taille minimum
      * @param minWidth int - minimum width the frame can be
      * @param minHeight int - minimum height the frame can be
      */
     public void updateSize(int minWidth, int minHeight) {
         this.setMinimumSize(new Dimension(minWidth, minHeight));
-        this.setSize(new Dimension(minWidth, minHeight));
+        this.setSize(minWidth, minHeight);
+    }
+    
+    ///Getters
+    public ArrayList<EditPlayer> getEditsPlayers() {
+        return this.initGame.getEditsPlayers();
+    }
+
+    public void reset() {
+        this.initGame.reset();
+        this.setVisible(true);
     }
 }

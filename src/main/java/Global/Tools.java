@@ -170,7 +170,6 @@ public class Tools {
     }
 
     public static int findAppropriateCoordinatesForTileShifts(int value) {
-
         if (value > 4) {
             return 0;
         }

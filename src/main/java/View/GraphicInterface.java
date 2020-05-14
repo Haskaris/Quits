@@ -6,19 +6,14 @@
 package View;
 
 import View.Action.MouseAction;
-import Controleur.FileGestion;
 import Controleur.Mediator;
 
-import Model.Players.Player;
-import Model.Support.Board;
 
 import Paterns.Observateur;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -45,7 +40,9 @@ public class GraphicInterface implements Runnable, Observateur {
     
     ArrayList<JLabel> names;
     
-    Box totalMenu, boxPlayer;
+    JLabel nameLabel;
+    
+    Box totalMenu, boxPlayer, boxPlayerAndBoard;
     
     
     GraphicInterface(Mediator m) {
@@ -76,6 +73,8 @@ public class GraphicInterface implements Runnable, Observateur {
         this.frame = new JFrame("Quits");
         this.inGameMenu = new InGameMenu(this.mediator);
 
+        this.boxPlayerAndBoard = Box.createVerticalBox();
+        
         this.createPlayers();
         this.createMenu();
         this.createBoard();
@@ -83,9 +82,11 @@ public class GraphicInterface implements Runnable, Observateur {
         // Mise en place de l'interface
         //j.ajouteObservateur(this);
         //chrono.start();
-
+        frame.add(boxPlayerAndBoard);
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 300);
+        frame.setSize(500, 485);
+        frame.setMinimumSize(new Dimension(500, 485));
         frame.setVisible(true);
         this.update();
     }
@@ -126,32 +127,46 @@ public class GraphicInterface implements Runnable, Observateur {
     }
     
     private void createPlayers() {
-        boxPlayer = Box.createVerticalBox();
+        boxPlayer = Box.createHorizontalBox();
+        
+        nameLabel = new JLabel("");
 
-        this.mediator.getBoard().getPlayers().forEach((player) -> {
+        /*this.mediator.getBoard().getPlayers().forEach((player) -> {
             JLabel titre = new JLabel(player.name);
             titre.setAlignmentX(Component.CENTER_ALIGNMENT);
             boxPlayer.add(titre);
             this.names.add(titre);
         });
         
-        this.frame.add(boxPlayer, BorderLayout.EAST);
+        this.frame.add(boxPlayer, BorderLayout.EAST);*/
+        
+        this.boxPlayer.add(new JLabel("Tour de "));
+        this.boxPlayer.add(nameLabel);
+        this.boxPlayerAndBoard.add(boxPlayer, BorderLayout.NORTH);
+        
     }
     
     private void createBoard() {
         this.boardGraphic = new ViewBoard(this.mediator.getBoard());
         this.boardGraphic.addMouseListener(new MouseAction(this.boardGraphic, this.mediator));
-        this.frame.add(this.boardGraphic);
+        this.boxPlayerAndBoard.add(this.boardGraphic, BorderLayout.SOUTH);
     }
     
     public void update() {
         boardGraphic.repaint();
         this.undo.setEnabled(this.mediator.canUndo());
         this.redo.setEnabled(this.mediator.canRedo());
-        this.names.forEach((name) -> {
+        /*this.names.forEach((name) -> {
             name.setForeground(Color.black);
         });
-        this.names.get(this.mediator.getBoard().currentPlayer).setForeground(Color.red);
+        this.names.get(this.mediator.getBoard().currentPlayer).setForeground(Color.red);*/
+        nameLabel.setText(this.mediator.getBoard().getCurrentPlayer().name);
+        nameLabel.setForeground(this.mediator.getBoard().getCurrentPlayer().color);
+    }
+    
+    public void dispose() {
+        this.frame.setVisible(false);
+        this.frame.dispose();
     }
 
     @Override

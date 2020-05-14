@@ -77,9 +77,9 @@ public class Board {
                 this.players.get(3).setStartPoint(Tools.Direction.SE);
                 break;
         }
-        for (Player p : this.players) {
+        this.players.forEach((p) -> {
             init3Marbles(p);
-        }
+        });
     }
 
     /**
@@ -137,8 +137,8 @@ public class Board {
     }
 
     /**
-     * Clot un tour. Verifie les conditions de victoire et passe au joueur
-     * suivant
+     * Clot un tour.Verifie les conditions de victoire et passe au joueur suivant
+     * @return 
      */
     public boolean endTurn() {
         boolean isEnded = false;
@@ -209,6 +209,11 @@ public class Board {
         }
     }
 
+    /**
+     * Retourne la grille
+     *
+     * @return Tile[][]
+     */
     public Tile[][] getGrid() {
         return grid;
     }
@@ -275,13 +280,6 @@ public class Board {
         return getPlayer(currentPlayer);
     }
 
-    /**
-     * Retourne la grille
-     *
-     * @return Tile[][]
-     */
-
-    //Plus simple si on utilise un arrayList non?
     /**
      * Ajoute un joueur à la liste des joueurs
      *

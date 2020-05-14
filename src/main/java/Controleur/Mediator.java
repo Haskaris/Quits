@@ -6,6 +6,7 @@ import Global.Tools.AILevel;
 import Model.Players.*;
 import Model.Support.Board;
 import Paterns.Observateur;
+import View.Dialogs.RulesDialog;
 import View.EditPlayer;
 
 import View.GraphicInterface;
@@ -27,8 +28,6 @@ public class Mediator {
      * @param mainGraphicInterface Interface permettant de faire la liaison
      */
     public Mediator(MainGraphicInterface mainGraphicInterface) {
-        this.board = new Board();
-        this.board.setMediator(this);
         this.fileGestion = new FileGestion(this);
         this.mainGraphicInterface = mainGraphicInterface;
     }
@@ -78,6 +77,8 @@ public class Mediator {
      */
     public void initGame(Tools.GameMode gameMode) {
         //Prépare le plateau
+        this.board = new Board();
+        this.board.setMediator(this);
         ArrayList<EditPlayer> tmp = this.mainGraphicInterface.getEditsPlayers();
         tmp.forEach((e) -> {
             this.addPlayer(e.playerName, e.playerColor, e.aiLevel);
@@ -192,5 +193,16 @@ public class Mediator {
     
     public Player getPlayer(int index) {
         return this.board.getPlayer(index);
+    }
+
+    public void newGame() {
+        this.mainGraphicInterface.reset();
+        this.graphicInterface.dispose();
+    }
+
+    public void rules() {
+        RulesDialog rulesDialog = new RulesDialog(new javax.swing.JFrame(), true);
+        rulesDialog.setTitle("Règles du Quits");
+        rulesDialog.setVisible(true);
     }
 }
