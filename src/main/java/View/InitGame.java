@@ -11,6 +11,7 @@ import Controleur.Mediator;
 import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
@@ -24,7 +25,7 @@ public class InitGame extends javax.swing.JPanel {
 
     Mediator mediator;
     Tools.GameMode gameMode;
-    JFrame frame;
+    MainGraphicInterface frame;
     private final JFileChooser fc;
     
     /**
@@ -32,7 +33,7 @@ public class InitGame extends javax.swing.JPanel {
      * @param frame
      * @param mediateur
      */
-    public InitGame(JFrame frame, Mediator mediateur) {
+    public InitGame(MainGraphicInterface frame, Mediator mediateur) {
         initComponents();
         this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
         this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
@@ -63,6 +64,8 @@ public class InitGame extends javax.swing.JPanel {
         editPlayers = new javax.swing.JPanel();
         loadButton = new javax.swing.JButton();
 
+        setMinimumSize(new java.awt.Dimension(643, 158));
+
         buttonRules.setText("Règles");
         buttonRules.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,7 +91,7 @@ public class InitGame extends javax.swing.JPanel {
 
         editPlayers.setLayout(new javax.swing.BoxLayout(editPlayers, javax.swing.BoxLayout.Y_AXIS));
 
-        loadButton.setText("Charger");
+        loadButton.setText("Charger une partie");
         loadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadButtonActionPerformed(evt);
@@ -112,9 +115,9 @@ public class InitGame extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ButtonPlay)
+                        .addComponent(loadButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(loadButton)))
+                        .addComponent(ButtonPlay)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -133,7 +136,7 @@ public class InitGame extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonPlay)
                     .addComponent(loadButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -141,21 +144,24 @@ public class InitGame extends javax.swing.JPanel {
         this.editPlayers.removeAll();
             switch(this.gameModeList.getSelectedIndex()) {
                 case 0:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.editPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
+                    this.editPlayers.add(new EditPlayer("Joueur B", Color.RED));
                     this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
+                    this.frame.updateSize(675, 225);
                     break;
                 case 1:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.editPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
+                    this.editPlayers.add(new EditPlayer("Joueur B", Color.RED));
                     this.gameMode = Tools.GameMode.TwoPlayersThreeBalls;
+                    this.frame.updateSize(675, 225);
                     break;
                 case 2:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
-                    this.editPlayers.add(new EditPlayer("JoueurC", Color.YELLOW));
-                    this.editPlayers.add(new EditPlayer("JoueurD", Color.GREEN));
+                    this.editPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
+                    this.editPlayers.add(new EditPlayer("Joueur B", Color.RED));
+                    this.editPlayers.add(new EditPlayer("Joueur C", Color.YELLOW));
+                    this.editPlayers.add(new EditPlayer("Joueur D", Color.GREEN));
                     this.gameMode = Tools.GameMode.FourPlayersFiveBalls;
+                    this.frame.updateSize(675, 325);
                     break;
             }
         this.updateUI();

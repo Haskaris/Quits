@@ -1,6 +1,7 @@
 package View;
 
 import Controleur.Mediator;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -13,7 +14,7 @@ public class MainGraphicInterface extends JFrame {
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.mediator = new Mediator(this);
         
-        //this.setMinimumSize(new Dimension(500,500));
+        super.setMinimumSize(new Dimension(675, 225));
         initGame = new InitGame(this, mediator);
         
         super.add(initGame);
@@ -32,5 +33,15 @@ public class MainGraphicInterface extends JFrame {
         //Pour "fermer" la fenêtre
         this.setVisible(false);
         GraphicInterface.start(this.mediator);
+    }
+    
+    /**
+     * Uptade the minimum size
+     * @param minWidth int - minimum width the frame can be
+     * @param minHeight int - minimum height the frame can be
+     */
+    public void updateSize(int minWidth, int minHeight) {
+        this.setMinimumSize(new Dimension(minWidth, minHeight));
+        this.setSize(new Dimension(minWidth, minHeight));
     }
 }
