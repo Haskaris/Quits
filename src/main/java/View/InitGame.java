@@ -27,6 +27,7 @@ public class InitGame extends javax.swing.JPanel {
     Tools.GameMode gameMode;
     MainGraphicInterface frame;
     private final JFileChooser fc;
+    private ArrayList<EditPlayer> listOfEditPlayers;
     
     /**
      * Creates new form InitGameAuto
@@ -36,8 +37,17 @@ public class InitGame extends javax.swing.JPanel {
     public InitGame(MainGraphicInterface frame, Mediator mediateur) {
         initComponents();
         this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
-        this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-        this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+        this.listOfEditPlayers = new ArrayList<>();
+        
+        //Ajout des editPlayers dans la liste de sauvegarde
+        this.listOfEditPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur B", Color.RED));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur C", Color.YELLOW));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur D", Color.GREEN));
+        
+        this.editPlayers.add(this.listOfEditPlayers.get(0));
+        this.editPlayers.add(this.listOfEditPlayers.get(1));
+        
         this.mediator = mediateur;
         this.frame = frame;
         
@@ -144,22 +154,22 @@ public class InitGame extends javax.swing.JPanel {
         this.editPlayers.removeAll();
             switch(this.gameModeList.getSelectedIndex()) {
                 case 0:
-                    this.editPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("Joueur B", Color.RED));
+                    this.editPlayers.add(this.listOfEditPlayers.get(0));
+                    this.editPlayers.add(this.listOfEditPlayers.get(1));
                     this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
                     this.frame.updateSize(675, 225);
                     break;
                 case 1:
-                    this.editPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("Joueur B", Color.RED));
+                    this.editPlayers.add(this.listOfEditPlayers.get(0));
+                    this.editPlayers.add(this.listOfEditPlayers.get(1));
                     this.gameMode = Tools.GameMode.TwoPlayersThreeBalls;
                     this.frame.updateSize(675, 225);
                     break;
                 case 2:
-                    this.editPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("Joueur B", Color.RED));
-                    this.editPlayers.add(new EditPlayer("Joueur C", Color.YELLOW));
-                    this.editPlayers.add(new EditPlayer("Joueur D", Color.GREEN));
+                    this.editPlayers.add(this.listOfEditPlayers.get(0));
+                    this.editPlayers.add(this.listOfEditPlayers.get(1));
+                    this.editPlayers.add(this.listOfEditPlayers.get(2));
+                    this.editPlayers.add(this.listOfEditPlayers.get(3));
                     this.gameMode = Tools.GameMode.FourPlayersFiveBalls;
                     this.frame.updateSize(675, 325);
                     break;
@@ -186,6 +196,10 @@ public class InitGame extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
+    /**
+     * Permet de récupérer la liste des EditPlayers affiché dans le panel
+     * @return Retourne la liste des editPlayers affiché dans le panel
+     */
     public ArrayList<EditPlayer> getEditsPlayers() {
         ArrayList<EditPlayer> tmp = new ArrayList<>();
         //Je récupère tous le contenu de mon panel editPlayers
