@@ -17,14 +17,18 @@ import java.io.IOException;
 public class FileGestion {
     private final Mediator mediator;
     
-    public FileGestion(Mediator mediator) {
+    /**
+     * Constructeur
+     * @param mediator 
+     */
+    FileGestion(Mediator mediator) {
         this.mediator = mediator;
     }
     
     /**
      * Charge une partie
-     * @param fileName
-     * @return 
+     * @param fileName Nom du fichier de la partie à charger
+     * @return Plateau de la partie chargée
      */
     public Board loadGame(String fileName){
         try {
@@ -36,8 +40,8 @@ public class FileGestion {
     }
     
     /**
-     * Enregistre une partie
-     * @param fileName
+     * Sauvegarde une partie
+     * @param fileName Nom de la partie à sauvegarder
      */
     public void saveGame(String fileName) {
         try {
@@ -48,7 +52,7 @@ public class FileGestion {
     }
     
     /**
-     * Fermeture du jeu
+     * Ferme le jeu
      */
     public void quitGame(){
         try {

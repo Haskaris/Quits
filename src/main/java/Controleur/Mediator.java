@@ -22,6 +22,10 @@ public class Mediator {
     private MainGraphicInterface mainGraphicInterface;
     private FileGestion fileGestion;
 
+    /**
+     * Constructeur
+     * @param mainGraphicInterface Interface permettant de faire la liaison
+     */
     public Mediator(MainGraphicInterface mainGraphicInterface) {
         this.board = new Board();
         this.board.setMediator(this);
@@ -30,68 +34,9 @@ public class Mediator {
     }
 
     /**
-     * Créée un nouveau joueur humain
-     * @param playerName
-     * @param color
-     * @return Player
+     * Charge une partie
+     * @param fileName Nom du fichier de la partie à charger
      */
-    private Player newPlayerHuman(String playerName, Color color) {
-        return new HumanPlayer(playerName, color);
-    }
-
-    /**
-     * Créée une nouvelle IA facile
-     * @param playerName
-     * @param color
-     * @return Player
-     */
-    private Player newPlayerAIEeasy(String playerName, Color color) {
-        return new AIEasyPlayer(playerName, color);
-    }
-
-    /**
-     * Créée une nouvelle IA normale
-     * @param playerName
-     * @param color
-     * @return Player
-     */
-    private Player newPlayerAIMedium(String playerName, Color color) {
-        return new AINormalPlayer(playerName, color);
-    }
-
-    /**
-     * Créée une nouvelle IA difficile
-     * @param playerName
-     * @param color
-     * @return Player
-     */
-    private Player newPlayerAIHard(String playerName, Color color) {
-        return new AIHardPlayer(playerName, color);
-    }
-
-    /**
-     * Ajoute un nouveau joueur au plateau
-     * @param playerName
-     * @param color
-     * @param level 
-     */
-    private void addPlayer(String playerName, Color color, AILevel level) {
-        switch (level) {
-            case Player:
-                this.board.addPlayer(newPlayerHuman(playerName, color));
-                break;
-            case Easy:
-                this.board.addPlayer(newPlayerAIEeasy(playerName, color));
-                break;
-            case Hard:
-                this.board.addPlayer(newPlayerAIHard(playerName, color));
-                break;
-            case Medium:
-                this.board.addPlayer(newPlayerAIMedium(playerName, color));
-                break;
-        }
-    }
-
     public void loadGame(String fileName) {
         this.board = this.fileGestion.loadGame(fileName);
         this.board.setMediator(this);
@@ -102,28 +47,30 @@ public class Mediator {
         }
     }
 
+    /**
+     * Sauvegarde une partie
+     * @param fileName Nom de la partie à sauvegarder
+     */
     public void saveGame(String fileName) {
         this.fileGestion.saveGame(fileName);
     }
     
+    /**
+     * Réinitialise la partie
+     */
     public void resetGame() {
         this.board.reset();
         this.board.initFromGameMode();
         this.graphicInterface.update();
     }
     
+    /**
+     * Quitte le jeu
+     */
     public void quitGame() {
         this.fileGestion.quitGame();
     }
     
-    public void setGraphicInterface(GraphicInterface view) {
-        this.graphicInterface = view;
-    }
-
-    public void setMainGraphicInterface(MainGraphicInterface view) {
-        this.mainGraphicInterface = view;
-    }
-
     /**
      * Prépare le plateau, change l'interface et lance la partie
      *
@@ -151,22 +98,6 @@ public class Mediator {
     public void mouseClick(int c, int l) {
         board.playTurn(c, l);
     }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-    
-    public Board getBoard() {
-        return this.board;
-    }
-
-    public GraphicInterface getGraphicInterface() {
-        return this.graphicInterface;
-    }
-    
-    public Player getPlayer(int index) {
-        return this.board.getPlayer(index);
-    }
     
     public void addObservateur(Observateur a) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -190,6 +121,9 @@ public class Mediator {
         this.graphicInterface.update();
     }
 
+    /**
+     * Evenement de fin de jeu
+     */
     public void endGame() {
         VictoryDialog VD = new VictoryDialog(this.mainGraphicInterface, true);
         VD.setVictoryText(this.board.getCurrentPlayer().name + " A GAGNÉ !!");
@@ -208,5 +142,55 @@ public class Mediator {
             default:
                 System.out.println("AH, une erreure innatendue a spawn");
         }
+    }
+    
+    ///Private
+    /**
+     * Ajoute un nouveau joueur au plateau
+     * @param playerName Nom du joueur
+     * @param color Couleur du joueur
+     * @param level Type du joueur
+     */
+    private void addPlayer(String playerName, Color color, AILevel level) {
+        switch (level) {
+            case Player:
+                this.board.addPlayer(new HumanPlayer(playerName, color));
+                break;
+            case Easy:
+                this.board.addPlayer(new AIEasyPlayer(playerName, color));
+                break;
+            case Hard:
+                this.board.addPlayer(new AINormalPlayer(playerName, color));
+                break;
+            case Medium:
+                this.board.addPlayer(new AIHardPlayer(playerName, color));
+                break;
+        }
+    }
+    
+    // Setters
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+    
+    public void setGraphicInterface(GraphicInterface view) {
+        this.graphicInterface = view;
+    }
+
+    public void setMainGraphicInterface(MainGraphicInterface view) {
+        this.mainGraphicInterface = view;
+    }
+
+    //Getters
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public GraphicInterface getGraphicInterface() {
+        return this.graphicInterface;
+    }
+    
+    public Player getPlayer(int index) {
+        return this.board.getPlayer(index);
     }
 }
