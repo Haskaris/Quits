@@ -409,4 +409,8 @@ public class Board {
         //Je remets le joueur courant au début
         this.currentPlayer = 0;
     }
+
+    public Mediator getMediator() {
+        return this.mediator;
+    }
 }

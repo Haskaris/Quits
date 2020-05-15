@@ -162,6 +162,7 @@ public class GraphicInterface implements Runnable, Observateur {
         });
         this.names.get(this.mediator.getBoard().currentPlayer).setForeground(Color.red);*/
         nameLabel.setText(this.mediator.getBoard().getCurrentPlayer().name);
+        System.err.println(this.mediator.getBoard().getCurrentPlayer().name);
         nameLabel.setForeground(this.mediator.getBoard().getCurrentPlayer().color);
     }
     

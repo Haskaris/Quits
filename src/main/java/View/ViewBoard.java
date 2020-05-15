@@ -5,13 +5,12 @@ import Model.Move;
 import Model.Support.Board;
 import Model.Support.Tile;
 import java.awt.Color;
+import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import javax.swing.Timer;
 
 public class ViewBoard extends BoardGraphic {
 
@@ -33,9 +32,10 @@ public class ViewBoard extends BoardGraphic {
 
     private void initTile() {
         tileImages = new ArrayList<>();
-        tileImages.add(readImage("Tuile1"));
-        tileImages.add(readImage("Tuile2"));
-        tileImages.add(readImage("Tuile3"));
+        tileImages.add(readImage("Tile1"));
+        tileImages.add(readImage("Tile2"));
+        tileImages.add(readImage("Tile3"));
+        tileImages.add(readImage("Tile4"));
         selectedTile = readImage("SelectedTile");
         arrowUp = readImage("ArrowUp");
         arrowRight = readImage("ArrowRight");
@@ -126,7 +126,7 @@ public class ViewBoard extends BoardGraphic {
                     drawRect(currentColor, x, y, widthTile, heightTile);
                 }
 
-                if (currentTile.hasMarble()) {
+                if (currentTile.hasMarble() && currentTile.getMarble() != selectedMarble) {
                     if (board.availableTiles[i][j] == 1) {//Selected marble
                         tracer(selectedTile, x, y, widthTile, heightTile);
                     }
@@ -186,7 +186,21 @@ public class ViewBoard extends BoardGraphic {
                     break;
             }
         }
+        
+        try {
+            if (selectedMarble != null && getMousePosition() != null) {
+                int mousePosX = getMousePosition().x;
+                int mousePosY = getMousePosition().y;
+                drawBall(selectedMarble.getColor(), mousePosX-widthTile/2, mousePosY-heightTile/2, widthTile, heightTile);
+                tracer(defaultMarble, mousePosX-widthTile/2, mousePosY-heightTile/2, widthTile, heightTile);
+            }
+        } catch (HeadlessException ex) {}
     }
+    
+    /*@Override
+    public void updateSelectedMarble() {
+        
+    }*/
 
     @Override
     public int getHeightTile() {
@@ -222,6 +236,11 @@ public class ViewBoard extends BoardGraphic {
     @Override
     public void changeStep() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.repaint();
     }
 
 }

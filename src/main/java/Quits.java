@@ -1,6 +1,7 @@
 import Global.Properties;
 import Model.Support.Board;
 import View.MainGraphicInterface;
+import java.awt.EventQueue;
 
 import java.io.IOException;
 
@@ -14,6 +15,8 @@ public class Quits {
      */
     public static void main(String[] args) throws IOException {
         Properties.load();
-        MainGraphicInterface mainGraphicInterface = new MainGraphicInterface();
+        EventQueue.invokeLater(() -> {
+            MainGraphicInterface mainGraphicInterface = new MainGraphicInterface();
+        });
     }
 }

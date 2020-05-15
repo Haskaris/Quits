@@ -5,13 +5,13 @@
  */
 package View;
 
+import Model.Support.Marble;
 import Paterns.Observateur;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,9 +20,11 @@ import javax.swing.*;
  *
  * @author Mathis
  */
-public abstract class BoardGraphic extends JComponent implements Observateur {
+public abstract class BoardGraphic extends JComponent implements Observateur, ActionListener {
 
     Graphics2D drawable;
+    
+    Marble selectedMarble;
 
     protected ImageQuits readImage(InputStream in) throws IOException {
         return new ImageQuits(ImageIO.read(in));
@@ -38,13 +40,13 @@ public abstract class BoardGraphic extends JComponent implements Observateur {
         h = (int) (h * ratio);
 
         drawable.fillOval(x, y, w, h);
-        drawable.drawOval(x, y, w, h);
+        //drawable.drawOval(x, y, w, h);
     }
 
     protected void drawRect(Color c, int x, int y, int l, int h) {
         drawable.setPaint(c);
         drawable.fillRect(x, y, l, h);
-        drawable.drawRect(x, y, l, h);
+        //drawable.drawRect(x, y, l, h);
     }
 
     protected void tracer(ImageQuits i, int x, int y, int l, int h) {
@@ -88,4 +90,10 @@ public abstract class BoardGraphic extends JComponent implements Observateur {
     public abstract void updateDirection(int dL, int dC);
 
     public abstract void changeStep();
+    
+    //public abstract void updateSelectedMarble();
+    
+    public void setSelectedMarble(Marble selectedMarble) {
+        this.selectedMarble = selectedMarble;
+    }
 }

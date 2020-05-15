@@ -49,6 +49,9 @@ public class EditPlayer extends javax.swing.JPanel {
             }
         });
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField1KeyTyped(evt);
             }
@@ -115,12 +118,16 @@ public class EditPlayer extends javax.swing.JPanel {
     }//GEN-LAST:event_aiLevelListItemStateChanged
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        //TODO : Je n'arrive pas à la supprimer
+        
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-        this.playerName = jTextField1.getText();
+        
     }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        this.playerName = jTextField1.getText();
+    }//GEN-LAST:event_jTextField1KeyReleased
 
     public void updateButtonColor(Color c) {
         this.jButton.setBackground(c);

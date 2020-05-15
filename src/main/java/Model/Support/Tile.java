@@ -23,7 +23,7 @@ public class Tile {
      */
     private void setRandomIndexOfColor() {
         Random random = new Random();
-        this.setIndexOfColor(random.nextInt(3));
+        this.setIndexOfColor(random.nextInt(4));
     }
     
     /**

@@ -13,9 +13,13 @@ import View.EditPlayer;
 import View.GraphicInterface;
 import View.MainGraphicInterface;
 import View.Dialogs.VictoryDialog;
+import View.ViewBoard;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.Timer;
 
 public class Mediator {
 
@@ -23,6 +27,8 @@ public class Mediator {
     private GraphicInterface graphicInterface;
     private MainGraphicInterface mainGraphicInterface;
     private FileGestion fileGestion;
+    
+    private Timer timer;
 
     /**
      * Constructeur
@@ -204,5 +210,16 @@ public class Mediator {
         RulesDialog rulesDialog = new RulesDialog(new javax.swing.JFrame(), true);
         rulesDialog.setTitle("Règles du Quits");
         rulesDialog.setVisible(true);
+    }
+
+    public void updateSelectedMarble() {
+        this.graphicInterface.boardGraphic.setSelectedMarble(this.board.selectedMarble);
+        this.timer = new Timer(10, this.graphicInterface.boardGraphic);
+        this.timer.start();
+    }
+
+    public void clearSelectedMarble() {
+        this.graphicInterface.boardGraphic.setSelectedMarble(null);
+        this.timer.stop();
     }
 }
