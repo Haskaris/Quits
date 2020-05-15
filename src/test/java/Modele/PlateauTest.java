@@ -1,8 +1,9 @@
 package Modele;
 
 import Global.Tools;
-import Modele.Support.Bille;
-import Modele.Support.Plateau;
+import Global.Tools.Direction;
+import Model.Support.Marble;
+import Model.Support.Board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,19 +12,19 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlateauTest {
-    Plateau plateau;
+    Board plateau;
 
     @BeforeEach
     public void init(){
-        plateau = new Plateau();
+        plateau = new Board();
     }
 
     @Test
     void CreationPlateau(){
         try {
-            plateau = new Plateau();
+            plateau = new Board();
             //LecteurRedacteur.AffichePartie(plateau);
-            plateau = new Plateau();
+            plateau = new Board();
             //LecteurRedacteur.AffichePartie(plateau);
         }catch (Exception e){
             fail();
@@ -33,13 +34,13 @@ class PlateauTest {
     @Test
     void deplacerBille() {
         try {
-            Bille b = new Bille(Color.BLUE);
-            plateau.GetGrille()[2][2].addBille(b);
-            plateau.DeplacerBille(b, Tools.Dir.NO);
-            assertTrue(plateau.GetGrille()[1][1].contientBille());
-            plateau.DeplacerBille(b, Tools.Dir.SO);
-            plateau.DeplacerBille(b, Tools.Dir.SE);
-            assertTrue(plateau.GetGrille()[1][3].contientBille());
+            Marble b = new Marble(Color.BLUE);
+            plateau.getGrid()[2][2].addMarble(b);
+            plateau.moveMarble(b, Tools.Direction.NW);
+            assertTrue(plateau.getGrid()[1][1].hasMarble());
+            plateau.moveMarble(b, Tools.Direction.SW);
+            plateau.moveMarble(b, Tools.Direction.SE);
+            assertTrue(plateau.getGrid()[1][3].hasMarble());
         }catch (Exception e){
             fail();
         }
@@ -49,11 +50,11 @@ class PlateauTest {
     @Test
     void deplacerRangee() {
         try {
-            plateau.GetGrille()[2][2].addBille(new Bille(Color.BLUE));
-            plateau.GetGrille()[2][3].addBille(new Bille(Color.BLUE));
-            plateau.DeplacerRangee(new Point(-1,2),true);
-            assertTrue(plateau.GetGrille()[2][3].contientBille());
-            assertTrue(plateau.GetGrille()[3][2].contientBille());
+            plateau.getGrid()[2][2].addMarble(new Marble(Color.BLUE));
+            plateau.getGrid()[2][3].addMarble(new Marble(Color.BLUE));
+            plateau.moveLine(new Point(2,2), Direction.E);
+            assertTrue(plateau.getGrid()[2][3].hasMarble());
+            assertTrue(plateau.getGrid()[3][2].hasMarble());
         }catch (Exception e){
             fail();
         }

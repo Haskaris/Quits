@@ -1,9 +1,12 @@
 5 2
-Default1 0 IA1
-Default2 1 IA1
-90099
-00999
-09991
-99911
-99119
+AINormalPlayer Default1 -16776961 SW
+1-1/
+AINormalPlayer Default2 -16711936 NE
+2-2/
+TwoPlayersThreeBalls 0
+10222
+01120
+10000
+12121
+02200
 

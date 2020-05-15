@@ -1,64 +1,22 @@
-import Global.Configuration;
 import Global.Properties;
-import Modele.LecteurRedacteur;
-import Modele.Support.Plateau;
-import Vue.MainInterface;
-//import Vue.InterfaceGraphique;
+import Model.Support.Board;
+import View.MainGraphicInterface;
+import java.awt.EventQueue;
 
 import java.io.IOException;
 
 public class Quits {
-    //static InterfaceGraphique interfacegraphique;
-    static Plateau plateau;
+    static Board plateau;
 
     /**
-     * Permet d'initialiser ka partie. Les parametres de la partie sont definies dans Configuration
+     * Permet d'initialiser ka partie.Les parametres de la partie sont definies dans Configuration
+     * @param args
+     * @throws java.io.IOException
      */
-    public static void main(String[] args) throws IOException, IllegalArgumentException, IllegalAccessException {
-        Properties.Load();
-        new MainInterface();
-        //interfacegraphique = new InterfaceGraphique();
-        //plateau = new Plateau();
-        //plateau.JouePartie();
-    }
-
-    /**
-     * Charge une partie
-     */
-    public static void ChargerPartie(){
-        try {
-            plateau = new LecteurRedacteur("default.save").LitPartie();
-        }
-        catch (Exception e){
-            System.out.println("Erreur de chargement de la partie");
-        }
-        //plateau.JouePartie();
-    }
-
-    /**
-     * Enregistre une partie
-     */
-    public static void EnregistrerPartie(){
-        try {
-            new LecteurRedacteur("default.save").EcrisPartie(plateau);
-        }
-        catch (Exception e){
-            System.out.println("Erreur d'enregistrement de la partie");
-        }
-
-    }
-
-
-    /**
-     * Fermeture du jeu
-     */
-    public static void Exit(){
-        try {
-            Properties.Store();
-        } catch (IOException e) {
-            Configuration.logger().severe("Erreur d'ecriture des Properties");
-            System.exit(1);
-        }
-        System.exit(0);
+    public static void main(String[] args) throws IOException {
+        Properties.load();
+        EventQueue.invokeLater(() -> {
+            MainGraphicInterface mainGraphicInterface = new MainGraphicInterface();
+        });
     }
 }
