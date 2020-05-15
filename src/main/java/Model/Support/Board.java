@@ -80,6 +80,7 @@ public class Board {
         this.players.forEach((p) -> {
             init3Marbles(p);
         });
+        listAllShifts();
     }
 
     /**
@@ -137,43 +138,45 @@ public class Board {
     }
 
     /**
-     * Clot un tour.Verifie les conditions de victoire et passe au joueur suivant
-     * @return 
+     * Clot un tour.Verifie les conditions de victoire et passe au joueur
+     * suivant
+     *
+     * @return
      */
     public boolean endTurn() {
         boolean isEnded = false;
-        
-        switch(getCurrentPlayer().getStartPoint()) {
+
+        switch (getCurrentPlayer().getStartPoint()) {
             case SW:
-                if (this.grid[4][0].hasMarble() && 
-                        this.grid[4][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                if (this.grid[4][0].hasMarble()
+                        && this.grid[4][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
                     this.getCurrentPlayer().removeMarble(this.grid[4][0].removeMarble());
                     System.out.println("DEL");
                 }
                 break;
             case NW:
-                if (this.grid[4][4].hasMarble() && 
-                        this.grid[4][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                if (this.grid[4][4].hasMarble()
+                        && this.grid[4][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
                     this.getCurrentPlayer().removeMarble(this.grid[4][4].removeMarble());
                     System.out.println("DEL");
                 }
                 break;
             case NE:
-                if (this.grid[0][4].hasMarble() && 
-                        this.grid[0][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                if (this.grid[0][4].hasMarble()
+                        && this.grid[0][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
                     this.getCurrentPlayer().removeMarble(this.grid[0][4].removeMarble());
                     System.out.println("DEL");
                 }
                 break;
             case SE:
-                if (this.grid[0][0].hasMarble() && 
-                        this.grid[0][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                if (this.grid[0][0].hasMarble()
+                        && this.grid[0][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
                     this.getCurrentPlayer().removeMarble(this.grid[0][0].removeMarble());
                     System.out.println("DEL");
                 }
                 break;
         }
-        
+
         isEnded = getCurrentPlayer().getMarbles().size() == marbleEndObjectiv;
 
         if (isEnded) {
@@ -317,12 +320,12 @@ public class Board {
     public void print(OutputStream stream) throws IOException {
         //Je print le mode de jeu
         stream.write(this.gameMode.name().getBytes());
-        
+
         stream.write(" ".getBytes());
-        
+
         //Je print le joueur courant
         stream.write(String.valueOf(this.currentPlayer).getBytes());
-        
+
         stream.write('\n');
         //Je print la couleur des tuiles
         for (int i = 0; i < 5; i++) {
@@ -335,15 +338,15 @@ public class Board {
 
     /**
      * Charge le plateau à partir de l'entrée stream
-     * 
+     *
      * @param in_stream
-     * @throws IOException 
+     * @throws IOException
      */
     public void load(InputStream in_stream) throws IOException {
         String[] paramLine = ReaderWriter.readLine(in_stream).split(" ");
         this.gameMode = Tools.GameMode.valueOf(paramLine[0]);
         this.currentPlayer = Integer.parseInt(paramLine[1]);
-        
+
         for (int i = 0; i < 5; i++) {
             String indexLine = ReaderWriter.readLine(in_stream);
             for (int j = 0; j < 5; j++) {
@@ -369,8 +372,9 @@ public class Board {
         if (currentPlayer >= players.size()) {
             currentPlayer = 0;
         }
+        listAllShifts();
     }
-    
+
     /**
      * Move backward in the player list
      */
@@ -391,26 +395,34 @@ public class Board {
     public void reset() {
         //J'enlève tous les coups qui ont été fait
         this.history = new History(this);
-        
+
         //J'enlève toutes les billes du plateau
-        for(int i = 0; i < 5; i++) {
-            for(int j = 0; j < 5; j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 if (this.grid[i][j].hasMarble()) {
                     this.grid[i][j].removeMarble();
                 }
             }
         }
-        
+
         //J'enlève toutes les billes de chaque joueur
         this.players.forEach((p) -> {
             p.getMarbles().clear();
         });
-        
+
         //Je remets le joueur courant au début
         this.currentPlayer = 0;
     }
 
     public Mediator getMediator() {
         return this.mediator;
+    }
+
+    private void listAllShifts() {
+        allPotentialShifts.clear();
+        List<Move> possibleShifts = new MoveCalculator(this).possibleShifts();
+        for (Move m : possibleShifts) {
+            allPotentialShifts.add(m);
+        }
     }
 }

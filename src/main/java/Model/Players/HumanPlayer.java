@@ -63,7 +63,6 @@ public class HumanPlayer extends Player {
             
             if (!grid[column][line].getMarble().equals(board.selectedMarble)) {
                 board.resetAvailableTiles();
-                board.allPotentialShifts.clear();
                 board.availableTiles[column][line] = 1;
                 board.selectedMarble = grid[column][line].getMarble();
                 board.getMediator().updateSelectedMarble();
@@ -82,7 +81,7 @@ public class HumanPlayer extends Player {
                         }
                     } catch (Exception e) {
                         //Here we handle the tile shifting
-                        board.allPotentialShifts.add(m);
+                        //board.allPotentialShifts.add(m);
                     }
                 }
 
@@ -94,7 +93,7 @@ public class HumanPlayer extends Player {
                 board.resetAvailableTiles();
                 board.allPotentialShifts.clear();
             }
-        } else if (this.getStatus() == Tools.PlayerStatus.ActionSelection) {
+        } else {
             //The player selects a good move, else they are put back to MarbleSelection status
             if (!(column >= 0 && column <= 4 && line >= 0 && line <= 4)) {
                 //We clicked on an arrow so we shift the rows or columns if its a valid move
@@ -135,14 +134,13 @@ public class HumanPlayer extends Player {
                 }
                 board.selectedMarble = null;
                 board.getMediator().clearSelectedMarble();
-            } else {
+            } else if (this.getStatus() == Tools.PlayerStatus.ActionSelection) {
                 if (board.availableTiles[column][line] == 2) {
                     //That's a good action, we can move the marble to the new position
                     //board.getMediator().clearSelectedMarble();
                     Point pos = board.selectedMarble.getPosition();
                     
                     board.resetAvailableTiles();
-                    board.allPotentialShifts.clear();
 
                     board.getHistory().doMove(
                             new Move(board.selectedMarble,
@@ -158,7 +156,6 @@ public class HumanPlayer extends Player {
                     //That's not a good action, we get back to MarbleSelection, but we don't change players
                     this.setStatus(Tools.PlayerStatus.MarbleSelection);
                     board.resetAvailableTiles();
-                    board.allPotentialShifts.clear();
                     board.selectedMarble = null;
                     board.getMediator().clearSelectedMarble();
                 }
