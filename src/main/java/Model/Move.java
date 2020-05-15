@@ -14,27 +14,27 @@ public class Move {
      * Indique si une bille doit être bougé dans ce mouvement
      */
     Marble marble = null;
-    
+
     /**
      * Indique si une ligne doit être bougé dans ce mouvement
      */
     Point line = null;
-    
+
     /**
      * Indique la direction du mouvement
      */
     Direction direction;
-    
+
     /**
      * Joueur responsable du mouvement
      */
     Player player;
-    
+
     /**
      * Prochain mouvement de la pile
      */
     Move nextMove;
-    
+
     /**
      * Mouvement précédent de la pile
      */
@@ -150,20 +150,12 @@ public class Move {
 
     public boolean isEqual(Move toBeCompared) {
         if (line != null && toBeCompared.line != null) {
-            System.out.println("LINE MODE");
-            System.out.println("dir1 = " + this.direction + "| dir2 = " + toBeCompared.direction);
-            System.out.println("x1 = " + this.line.x + "| x2 = " +  + toBeCompared.line.x);
-            System.out.println("y1 = " + this.line.y + "| y2 = " + toBeCompared.line.y);
 
             return this.direction == toBeCompared.direction
                     && this.line.x == toBeCompared.line.x
                     && this.line.y == toBeCompared.line.y;
         }
         if (marble != null && toBeCompared.marble != null) {
-            System.out.println("MARBLE MODE");
-            System.out.println(this.direction + " " + toBeCompared.direction);
-            System.out.println(this.marble.getPosition().x + " " + toBeCompared.marble.getPosition().x);
-            System.out.println(this.marble.getPosition().y + " " + toBeCompared.marble.getPosition().y);
             return this.direction == toBeCompared.direction
                     && this.marble.getPosition().x == toBeCompared.marble.getPosition().x
                     && this.marble.getPosition().y == toBeCompared.marble.getPosition().y;
