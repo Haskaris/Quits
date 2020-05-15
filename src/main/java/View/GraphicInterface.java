@@ -88,6 +88,7 @@ public class GraphicInterface implements Runnable, Observateur {
         frame.setSize(500, 485);
         frame.setMinimumSize(new Dimension(500, 485));
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
         this.update();
     }
     

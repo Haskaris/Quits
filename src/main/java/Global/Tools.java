@@ -177,6 +177,5 @@ public class Tools {
             return 4;
         }
         return value;
-
     }
 }
