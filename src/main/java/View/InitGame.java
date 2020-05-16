@@ -5,6 +5,7 @@
  */
 package View;
 
+import View.Filters.SaveFilter;
 import Controleur.Mediator;
 import Global.Tools;
 import java.awt.Color;
@@ -12,7 +13,6 @@ import java.awt.Component;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 
 /**
  *
@@ -22,19 +22,29 @@ public class InitGame extends javax.swing.JPanel {
 
     Mediator mediator;
     Tools.GameMode gameMode;
-    JFrame frame;
+    MainGraphicInterface frame;
     private final JFileChooser fc;
+    private ArrayList<EditPlayer> listOfEditPlayers;
     
     /**
      * Creates new form InitGameAuto
      * @param frame
      * @param mediateur
      */
-    public InitGame(JFrame frame, Mediator mediateur) {
+    InitGame(MainGraphicInterface frame, Mediator mediateur) {
         initComponents();
         this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
-        this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-        this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+        this.listOfEditPlayers = new ArrayList<>();
+        
+        //Ajout des editPlayers dans la liste de sauvegarde
+        this.listOfEditPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur B", Color.RED));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur C", Color.YELLOW));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur D", Color.GREEN));
+        
+        this.editPlayers.add(this.listOfEditPlayers.get(0));
+        this.editPlayers.add(this.listOfEditPlayers.get(1));
+        
         this.mediator = mediateur;
         this.frame = frame;
         
@@ -61,6 +71,8 @@ public class InitGame extends javax.swing.JPanel {
         editPlayers = new javax.swing.JPanel();
         loadButton = new javax.swing.JButton();
 
+        setMinimumSize(new java.awt.Dimension(643, 158));
+
         buttonRules.setText("Règles");
         buttonRules.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,7 +89,7 @@ public class InitGame extends javax.swing.JPanel {
             }
         });
 
-        gameModeList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2 joueurs 5 billes", "2 joueurs 3 billes", "4 joueurs" }));
+        gameModeList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2 joueurs 5 billes", "2 joueurs 3 billes", "4 joueurs 3 billes" }));
         gameModeList.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 gameModeListItemStateChanged(evt);
@@ -86,7 +98,7 @@ public class InitGame extends javax.swing.JPanel {
 
         editPlayers.setLayout(new javax.swing.BoxLayout(editPlayers, javax.swing.BoxLayout.Y_AXIS));
 
-        loadButton.setText("Charger");
+        loadButton.setText("Charger une partie");
         loadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadButtonActionPerformed(evt);
@@ -110,9 +122,9 @@ public class InitGame extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ButtonPlay)
+                        .addComponent(loadButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(loadButton)))
+                        .addComponent(ButtonPlay)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -131,7 +143,7 @@ public class InitGame extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonPlay)
                     .addComponent(loadButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -139,21 +151,24 @@ public class InitGame extends javax.swing.JPanel {
         this.editPlayers.removeAll();
             switch(this.gameModeList.getSelectedIndex()) {
                 case 0:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.editPlayers.add(this.listOfEditPlayers.get(0));
+                    this.editPlayers.add(this.listOfEditPlayers.get(1));
                     this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
+                    this.frame.updateSize(675, 225);
                     break;
                 case 1:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
+                    this.editPlayers.add(this.listOfEditPlayers.get(0));
+                    this.editPlayers.add(this.listOfEditPlayers.get(1));
                     this.gameMode = Tools.GameMode.TwoPlayersThreeBalls;
+                    this.frame.updateSize(675, 225);
                     break;
                 case 2:
-                    this.editPlayers.add(new EditPlayer("JoueurA", Color.BLUE));
-                    this.editPlayers.add(new EditPlayer("JoueurB", Color.RED));
-                    this.editPlayers.add(new EditPlayer("JoueurC", Color.YELLOW));
-                    this.editPlayers.add(new EditPlayer("JoueurD", Color.GREEN));
+                    this.editPlayers.add(this.listOfEditPlayers.get(0));
+                    this.editPlayers.add(this.listOfEditPlayers.get(1));
+                    this.editPlayers.add(this.listOfEditPlayers.get(2));
+                    this.editPlayers.add(this.listOfEditPlayers.get(3));
                     this.gameMode = Tools.GameMode.FourPlayersFiveBalls;
+                    this.frame.updateSize(675, 325);
                     break;
             }
         this.updateUI();
@@ -164,9 +179,7 @@ public class InitGame extends javax.swing.JPanel {
     }//GEN-LAST:event_ButtonPlayActionPerformed
 
     private void buttonRulesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonRulesActionPerformed
-        RulesDialog rulesDialog = new RulesDialog(new javax.swing.JFrame(), true);
-        rulesDialog.setTitle("Règles du Quits");
-        rulesDialog.setVisible(true);
+        this.mediator.rules();
     }//GEN-LAST:event_buttonRulesActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
@@ -178,6 +191,10 @@ public class InitGame extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_loadButtonActionPerformed
 
+    /**
+     * Permet de récupérer la liste des EditPlayers affiché dans le panel
+     * @return Retourne la liste des editPlayers affiché dans le panel
+     */
     public ArrayList<EditPlayer> getEditsPlayers() {
         ArrayList<EditPlayer> tmp = new ArrayList<>();
         //Je récupère tous le contenu de mon panel editPlayers
@@ -191,6 +208,20 @@ public class InitGame extends javax.swing.JPanel {
             }
         }
         return tmp;
+    }
+    
+    public void reset() {
+        this.editPlayers.removeAll();
+        this.listOfEditPlayers.clear();
+        
+        //Ajout des editPlayers dans la liste de sauvegarde
+        this.listOfEditPlayers.add(new EditPlayer("Joueur A", Color.BLUE));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur B", Color.RED));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur C", Color.YELLOW));
+        this.listOfEditPlayers.add(new EditPlayer("Joueur D", Color.GREEN));
+        
+        this.editPlayers.add(this.listOfEditPlayers.get(0));
+        this.editPlayers.add(this.listOfEditPlayers.get(1));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

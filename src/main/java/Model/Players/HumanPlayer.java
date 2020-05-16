@@ -7,6 +7,7 @@ import Model.MoveCalculator;
 import Model.Support.Board;
 import Model.Support.Marble;
 import Model.Support.Tile;
+import View.ViewBoard;
 import java.awt.Color;
 import java.awt.Point;
 import java.io.IOException;
@@ -53,40 +54,52 @@ public class HumanPlayer extends Player {
     }
 
     public void Jouer(Board board, int column, int line) {
+        
         Tile[][] grid = board.getGrid();
 
+        //On clique sur la grille, s'il y a une bille de notre couleur
         if ((column >= 0 && column <= 4 && line >= 0 && line <= 4) && grid[column][line].hasMarble()
                 && color.equals(grid[column][line].getMarble().getColor())) {
-            //The players needs to select a marble
+            
+            //Si la bille sélectionnée n'a pas déjà été sélectionnée
+            if (!grid[column][line].getMarble().equals(board.selectedMarble)) {
+                board.clearShifts();
+                board.resetAvailableTiles();
+                board.availableTiles[column][line] = 1;
+                board.selectedMarble = grid[column][line].getMarble();
+                board.getMediator().updateSelectedMarble();
 
-            board.resetAvailableTiles();
-            board.allPotentialShifts.clear();
-            board.availableTiles[column][line] = 1;
-            board.selectedMarble = grid[column][line].getMarble();
-            //List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
-            List<Move> possibleMovesWithSource = new MoveCalculator(board).possibleMovesWithSource(column, line);
-            for (Move m : possibleMovesWithSource) {
-                try {
+                List<Move> possibleMovesWithSource = new MoveCalculator(board).possibleMovesWithSource(column, line);
+                
+                //Pour chaque mouvement qui est un mouvement de billes
+                possibleMovesWithSource.stream().filter((m) -> (!m.isShift())).forEachOrdered((m) -> {
                     Point pos = m.getPosition();
-                    if (column == pos.x && line == pos.y) {//If the selected marble is the source of the available move seleted
+                        
+                    Point dir = m.getCoordinatesDirection();
 
-                        Point dir = m.getCoordinatesDirection();
+                    int x = pos.x + dir.x;
+                    int y = pos.y + dir.y;
+                    board.availableTiles[x][y] = 2;
+                });
 
-                        int x = pos.x + dir.x;
-                        int y = pos.y + dir.y;
-                        board.availableTiles[x][y] = 2;
-                    }
-                } catch (Exception e) {
-                    //Here we handle the tile shifting
-                    board.allPotentialShifts.add(m);
-                }
+                //On passe en choix d'action
+                this.setStatus(Tools.PlayerStatus.ActionSelection);
+            } else {
+                board.clearSelectedMarble();
+                board.resetAvailableTiles();
+                board.listAllShifts();
+                
+                //On passe en choix de billes
+                this.setStatus(Tools.PlayerStatus.MarbleSelection);
             }
-            //board.diplayAvailableTiles();
-            this.setStatus(Tools.PlayerStatus.ActionSelection);
-        } else if (this.getStatus() == Tools.PlayerStatus.ActionSelection) {
+        //Soit il cherche en dehors de la grille (déplacement de tuiles)
+        //Soit il déplace la bille sélectionnée
+        //Soit il a cliqué dans un endroit non valide 
+        } else {
             //The player selects a good move, else they are put back to MarbleSelection status
             if (!(column >= 0 && column <= 4 && line >= 0 && line <= 4)) {
-                //We clicked on an arrow so we shift the rows or columns
+                //We clicked on an arrow so we shift the rows or columns if its a valid move
+
                 Tools.Direction d = Tools.Direction.NODIR;
                 Point anchorSource = null;
                 if (column == -1 && line >= 0 && line <= 4) {
@@ -107,23 +120,34 @@ public class HumanPlayer extends Player {
                     d = Tools.Direction.N;
                     anchorSource = new Point(column, 4);
                 }
-
-                board.resetAvailableTiles();
-                board.allPotentialShifts.clear();
                 
-                board.getHistory().doMove(
-                        new Move(grid[anchorSource.x][anchorSource.y].getPosition(), d, this)
-                );
+                Move move = new Move(
+                        new Point(Tools.findAppropriateCoordinatesForTileShifts(column),
+                                Tools.findAppropriateCoordinatesForTileShifts(line)), 
+                                d, this);
                 
-                this.setStatus(Tools.PlayerStatus.MarbleSelection);
-                board.endTurn();
-            } else {
+                
+                if (moveExists(move, board.allPotentialShifts)) {
+                    board.resetAvailableTiles();
+                    board.getHistory().doMove(move);
+                    
+                    this.setStatus(Tools.PlayerStatus.MarbleSelection);
+                    board.endTurn();
+                }
+                
+                //Si on a une bille déjà sélectionné
+                //On ne peut pas déplacer une rangée
+                if (board.selectedMarble != null) {
+                    board.clearSelectedMarble();
+                    board.listAllShifts();
+                }
+                
+            } else if (this.getStatus() == Tools.PlayerStatus.ActionSelection) {
                 if (board.availableTiles[column][line] == 2) {
                     //That's a good action, we can move the marble to the new position
                     Point pos = board.selectedMarble.getPosition();
                     
                     board.resetAvailableTiles();
-                    board.allPotentialShifts.clear();
 
                     board.getHistory().doMove(
                             new Move(board.selectedMarble,
@@ -133,14 +157,34 @@ public class HumanPlayer extends Player {
 
                     this.setStatus(Tools.PlayerStatus.MarbleSelection);
                     board.endTurn();
+                    board.clearSelectedMarble();
                 } else {
                     //That's not a good action, we get back to MarbleSelection, but we don't change players
                     this.setStatus(Tools.PlayerStatus.MarbleSelection);
                     board.resetAvailableTiles();
-                    board.allPotentialShifts.clear();
+                    board.clearSelectedMarble();
+                    board.listAllShifts();
                 }
             }
         }
+    }
+
+    /**
+     * Permet de savoir si un mouvement existe dans une liste de mouvements
+     * @param myM Move - Mouvement à étudier
+     * @param allMoves ArrayList<Move> - Liste des mouvements à étudier
+     * @return Boolean - Vrai si le mouvement est dans la liste des mouvemens
+     */
+    private boolean moveExists(Move myM, ArrayList<Move> allMoves) {
+        boolean found = false;
+
+        for (Move m : allMoves) {
+            if (m.isEqual(myM)) {
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 
 }

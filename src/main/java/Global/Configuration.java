@@ -29,9 +29,10 @@ public final class Configuration {
     private static Boolean Animations = true;
     private static int Taille = 5;
     private static int Joueurs = 2;
-    private static String Tuile1 = "Tiles/tile_1.png";
-    private static String Tuile2 = "Tiles/tile_2.png";
-    private static String Tuile3 = "Tiles/tile_3.png";
+    private static String Tile1 = "Tiles/tile_1.png";
+    private static String Tile2 = "Tiles/tile_2.png";
+    private static String Tile3 = "Tiles/tile_3.png";
+    private static String Tile4 = "Tiles/tile_4.png";
     private static String SelectedTile = "Tiles/selected_tile.png";
     private static String ArrowLeft = "Arrows/arrow_left.png";
     private static String ArrowUp = "Arrows/arrow_up.png";

@@ -5,7 +5,10 @@ import Model.Move;
 import Model.Support.Board;
 import Model.Support.Tile;
 import java.awt.Color;
+import java.awt.HeadlessException;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -29,9 +32,10 @@ public class ViewBoard extends BoardGraphic {
 
     private void initTile() {
         tileImages = new ArrayList<>();
-        tileImages.add(readImage("Tuile1"));
-        tileImages.add(readImage("Tuile2"));
-        tileImages.add(readImage("Tuile3"));
+        tileImages.add(readImage("Tile1"));
+        tileImages.add(readImage("Tile2"));
+        tileImages.add(readImage("Tile3"));
+        tileImages.add(readImage("Tile4"));
         selectedTile = readImage("SelectedTile");
         arrowUp = readImage("ArrowUp");
         arrowRight = readImage("ArrowRight");
@@ -43,13 +47,13 @@ public class ViewBoard extends BoardGraphic {
     }
 
     private ImageQuits readImage(String name) {
-        String ressource = (String) Configuration.instance().read(name);
+        String ressource = (String) Configuration.read(name);
         Configuration.instance().logger().info("Image " + ressource + " read as " + name);
         InputStream in = Configuration.charge(ressource);
         try {
             // Chargement d'une image utilisable dans Swing
             return super.readImage(in);
-        } catch (Exception e) {
+        } catch (IOException e) {
             Configuration.instance().logger().severe("Image " + ressource + " impossible to charge.");
             System.exit(1);
         }
@@ -58,6 +62,31 @@ public class ViewBoard extends BoardGraphic {
 
     @Override
     void drawBoard() {
+        float[] sRGB = board.getCurrentPlayer().color.getRGBComponents(null);
+        Color currentColor = new Color(sRGB[0], sRGB[1], sRGB[2], 0.2f);
+        
+        int currentXObjective = -1;
+        int currentYObjective = -1;
+        
+        switch(board.getCurrentPlayer().getStartPoint()) {
+            case NE:
+                currentXObjective = 0;
+                currentYObjective = 4;
+                break;
+            case NW:
+                currentXObjective = 4;
+                currentYObjective = 4;
+                break;
+            case SE:
+                currentXObjective = 0;
+                currentYObjective = 0;
+                break;
+            case SW:
+                currentXObjective = 4;
+                currentYObjective = 0;
+                break;
+        }
+        
         if (shifts == null) {
             shifts = new Vecteur[5][5];
         }
@@ -92,11 +121,14 @@ public class ViewBoard extends BoardGraphic {
                 int index = currentTile.getIndexOfColor();
 
                 tracer(tileImages.get(index), x, y, widthTile, heightTile);
+                
+                if (i == currentXObjective && j == currentYObjective) {
+                    drawRect(currentColor, x, y, widthTile, heightTile);
+                }
 
-                if (currentTile.hasMarble()) {
+                if (currentTile.hasMarble() && currentTile.getMarble() != selectedMarble) {
                     if (board.availableTiles[i][j] == 1) {//Selected marble
                         tracer(selectedTile, x, y, widthTile, heightTile);
-                        //drawBall(new Color(1f, 1f, 1f, 0.3f), x, y, widthTile, heightTile);
                     }
                     Color c = currentTile.getMarbleColor();
                     if (c == board.getCurrentPlayer().color) {
@@ -125,8 +157,8 @@ public class ViewBoard extends BoardGraphic {
                 }
             }
         }
+        
         for (Move m : board.allPotentialShifts) {
-
             Point p = m.getLine();
             int rowOrColIndex = -1;
             switch (m.getDirection()) {
@@ -136,7 +168,6 @@ public class ViewBoard extends BoardGraphic {
                     tracer(arrowDown, widthTile * rowOrColIndex + (widthTile / 2), 0, widthTile, heightTile / 2);
                     break;
                 case N:
-
                     rowOrColIndex = p.x;
                     //Display a down arrow on the upper part of the board
                     tracer(arrowUp, widthTile * rowOrColIndex + (widthTile / 2), (int) (widthTile * 5.5), widthTile, heightTile / 2);
@@ -154,10 +185,22 @@ public class ViewBoard extends BoardGraphic {
                 default:
                     break;
             }
-
         }
-
+        
+        try {
+            if (selectedMarble != null && getMousePosition() != null) {
+                int mousePosX = getMousePosition().x;
+                int mousePosY = getMousePosition().y;
+                drawBall(selectedMarble.getColor(), mousePosX-widthTile/2, mousePosY-heightTile/2, widthTile, heightTile);
+                tracer(defaultMarble, mousePosX-widthTile/2, mousePosY-heightTile/2, widthTile, heightTile);
+            }
+        } catch (HeadlessException ex) {}
     }
+    
+    /*@Override
+    public void updateSelectedMarble() {
+        
+    }*/
 
     @Override
     public int getHeightTile() {
@@ -193,6 +236,11 @@ public class ViewBoard extends BoardGraphic {
     @Override
     public void changeStep() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        this.repaint();
     }
 
 }

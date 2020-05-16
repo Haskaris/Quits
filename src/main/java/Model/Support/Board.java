@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Board {
@@ -76,9 +77,10 @@ public class Board {
                 this.players.get(3).setStartPoint(Tools.Direction.SE);
                 break;
         }
-        for (Player p : this.players) {
+        this.players.forEach((p) -> {
             init3Marbles(p);
-        }
+        });
+        listAllShifts();
     }
 
     /**
@@ -112,26 +114,6 @@ public class Board {
         }
     }
 
-    public void setGameMode(Tools.GameMode gameMode) {
-        this.gameMode = gameMode;
-    }
-
-    public void setMediator(Mediator m) {
-        this.mediator = m;
-    }
-
-    /**
-     * Joue les tours de la partie. S'arrete à la fin Plante l'ihm
-     */
-    public void playGame() {
-        /*while(endRound()){
-            List<Move> possiblesMoves = new MoveCalculator(this).coupsPossibles();
-            Move coup = getCurrentPlayer().Jouer(possiblesMoves);
-            history.doMove(coup);
-            //LecteurRedacteur.AffichePartie(this);
-        }*/
-    }
-
     public void playTurn(int column, int line) {
         if (getCurrentPlayer().getClass().equals(HumanPlayer.class)) {
             HumanPlayer player = (HumanPlayer) getCurrentPlayer();
@@ -148,43 +130,45 @@ public class Board {
     }
 
     /**
-     * Clot un tour. Verifie les conditions de victoire et passe au joueur
+     * Clot un tour.Verifie les conditions de victoire et passe au joueur
      * suivant
+     *
+     * @return
      */
     public boolean endTurn() {
         boolean isEnded = false;
-        
-        switch(getCurrentPlayer().getStartPoint()) {
+
+        switch (getCurrentPlayer().getStartPoint()) {
             case SW:
-                if (this.grid[4][0].hasMarble() && 
-                        this.grid[4][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                if (this.grid[4][0].hasMarble()
+                        && this.grid[4][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
                     this.getCurrentPlayer().removeMarble(this.grid[4][0].removeMarble());
                     System.out.println("DEL");
                 }
                 break;
             case NW:
-                if (this.grid[4][4].hasMarble() && 
-                        this.grid[4][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                if (this.grid[4][4].hasMarble()
+                        && this.grid[4][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
                     this.getCurrentPlayer().removeMarble(this.grid[4][4].removeMarble());
                     System.out.println("DEL");
                 }
                 break;
             case NE:
-                if (this.grid[0][4].hasMarble() && 
-                        this.grid[0][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                if (this.grid[0][4].hasMarble()
+                        && this.grid[0][4].getMarbleColor().equals(this.getCurrentPlayer().color)) {
                     this.getCurrentPlayer().removeMarble(this.grid[0][4].removeMarble());
                     System.out.println("DEL");
                 }
                 break;
             case SE:
-                if (this.grid[0][0].hasMarble() && 
-                        this.grid[0][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
+                if (this.grid[0][0].hasMarble()
+                        && this.grid[0][0].getMarbleColor().equals(this.getCurrentPlayer().color)) {
                     this.getCurrentPlayer().removeMarble(this.grid[0][0].removeMarble());
                     System.out.println("DEL");
                 }
                 break;
         }
-        
+
         isEnded = getCurrentPlayer().getMarbles().size() == marbleEndObjectiv;
 
         if (isEnded) {
@@ -218,10 +202,6 @@ public class Board {
                 grid[i][j].updatePosition(i, j);
             }
         }
-    }
-
-    public Tile[][] getGrid() {
-        return grid;
     }
 
     /**
@@ -278,78 +258,12 @@ public class Board {
     }
 
     /**
-     * Retourne l'objet du joueur courant
-     *
-     * @return Player
-     */
-    public Player getCurrentPlayer() {
-        return getPlayer(currentPlayer);
-    }
-
-    /**
-     * Retourne la grille
-     *
-     * @return Tile[][]
-     */
-
-    //Plus simple si on utilise un arrayList non?
-    /**
      * Ajoute un joueur à la liste des joueurs
      *
      * @param player
      */
     public void addPlayer(Player player) {
         this.players.add(player);
-    }
-
-    /**
-     * Retourne le joueur à l'index désiré
-     *
-     * @param index Index du joueur souhaité
-     * @return Joueur à l'index indiqué
-     */
-    public Player getPlayer(int index) {
-        return this.players.get(index);
-    }
-
-    /**
-     * Retourne la liste des joueurs
-     *
-     * @return Liste des joueurs du plateau
-     */
-    public ArrayList<Player> getPlayers() {
-        return this.players;
-    }
-
-    /**
-     * S'imprime dans la sortie stream
-     *
-     * @param stream
-     * @throws IOException
-     */
-    public void print(OutputStream stream) throws IOException {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                this.grid[i][j].print(stream);
-            }
-            stream.write('\n');
-        }
-    }
-
-    /**
-     * Charge le plateau à partir de l'entrée stream
-     * 
-     * @param in_stream
-     * @throws IOException 
-     */
-    public void load(InputStream in_stream) throws IOException {
-        for (int i = 0; i < 5; i++) {
-            String indexLine = ReaderWriter.readLine(in_stream);
-            for (int j = 0; j < 5; j++) {
-                int indexOfColor = Character.getNumericValue(indexLine.charAt(j));
-                this.grid[i][j].setIndexOfColor(indexOfColor);
-            }
-        }
     }
 
     public void resetAvailableTiles() {
@@ -360,34 +274,161 @@ public class Board {
         }
     }
 
-    public void diplayAvailableTiles() {
-        System.out.println("#########################");
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print(availableTiles[i][j] + " ");
-            }
-            System.out.println("");
-        }
-    }
-
+    /**
+     * Move forward in the player list
+     */
     public void nextPlayer() {
         currentPlayer++;
         if (currentPlayer >= players.size()) {
             currentPlayer = 0;
         }
+        listAllShifts();
     }
-    
+
+    /**
+     * Move backward in the player list
+     */
     public void previousPlayer() {
         currentPlayer--;
         if (currentPlayer < 0) {
             currentPlayer = players.size() - 1;
         }
+        listAllShifts();
     }
 
     /**
-     * @return the history
+     * Réinitialise le plateau
      */
+    public void reset() {
+        //J'enlève tous les coups qui ont été fait
+        this.history = new History(this);
+
+        //J'enlève toutes les billes du plateau
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (this.grid[i][j].hasMarble()) {
+                    this.grid[i][j].removeMarble();
+                }
+            }
+        }
+
+        //J'enlève toutes les billes de chaque joueur
+        this.players.forEach((p) -> {
+            p.getMarbles().clear();
+        });
+
+        //Je remets le joueur courant au début
+        this.currentPlayer = 0;
+    }
+    
+    public void clearSelectedMarble() {
+        this.selectedMarble = null;
+        this.mediator.clearSelectedMarble();
+    }
+
+    /**
+     * Update the shift list
+     */
+    public void listAllShifts() {
+        this.clearShifts();
+        List<Move> possibleShifts = new MoveCalculator(this).possibleShifts();
+        possibleShifts.forEach((m) -> {
+            this.allPotentialShifts.add(m);
+        });
+    }
+    
+    /**
+     * Clear the shift list
+     */
+    public void clearShifts() {
+        this.allPotentialShifts.clear();
+    }
+
+    //////////////////////////////  GETTERS  ///////////////////////////////////
     public History getHistory() {
-        return history;
+        return this.history;
+    }
+    
+    public Mediator getMediator() {
+        return this.mediator;
+    }
+    
+    /**
+     * Retourne l'objet du joueur à l'index souhaité
+     * @param index int - index du joueur
+     * @return Player - Joueur à l'index
+     */
+    public Player getPlayer(int index) {
+        return this.players.get(index);
+    }
+    
+    public ArrayList<Player> getPlayers() {
+        return this.players;
+    }
+    
+    /**
+     * Retourne l'objet du joueur courant
+     * @return Player - Joueur courant
+     */
+    public Player getCurrentPlayer() {
+        return this.getPlayer(this.currentPlayer);
+    }
+    
+    public Tile[][] getGrid() {
+        return grid;
+    }
+    
+    //////////////////////////////  SETTERS  ///////////////////////////////////
+
+    public void setGameMode(Tools.GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
+
+    public void setMediator(Mediator m) {
+        this.mediator = m;
+    }
+    
+    /////////////////////////////////  IO  /////////////////////////////////////
+    /**
+     * S'imprime dans la sortie stream
+     * @param stream
+     * @throws IOException
+     */
+    public void print(OutputStream stream) throws IOException {
+        //Je print le mode de jeu
+        stream.write(this.gameMode.name().getBytes());
+
+        stream.write(" ".getBytes());
+
+        //Je print le joueur courant
+        stream.write(String.valueOf(this.currentPlayer).getBytes());
+
+        stream.write('\n');
+        //Je print la couleur des tuiles
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                this.grid[i][j].print(stream);
+            }
+            stream.write('\n');
+        }
+    }
+
+    /**
+     * Charge le plateau à partir de l'entrée stream
+     * @param in_stream
+     * @throws IOException
+     */
+    public void load(InputStream in_stream) throws IOException {
+        String[] paramLine = ReaderWriter.readLine(in_stream).split(" ");
+        this.gameMode = Tools.GameMode.valueOf(paramLine[0]);
+        this.currentPlayer = Integer.parseInt(paramLine[1]);
+
+        for (int i = 0; i < 5; i++) {
+            String indexLine = ReaderWriter.readLine(in_stream);
+            for (int j = 0; j < 5; j++) {
+                int indexOfColor = Character.getNumericValue(indexLine.charAt(j));
+                this.grid[i][j].setIndexOfColor(indexOfColor);
+            }
+        }
     }
 }

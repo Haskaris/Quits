@@ -37,6 +37,10 @@ public class MoveCalculator {
      */
     public List<Move> possibleMoves() {
         marblesMoves();
+        return moves;
+    }
+    
+    public List<Move> possibleShifts() {
         tilesMoves();
         return moves;
     }

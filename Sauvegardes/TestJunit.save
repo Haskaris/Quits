@@ -3,9 +3,10 @@ AINormalPlayer Default1 -16776961 SW
 1-1/
 AINormalPlayer Default2 -16711936 NE
 2-2/
-00220
-22001
-00002
-01212
-10220
+TwoPlayersThreeBalls 0
+01103
+30131
+32212
+31020
+11010
 

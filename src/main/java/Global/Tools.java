@@ -73,8 +73,11 @@ public class Tools {
     }
 
     /**
-     * @param d
-     * @return
+     * Convertit une direction en un point
+     * Permet de se décaler en ajoutant le retour à un point éxistant
+     * Exemple : Point(1,1) + DirToPoint(NE) = Point(2,0)
+     * @param d Direction - Direction à convertir
+     * @return Point - Point calculé
      */
     public static Point DirToPoint(Direction d) {
         int x = 0, y = 0;
@@ -167,5 +170,20 @@ public class Tools {
 
     public static Point PointToPointDiff(Point start, Point end) {
         return new Point(end.x - start.x, end.y - start.y);
+    }
+
+    /**
+     * Clamp coordinates
+     * @param value int - Value to clamp
+     * @return int - Value clamped
+     */
+    public static int findAppropriateCoordinatesForTileShifts(int value) {
+        if (value > 4) {
+            return 0;
+        }
+        if (value < 0) {
+            return 4;
+        }
+        return value;
     }
 }

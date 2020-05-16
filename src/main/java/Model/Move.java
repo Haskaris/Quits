@@ -14,27 +14,27 @@ public class Move {
      * Indique si une bille doit être bougé dans ce mouvement
      */
     Marble marble = null;
-    
+
     /**
      * Indique si une ligne doit être bougé dans ce mouvement
      */
     Point line = null;
-    
+
     /**
      * Indique la direction du mouvement
      */
     Direction direction;
-    
+
     /**
      * Joueur responsable du mouvement
      */
     Player player;
-    
+
     /**
      * Prochain mouvement de la pile
      */
     Move nextMove;
-    
+
     /**
      * Mouvement précédent de la pile
      */
@@ -71,7 +71,6 @@ public class Move {
             board.moveMarble(marble, direction);
         }
         if (line != null) {
-            Display();
             board.moveLine(line, direction);
         }
     }
@@ -81,7 +80,6 @@ public class Move {
             board.moveMarble(marble, reverse(direction));
         }
         if (line != null) {
-            Display();
             board.moveLine(line, reverse(direction));
         }
     }
@@ -90,30 +88,38 @@ public class Move {
         return marble.getPosition();
     }
 
+    /**
+     * Retourne le décalage pour acceder à la position possible
+     * @return Point - Décalage du mouvement par rapport à sa direction
+     * @see Tools.DirToPoint(Direction d)
+     */
     public Point getCoordinatesDirection() {
         return DirToPoint(direction);
     }
-    
+
+    /**
+     * Retourne la direction du mouvement
+     * @return Direction - Direction du mouvement
+     */
     public Direction getDirection() {
         return direction;
     }
-    
+
     public Point getLine() {
         return line;
     }
 
+    /**
+     * Permet de savoir si le mouvement est un déplacement de tuiles
+     * @return boolean - Vrai si c'est un déplacement de tuiles
+     */
     public boolean isShift() {
         return (marble == null);
     }
-    
+
     public void Display() {
-        if (marble != null) {
-            System.out.println(marble.getPosition());
-            System.out.println(direction);
-        }
+
         if (line != null) {
-            //System.out.println(line);
-            //System.out.println(direction);
             int number = -1;
             String cardinalPoint = "";
             String isRowOrCol = "";
@@ -146,16 +152,28 @@ public class Move {
                     System.out.println("Erreur");
                     break;
             }
-
             System.out.println(isRowOrCol + " n°" + number + " shiftable towards " + cardinalPoint + ".");
-
+            return;
+        }
+        if (marble != null) {
+            System.out.println(marble.getPosition());
+            System.out.println(direction);
         }
     }
-    
+
     public boolean isEqual(Move toBeCompared) {
-        return this.direction == toBeCompared.direction
-                && this.line.x == toBeCompared.line.x
-                && this.line.y == toBeCompared.line.y;
+        if (line != null && toBeCompared.line != null) {
+
+            return this.direction == toBeCompared.direction
+                    && this.line.x == toBeCompared.line.x
+                    && this.line.y == toBeCompared.line.y;
+        }
+        if (marble != null && toBeCompared.marble != null) {
+            return this.direction == toBeCompared.direction
+                    && this.marble.getPosition().x == toBeCompared.marble.getPosition().x
+                    && this.marble.getPosition().y == toBeCompared.marble.getPosition().y;
+        }
+        return false;
     }
 
 }
