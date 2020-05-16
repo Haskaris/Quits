@@ -51,12 +51,6 @@ public class AIEnvironnement {
     public AIEnvironnement(){
         this._players = new ArrayList<>();
         this._grid = new int[5][5];
-        //initialisation du plateau
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                this._grid[i][j] = -1;
-            }
-        }
         this._currentPlayer = 0;
         this._iaPlayer = 0;
         this._startingPoint = new ArrayList<>();
@@ -98,11 +92,11 @@ public class AIEnvironnement {
             //On ajoute le point de départ à la liste des points de départ des joueurs
             Tools.Direction direction = player.getStartPoint();
             Point p = null;
-            if(direction == Tools.Direction.SO) {
+            if(direction == Tools.Direction.SW) {
                 p = new Point(4,0);
             } else if(direction == Tools.Direction.SE) {
                 p = new Point(4,4);
-            } else if(direction == Tools.Direction.NO) {
+            } else if(direction == Tools.Direction.NW) {
                 p = new Point(0,0);
             } else if(direction == Tools.Direction.NE) {
                 p = new Point(0,4);
@@ -224,10 +218,6 @@ public class AIEnvironnement {
      */
     public void addPlayerMarble(ArrayList<Point> playerMarble){
         this._playerMarble.add(playerMarble);
-        int num = this._playerMarble.size() -1 ;
-        for(Point p: playerMarble){
-            setNumberInGrid(p.x, p.y, num);
-        }
     }
 
     /**
@@ -625,14 +615,6 @@ public class AIEnvironnement {
         }
     }
 
-    public boolean playerWin(){
-        if(getOnePlayerMarble(getCurrentPlayer()).size() == 2){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /**
      * Joue un déplacement
      * @param move
@@ -704,16 +686,16 @@ public class AIEnvironnement {
         Move convertMove = null;
         //case move line
         if(move.get(0) == null){
-            convertMove = new Move(move.get(1), convertDirectionLine(move.get(1), move.get(2)), board.currentPlayer());
+            convertMove = new Move(move.get(1), convertDirectionLine(move.get(1), move.get(2)), board.getCurrentPlayer());
         } else {
             Marble goodMarble = null;
-            for(Marble m: board.currentPlayer().getMarbles()){
+            for(Marble m: board.getCurrentPlayer().getMarbles()){
                 if(m.getTile().getPosition().x == move.get(0).x && m.getTile().getPosition().y == move.get(0).y){
                     goodMarble = m;
                     break;
                 }
             }
-            convertMove = new Move(goodMarble, convertDirectionMarble(move.get(0), move.get(1)), board.currentPlayer());
+            convertMove = new Move(goodMarble, convertDirectionMarble(move.get(0), move.get(1)), board.getCurrentPlayer());
         }
         return convertMove;
     }
@@ -733,14 +715,14 @@ public class AIEnvironnement {
                 //case S
                 return Tools.Direction.NE;
             } else {
-                return Tools.Direction.NO;
+                return Tools.Direction.NW;
             }
         } else {
             //case E
             if (y == 1){
                 return Tools.Direction.SE;
             } else {
-                return Tools.Direction.SO;
+                return Tools.Direction.SW;
             }
         }
     }
@@ -756,7 +738,7 @@ public class AIEnvironnement {
         //1 4
         if(pMarble.x == pDir.x){
             if(pDir.y == 0){
-                return Tools.Direction.O;
+                return Tools.Direction.W;
             } else {
                 return Tools.Direction.E;
             }
@@ -780,6 +762,14 @@ public class AIEnvironnement {
             System.out.println("");
         }
         System.out.println("");
+    }
+
+    public boolean playerWin(){
+        if(getOnePlayerMarble(getCurrentPlayer()).size() == 2){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

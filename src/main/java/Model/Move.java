@@ -8,26 +8,45 @@ import static Global.Tools.*;
 
 import java.awt.*;
 
-public class Move implements Cloneable{
+public class Move {
+
     /**
-     * Marble indique la marble a bouger (null sinon)
- direction est la direction dans laquelle cette marble doit bouger (consulter Global.Tools)
- Point indique la line a bouger (null sinon) (ex : (-1,2) indique la colonne 2, (0,-1) la ligne 0)
- positif est vrai si la line bouge vers le positif (chaque indice i deviendra i+1) et inversement si faux
- player indique le player responsable du coup
+     * Indique si une bille doit être bougé dans ce mouvement
      */
     Marble marble = null;
-    Direction direction;
+
+    /**
+     * Indique si une ligne doit être bougé dans ce mouvement
+     */
     Point line = null;
+
+    /**
+     * Indique la direction du mouvement
+     */
+    Direction direction;
+
+    /**
+     * Joueur responsable du mouvement
+     */
     Player player;
+
+    /**
+     * Prochain mouvement de la pile
+     */
     Move nextMove;
 
     /**
+     * Mouvement précédent de la pile
+     */
+    Move lastMove;
+
+    /**
      * On veut jouer un deplacement de marble
+     *
      * @param marble Bille à déplacer
      * @param direction Direction du mouvement
      * @param player Responsable du mouvement
-    */
+     */
     public Move(Marble marble, Direction direction, Player player) {
         this.marble = marble;
         this.direction = direction;
@@ -36,10 +55,11 @@ public class Move implements Cloneable{
 
     /**
      * On veut jouer un deplacement de ligne
+     *
      * @param line Bille à déplacer
      * @param direction Direction du mouvement
      * @param player Responsable du mouvement
-    */
+     */
     public Move(Point line, Direction direction, Player player) {
         this.line = line;
         this.direction = direction;
@@ -47,30 +67,113 @@ public class Move implements Cloneable{
     }
 
     public void perform(Board board) {
-        //Afficher();
-        if(marble != null){
+        if (marble != null) {
             board.moveMarble(marble, direction);
-        } else if (line != null){
+        }
+        if (line != null) {
             board.moveLine(line, direction);
         }
     }
 
-    public void cancel(Board board){
-        if(marble != null){
+    public void cancel(Board board) {
+        if (marble != null) {
             board.moveMarble(marble, reverse(direction));
         }
-        if(line != null){
+        if (line != null) {
             board.moveLine(line, reverse(direction));
         }
     }
 
-    public void Afficher(){
-        if(marble!=null){
-            System.out.println(marble.getTile().getPosition() + " direction : " + direction);
+    public Point getPosition() {
+        return marble.getPosition();
+    }
+
+    /**
+     * Retourne le décalage pour acceder à la position possible
+     * @return Point - Décalage du mouvement par rapport à sa direction
+     * @see Tools.DirToPoint(Direction d)
+     */
+    public Point getCoordinatesDirection() {
+        return DirToPoint(direction);
+    }
+
+    /**
+     * Retourne la direction du mouvement
+     * @return Direction - Direction du mouvement
+     */
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public Point getLine() {
+        return line;
+    }
+
+    /**
+     * Permet de savoir si le mouvement est un déplacement de tuiles
+     * @return boolean - Vrai si c'est un déplacement de tuiles
+     */
+    public boolean isShift() {
+        return (marble == null);
+    }
+
+    public void Display() {
+
+        if (line != null) {
+            int number = -1;
+            String cardinalPoint = "";
+            String isRowOrCol = "";
+            switch (direction) {
+                case S:
+                    //Moving on y axis
+                    cardinalPoint = "South";
+                    isRowOrCol = "Column";
+                    number = line.x;
+                    break;
+                case N:
+                    //Moving on y axis
+                    cardinalPoint = "North";
+                    isRowOrCol = "Column";
+                    number = line.x;
+                    break;
+                case W:
+                    //Moving on x axis
+                    cardinalPoint = "West";
+                    isRowOrCol = "Row";
+                    number = line.y;
+                    break;
+                case E:
+                    //Moving on x axis
+                    cardinalPoint = "East";
+                    isRowOrCol = "Row";
+                    number = line.y;
+                    break;
+                default:
+                    System.out.println("Erreur");
+                    break;
+            }
+            System.out.println(isRowOrCol + " n°" + number + " shiftable towards " + cardinalPoint + ".");
+            return;
         }
-        if(line != null){
-            System.out.println(line);
-            //System.out.println(positif);
+        if (marble != null) {
+            System.out.println(marble.getPosition());
+            System.out.println(direction);
         }
     }
+
+    public boolean isEqual(Move toBeCompared) {
+        if (line != null && toBeCompared.line != null) {
+
+            return this.direction == toBeCompared.direction
+                    && this.line.x == toBeCompared.line.x
+                    && this.line.y == toBeCompared.line.y;
+        }
+        if (marble != null && toBeCompared.marble != null) {
+            return this.direction == toBeCompared.direction
+                    && this.marble.getPosition().x == toBeCompared.marble.getPosition().x
+                    && this.marble.getPosition().y == toBeCompared.marble.getPosition().y;
+        }
+        return false;
+    }
+
 }

@@ -22,6 +22,7 @@ class LecteurRedacteurTest {
     String namePlayer1Test = "Default2";
     Color colorPlayer1Test = Color.GREEN;
     int currentPlayerTest = 0;
+    Tools.GameMode gm = Tools.GameMode.TwoPlayersThreeBalls;
 
     @Test
     @Order(1)
@@ -29,8 +30,10 @@ class LecteurRedacteurTest {
         try {
             Board board = new Board();
             
+            board.setGameMode(gm);
+            
             Player tmpPlayer0 = new AINormalPlayer(namePlayer0Test, colorPlayer0Test);
-            tmpPlayer0.setStartPoint(Tools.Direction.SO);
+            tmpPlayer0.setStartPoint(Tools.Direction.SW);
             Player tmpPlayer1 = new AINormalPlayer(namePlayer1Test, colorPlayer1Test);
             tmpPlayer1.setStartPoint(Tools.Direction.NE);
             

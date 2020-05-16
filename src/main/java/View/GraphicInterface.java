@@ -5,12 +5,16 @@
  */
 package View;
 
+import View.Action.MouseAction;
 import Controleur.Mediator;
-import Model.Players.Player;
-import Model.Support.Board;
+
+
 import Paterns.Observateur;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,103 +27,153 @@ import javax.swing.SwingUtilities;
  * @author Mathis
  */
 public class GraphicInterface implements Runnable, Observateur {
-    Board board;
     Mediator mediator;
     
     JFrame frame;
-    BoardGraphic boardGraphic;
+    public BoardGraphic boardGraphic;
     
     boolean maximized;
     
-    JButton menu, undo, redo;
-
+    JToggleButton menu;
+    JButton undo, redo;
+    InGameMenu inGameMenu;
     
-    GraphicInterface(Board plateau, Mediator m) {
-        this.board = plateau;
+    ArrayList<JLabel> names;
+    
+    JLabel nameLabel;
+    
+    Box totalMenu, boxPlayer, boxPlayerAndBoard;
+    
+    
+    GraphicInterface(Mediator m) {
         this.mediator = m;
+        this.names = new ArrayList<>();
     }
 
     public static void start(Mediator m) {
-        GraphicInterface vue = new GraphicInterface(m.getPlateau(), m);
-        m.addGraphicInterface(vue);
-        SwingUtilities.invokeLater(vue);
+        GraphicInterface view = new GraphicInterface(m);
+        m.setGraphicInterface(view);
+        SwingUtilities.invokeLater(view);
     }
-
+    
+    /**
+     * Néttoie la fenêtre et recrée une partie avec les nouveaux paramètres
+     * du mediateur
+     */
+    public void reset() {
+        //Je supprime la fenêtre
+        this.frame.dispose();
+        
+        //Je refais la fenêtre
+        this.run();
+    }
 
     @Override
     public void run() {
-        // Eléments de l'interface
-        frame = new JFrame("Quits");
-        boardGraphic = new ViewBoard(this.board);
+        this.frame = new JFrame("Quits");
+        this.inGameMenu = new InGameMenu(this.mediator);
 
-        // Texte et contrôles à droite de la fenêtre
-        Box boxPlayer = Box.createVerticalBox();
-
-        for(Player player : this.board.getPlayers()) {
-            try {
-                JLabel titre = new JLabel(player.name);
-                titre.setAlignmentX(Component.CENTER_ALIGNMENT);
-                boxPlayer.add(titre);
-            } catch (Exception e) {
-                System.out.println("Un joueur est vide");
-            }
-        }
+        this.boxPlayerAndBoard = Box.createVerticalBox();
         
-        Box boxMenu = Box.createVerticalBox();
+        this.createPlayers();
+        this.createMenu();
+        this.createBoard();
         
-        menu = new JButton("Menu");
-        menu.setAlignmentX(Component.LEFT_ALIGNMENT);
-        menu.setFocusable(false);
-        undo = new JButton("Défaire");
-        undo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        undo.setFocusable(false);
-        redo = new JButton("Refaire");
-        redo.setAlignmentX(Component.LEFT_ALIGNMENT);
-        redo.setFocusable(false);
-        boxMenu.add(menu);
-        boxMenu.add(undo);
-        boxMenu.add(redo);
-        
-        // Annuler / refaire
-        //BoutonAnnuler annuler = new BoutonAnnuler(j);
-        //annuler.setFocusable(false);
-        //BoutonRefaire refaire = new BoutonRefaire(j);
-        //refaire.setFocusable(false);
-        //Box annulerRefaire = Box.createHorizontalBox();
-        //annulerRefaire.add(annuler);
-        //annulerRefaire.add(refaire);
-        //annulerRefaire.setAlignmentX(Component.CENTER_ALIGNMENT);
-        //boiteTexte.add(annulerRefaire);
-
-        // Retransmission des évènements au contrôleur
-        boardGraphic.addMouseListener(new MouseAction(boardGraphic, mediator));
-        //frame.addKeyListener(new AdaptateurClavier(control));
-        //Timer chrono = new Timer(16, new AdaptateurTemps(control));
-        //IA.addActionListener(new AdaptateurIA(control));
-        //animation.addActionListener(new AdaptateurAnimations(control));
-        //prochain.addActionListener(new AdaptateurProchain(control));
-        //annuler.addActionListener(new AdaptateurAnnuler(control));
-        //refaire.addActionListener(new AdaptateurRefaire(control));
-
         // Mise en place de l'interface
-        frame.add(boxMenu, BorderLayout.WEST);
-        frame.add(boxPlayer, BorderLayout.EAST);
-        frame.add(boardGraphic);
         //j.ajouteObservateur(this);
         //chrono.start();
-
+        frame.add(boxPlayerAndBoard);
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 300);
+        frame.setSize(500, 485);
+        frame.setMinimumSize(new Dimension(500, 485));
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
+        this.update();
+    }
+    
+    private void createMenu() {
+        totalMenu = Box.createHorizontalBox();
+        
+        Box boxMenu = Box.createVerticalBox();
+        this.menu = new JToggleButton("Menu");
+        this.menu.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.menu.addActionListener((ActionEvent e) -> {
+            this.inGameMenu.setVisible(!this.inGameMenu.isVisible());
+        });
+        
+        this.undo = new JButton("Défaire");
+        this.undo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.undo.setFocusable(false);
+        this.undo.setEnabled(this.mediator.canUndo());
+        this.undo.addActionListener((ActionEvent e) -> {
+            this.mediator.undo();
+        });
+        
+        this.redo = new JButton("Refaire");
+        this.redo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.redo.setFocusable(false);
+        this.redo.setEnabled(this.mediator.canRedo());
+        this.redo.addActionListener((ActionEvent e) -> {
+            this.mediator.redo();
+        });
+        
+        boxMenu.add(this.menu);
+        boxMenu.add(this.undo);
+        boxMenu.add(this.redo);
+        totalMenu.add(boxMenu);
+        totalMenu.add(this.inGameMenu);
+        
+        this.frame.add(totalMenu, BorderLayout.WEST);
+    }
+    
+    private void createPlayers() {
+        boxPlayer = Box.createHorizontalBox();
+        
+        nameLabel = new JLabel("");
+
+        /*this.mediator.getBoard().getPlayers().forEach((player) -> {
+            JLabel titre = new JLabel(player.name);
+            titre.setAlignmentX(Component.CENTER_ALIGNMENT);
+            boxPlayer.add(titre);
+            this.names.add(titre);
+        });
+        
+        this.frame.add(boxPlayer, BorderLayout.EAST);*/
+        
+        this.boxPlayer.add(new JLabel("Tour de "));
+        this.boxPlayer.add(nameLabel);
+        this.boxPlayerAndBoard.add(boxPlayer, BorderLayout.NORTH);
+        
+    }
+    
+    private void createBoard() {
+        this.boardGraphic = new ViewBoard(this.mediator.getBoard());
+        this.boardGraphic.addMouseListener(new MouseAction(this.boardGraphic, this.mediator));
+        this.boxPlayerAndBoard.add(this.boardGraphic, BorderLayout.SOUTH);
     }
     
     public void update() {
         boardGraphic.repaint();
+        this.undo.setEnabled(this.mediator.canUndo());
+        this.redo.setEnabled(this.mediator.canRedo());
+        /*this.names.forEach((name) -> {
+            name.setForeground(Color.black);
+        });
+        this.names.get(this.mediator.getBoard().currentPlayer).setForeground(Color.red);*/
+        nameLabel.setText(this.mediator.getBoard().getCurrentPlayer().name);
+        System.err.println(this.mediator.getBoard().getCurrentPlayer().name);
+        nameLabel.setForeground(this.mediator.getBoard().getCurrentPlayer().color);
+    }
+    
+    public void dispose() {
+        this.frame.setVisible(false);
+        this.frame.dispose();
     }
 
     @Override
     public void miseAJour() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Oui
     }
     
 }

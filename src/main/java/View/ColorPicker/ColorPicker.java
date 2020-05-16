@@ -23,9 +23,9 @@ public class ColorPicker extends JDialog {
     
     public ColorPicker(Color color) {
         super();
-        this.setTitle("Color Picker");
+        super.setTitle("Color Picker");
         
-        this.setMinimumSize(new Dimension(700,500));
+        super.setMinimumSize(new Dimension(700,500));
         this.currentColor = color;
         
         this.previewColor = new PreviewColor(this.currentColor);
@@ -54,8 +54,10 @@ public class ColorPicker extends JDialog {
         tmp.add(this.colorChooser);
         tmp.add(this.cancel);
         tmp.add(this.valid);
-        this.add(tmp);
-        this.setVisible(false);
+        super.add(tmp);
+        
+        super.setLocationRelativeTo(null);
+        super.setVisible(false);
     }
     
     public void showDialog(EditPlayer parent) {

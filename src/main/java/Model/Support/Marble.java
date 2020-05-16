@@ -40,6 +40,10 @@ public class Marble {
         return this.tile;
     }
     
+    public Point getPosition() {
+        return this.tile.getPosition();
+    }
+    
     /**
      * S'imprime dans la sortie stream
      * @param stream
@@ -50,12 +54,5 @@ public class Marble {
         stream.write('-');
         stream.write(String.valueOf(this.getTile().getPosition().y).getBytes());
         stream.write('/');
-    }
-
-    public Marble copy(){
-        Marble copy = new Marble(getColor());
-        copy.setTile(tile.copy());
-        copy.getTile().addMarble(copy);
-        return copy;
     }
 }

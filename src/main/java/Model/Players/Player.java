@@ -36,7 +36,7 @@ public abstract class Player {
      * @param _couleur
      * @param p 
      */
-    Player(String _nom, Color _couleur, Direction p) {
+    Player(String _nom, Color _couleur, Direction p){
         name = _nom;
         color = _couleur;
         marbles = new ArrayList<>();
@@ -146,7 +146,7 @@ public abstract class Player {
                     tmp = new AINormalPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
                 case "AIHardPlayer":
-                    tmp = new AIHardPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
+                    tmp = new AIHardPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])), board);
                     break;
             }
         tmp.setStartPoint(Direction.valueOf(dataPlayer[3]));

@@ -65,26 +65,26 @@ public class AIHardPlayer2 extends AI {
             Move convertMove;
             if(isMarble){
                 Marble goodMarble = null;
-                for (Marble m : this._board.currentPlayer().getMarbles()) {
+                for (Marble m : this._board.getCurrentPlayer().getMarbles()) {
                     if (m.getTile().getPosition().x == x && m.getTile().getPosition().y == y) {
                         goodMarble = m;
                         break;
                     }
                 }
                 if(goodMarble != null) {
-                    convertMove = new Move(goodMarble, dir, this._board.currentPlayer());
+                    convertMove = new Move(goodMarble, dir, this._board.getCurrentPlayer());
                 } else {
                     convertMove = coups_possibles.get(0);
                     this._impossibleMove = true;
                 }
             } else {
-                convertMove = new Move(new Point(x, y), dir, this._board.currentPlayer());
+                convertMove = new Move(new Point(x, y), dir, this._board.getCurrentPlayer());
                 MoveCalculator moveCalculator = new MoveCalculator(this._board);
-                if(!moveCalculator.coupsPossibles().contains(convertMove)){
+                if(!moveCalculator.possibleMoves().contains(convertMove)){
                     this._impossibleMove = true;
                 }
             }
-            convertMove.Afficher();
+            //convertMove.Afficher();
         }
         return coups_possibles.get(0);
     }
@@ -145,9 +145,9 @@ public class AIHardPlayer2 extends AI {
 
                     switch(dir){
                         case NE: convertMove.add(new Point(x+1, y-1)); break;
-                        case NO: convertMove.add(new Point(x-1, y-1)); break;
+                        case NW: convertMove.add(new Point(x-1, y-1)); break;
                         case SE: convertMove.add(new Point(x+1, y+1)); break;
-                        case SO: convertMove.add(new Point(x-1, y+1)); break;
+                        case SW: convertMove.add(new Point(x-1, y+1)); break;
                     }
                     if(!env.coupsPossibles().contains(convertMove)){
                         convertMove = null;
@@ -165,7 +165,7 @@ public class AIHardPlayer2 extends AI {
                         case N: convertMove.add(new Point(x, 0)); break;
                         case S: convertMove.add(new Point(x, 4)); break;
                         case E: convertMove.add(new Point(4, y)); break;
-                        case O: convertMove.add(new Point(0, y)); break;
+                        case W: convertMove.add(new Point(0, y)); break;
                     }
                     if(!env.coupsPossibles().contains(convertMove)){
                         convertMove = null;
@@ -209,11 +209,11 @@ public class AIHardPlayer2 extends AI {
             case 0:
                 return Tools.Direction.NE;
             case 1:
-                return Tools.Direction.NO;
+                return Tools.Direction.NW;
             case 2:
                 return Tools.Direction.SE;
             case 3:
-                return Tools.Direction.SO;
+                return Tools.Direction.SW;
             case 4:
                 return Tools.Direction.N;
             case 5:
@@ -221,7 +221,7 @@ public class AIHardPlayer2 extends AI {
             case 6:
                 return Tools.Direction.E;
             case 7:
-                return Tools.Direction.O;
+                return Tools.Direction.W;
         }
         return Tools.Direction.NE;
     }

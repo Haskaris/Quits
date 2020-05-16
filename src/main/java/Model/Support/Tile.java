@@ -9,8 +9,7 @@ public class Tile {
     private Marble marble = null;
     private Point position;
     private int indexOfColor;
-
-
+    
     /**
      * Constructeur
      */
@@ -24,7 +23,7 @@ public class Tile {
      */
     private void setRandomIndexOfColor() {
         Random random = new Random();
-        this.setIndexOfColor(random.nextInt(8));
+        this.setIndexOfColor(random.nextInt(4));
     }
     
     /**
@@ -58,6 +57,10 @@ public class Tile {
         Marble tmp = marble;
         marble = null;
         return tmp;
+    }
+    
+    public Marble getMarble() {
+        return marble;
     }
     
     /**
@@ -105,15 +108,5 @@ public class Tile {
      */
     public void print(OutputStream stream) throws IOException {
         stream.write(String.valueOf(this.indexOfColor).getBytes());
-    }
-
-    public Tile copy(){
-        Tile newTile = new Tile(position.x, position.y);
-
-        return newTile;
-    }
-
-    public Marble getMarble(){
-        return marble;
     }
 }

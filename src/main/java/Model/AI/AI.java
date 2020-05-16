@@ -19,14 +19,17 @@ import java.util.ListIterator;
 public abstract class AI extends Player {
     //mettre en privé
     public Board _board;
-    //mettre en privé
-    public int _max_depth;
+    private int _max_depth;
     public AIEnvironnement _env;
 
     public AI(String name, Color color, Board board, int max_depth) {
         super(name, color);
         this._board = board;
         this._max_depth = max_depth;
+    }
+
+    public int getMaxDepth() {
+        return _max_depth;
     }
 
     public float eval_func(AIEnvironnement iaEnv) {

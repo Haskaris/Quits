@@ -6,7 +6,7 @@ import Model.Move;
 import Model.Support.AIEnvironnement;
 import Model.Support.Board;
 
-import java.awt.*;
+import java.awt.Color;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -24,6 +24,11 @@ public class AIEasyPlayer extends AI {
     public Move Jouer(List<Move> coups_possibles) {
         try {
             TimeUnit.SECONDS.sleep(1);
+        }catch (Exception e){
+            System.out.println("Erreur d'attente de l'IA");
+        }
+        try {
+            TimeUnit.SECONDS.sleep(1);
         }catch (Exception e) {
             System.out.println("Erreur d'attente de l'IA");
         }
@@ -31,12 +36,8 @@ public class AIEasyPlayer extends AI {
         Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE, 0, iaEnv.getCurrentPlayer());
 
         iaEnv.printBoard();
-        System.out.println(iaEnv.getPlayers());
-        System.out.println(iaEnv.getOnePlayerStartingPoint(iaEnv.getIaPlayer()));
-        calculBestMove(2, iaEnv, node);
+        calculBestMove(getMaxDepth(), iaEnv, node);
         node.printTree();
-        System.out.println(node.getNodeMove());
-        System.out.println(node.getNodeValue());
         return iaEnv.convertMove(node.getNodeMove(), this._board);
     }
     
