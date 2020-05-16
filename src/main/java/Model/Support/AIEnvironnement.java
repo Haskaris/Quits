@@ -51,6 +51,12 @@ public class AIEnvironnement {
     public AIEnvironnement(){
         this._players = new ArrayList<>();
         this._grid = new int[5][5];
+        //initialisation du plateau
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                this._grid[i][j] = -1;
+            }
+        }
         this._currentPlayer = 0;
         this._iaPlayer = 0;
         this._startingPoint = new ArrayList<>();
@@ -218,6 +224,10 @@ public class AIEnvironnement {
      */
     public void addPlayerMarble(ArrayList<Point> playerMarble){
         this._playerMarble.add(playerMarble);
+        int num = this._playerMarble.size() -1 ;
+        for(Point p: playerMarble){
+            setNumberInGrid(p.x, p.y, num);
+        }
     }
 
     /**
@@ -612,6 +622,14 @@ public class AIEnvironnement {
                     point.y = move.get(1).y;
                 }
             }
+        }
+    }
+
+    public boolean playerWin(){
+        if(getOnePlayerMarble(getCurrentPlayer()).size() == 2){
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -32,7 +32,9 @@ public abstract class AI extends Player {
     public float eval_func(AIEnvironnement iaEnv) {
         //with float we can do 1/current number for other player and choose de good one
         //a changer prendre en compte toutes les billes
-
+        if(iaEnv.playerWin()){
+            return 0;
+        }
         float sum = 0;
         Point goal = new Point(Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getIaPlayer()).x) , Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getIaPlayer()).y));
 

@@ -2,6 +2,7 @@ package Modele;
 
 import Global.Tools;
 import Model.*;
+import Model.AI.NNManager;
 import Model.Support.*;
 import Model.Players.*;
 
@@ -56,7 +57,7 @@ class CoupTest {
         System.out.println("Historique OK");
     }
 
-    @Test
+    /*@Test
     public void TestEntreeController() {
         player2 = new AIEasyPlayer("default", Color.RED, board);
         player2.setStartPoint(Tools.Direction.NE);
@@ -72,8 +73,8 @@ class CoupTest {
         board.history.doMove(player.Jouer(coupspossible));
         //LecteurRedacteur.AffichePartie(board);
     }
-
-    /*@Test
+*/
+/*    @Test
     public void TestJouerIA(){
         System.out.println("Test jouer AI");
         player2 = new AIEasyPlayer("default", Color.RED, board);
@@ -90,6 +91,13 @@ class CoupTest {
 /*
         board.playGame();
     }*/
+
+    @Test
+    public void TestTrainIA(){
+        System.out.println("In test train IA");
+        NNManager nnManager = new NNManager();
+
+    }
 }
 
 
