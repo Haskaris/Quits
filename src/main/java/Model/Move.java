@@ -88,10 +88,19 @@ public class Move {
         return marble.getPosition();
     }
 
+    /**
+     * Retourne le décalage pour acceder à la position possible
+     * @return Point - Décalage du mouvement par rapport à sa direction
+     * @see Tools.DirToPoint(Direction d)
+     */
     public Point getCoordinatesDirection() {
         return DirToPoint(direction);
     }
 
+    /**
+     * Retourne la direction du mouvement
+     * @return Direction - Direction du mouvement
+     */
     public Direction getDirection() {
         return direction;
     }
@@ -100,6 +109,10 @@ public class Move {
         return line;
     }
 
+    /**
+     * Permet de savoir si le mouvement est un déplacement de tuiles
+     * @return boolean - Vrai si c'est un déplacement de tuiles
+     */
     public boolean isShift() {
         return (marble == null);
     }

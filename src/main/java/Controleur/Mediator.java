@@ -79,8 +79,7 @@ public class Mediator {
     
     /**
      * Prépare le plateau, change l'interface et lance la partie
-     *
-     * @param gameMode
+     * @param gameMode GameMode - Mode de jeu du plateau
      */
     public void initGame(Tools.GameMode gameMode) {
         //Prépare le plateau
@@ -212,12 +211,18 @@ public class Mediator {
         rulesDialog.setVisible(true);
     }
 
+    /**
+     * Déplace la bille sélectionnée
+     */
     public void updateSelectedMarble() {
         this.graphicInterface.boardGraphic.setSelectedMarble(this.board.selectedMarble);
         this.timer = new Timer(10, this.graphicInterface.boardGraphic);
         this.timer.start();
     }
 
+    /**
+     * Néttoie l'interface et arrête l'animation
+     */
     public void clearSelectedMarble() {
         this.graphicInterface.boardGraphic.setSelectedMarble(null);
         this.timer.stop();
