@@ -92,6 +92,7 @@ public class AIEnvironnement {
             //On ajoute le point de départ à la liste des points de départ des joueurs
             Tools.Direction direction = player.getStartPoint();
             Point p = null;
+            /*
             if(direction == Tools.Direction.SW) {
                 p = new Point(4,0);
             } else if(direction == Tools.Direction.SE) {
@@ -100,6 +101,19 @@ public class AIEnvironnement {
                 p = new Point(0,0);
             } else if(direction == Tools.Direction.NE) {
                 p = new Point(0,4);
+            } else {
+                //Dans le cas ou le point de départ ne correspond à aucun point connu
+                System.out.println("AIEnvironnement constructor this direction is not handle yet : " + direction);
+            }*/
+            //Inversion des directons car inversion des x et y dans l'environnement
+            if(direction == Tools.Direction.SW) {
+                p = new Point(0,4);
+            } else if(direction == Tools.Direction.SE) {
+                p = new Point(4,4);
+            } else if(direction == Tools.Direction.NW) {
+                p = new Point(0,0);
+            } else if(direction == Tools.Direction.NE) {
+                p = new Point(4,0);
             } else {
                 //Dans le cas ou le point de départ ne correspond à aucun point connu
                 System.out.println("AIEnvironnement constructor this direction is not handle yet : " + direction);
@@ -621,11 +635,20 @@ public class AIEnvironnement {
      */
     public void perform(ArrayList<Point> move) {
         //move marble if first point not null
+        //ArrayList<Point> cpMove = copyMove(move);
         if(move.get(0) != null){
             moveMarble(move);
         } else {
             moveLine(move);
         }
+    }
+
+    public ArrayList<Point> copyMove(ArrayList<Point> move){
+        ArrayList<Point> cpMove = new ArrayList<>();
+        for(Point p : move){
+            cpMove.add(new Point(p.x, p.y));
+        }
+        return cpMove;
     }
 
     /**
@@ -710,7 +733,25 @@ public class AIEnvironnement {
         int x = (pDir.x - pMarble.x);
         int y = (pDir.y - pMarble.y);
         if(x == -1){
-            //case o
+            //case W
+            if(y == 1){
+                //case S
+                return Tools.Direction.SW;
+            } else {
+                return Tools.Direction.NW;
+            }
+        } else {
+            //case E
+            if (y == 1){
+                //case S
+                return Tools.Direction.SE;
+            } else {
+                return Tools.Direction.NE;
+            }
+        }
+        /*
+        * if(x == -1){
+            //case W
             if(y == 1){
                 //case S
                 return Tools.Direction.NE;
@@ -720,11 +761,12 @@ public class AIEnvironnement {
         } else {
             //case E
             if (y == 1){
+                //case S
                 return Tools.Direction.SE;
             } else {
                 return Tools.Direction.SW;
             }
-        }
+        }*/
     }
 
     /**
@@ -738,6 +780,23 @@ public class AIEnvironnement {
         //1 4
         if(pMarble.x == pDir.x){
             if(pDir.y == 0){
+                //case N
+                return Tools.Direction.N;
+            } else {
+                return Tools.Direction.S;
+            }
+        } else {
+            if(pDir.x == 0){
+                //case W
+                return Tools.Direction.W;
+            } else {
+                return Tools.Direction.E;
+            }
+        }
+        /*
+        * if(pMarble.x == pDir.x){
+            if(pDir.y == 0){
+
                 return Tools.Direction.W;
             } else {
                 return Tools.Direction.E;
@@ -748,7 +807,7 @@ public class AIEnvironnement {
             } else {
                 return Tools.Direction.S;
             }
-        }
+        }*/
     }
 
     /**

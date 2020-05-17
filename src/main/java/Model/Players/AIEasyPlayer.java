@@ -35,10 +35,14 @@ public class AIEasyPlayer extends AI {
         AIEnvironnement iaEnv  = new AIEnvironnement(this._board);
         Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE, 0, iaEnv.getCurrentPlayer());
 
-        iaEnv.printBoard();
-        calculBestMove(getMaxDepth(), iaEnv, node);
-        node.printTree();
-        return iaEnv.convertMove(node.getNodeMove(), this._board);
+        //iaEnv.printBoard();
+        calculBestMove(getMaxDepth(), iaEnv, node);/*
+        System.out.println(iaEnv.getCurrentPlayer());
+        System.out.println(iaEnv.getStartingPoint());*/
+        Move m = iaEnv.convertMove(node.getNodeMove(), this._board);
+        /*System.out.println(m.getDirection());
+        System.out.println(m.getPosition());*/
+        return m;
     }
     
     /**
