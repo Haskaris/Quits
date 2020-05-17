@@ -36,6 +36,7 @@ public class ViewBoard extends BoardGraphic {
         tileImages.add(readImage("Tile2"));
         tileImages.add(readImage("Tile3"));
         tileImages.add(readImage("Tile4"));
+        
         selectedTile = readImage("SelectedTile");
         arrowUp = readImage("ArrowUp");
         arrowRight = readImage("ArrowRight");
@@ -121,6 +122,8 @@ public class ViewBoard extends BoardGraphic {
                 int index = currentTile.getIndexOfColor();
 
                 tracer(tileImages.get(index), x, y, widthTile, heightTile);
+                
+                System.out.println(tileImages.get(index).toString());
                 
                 if (i == currentXObjective && j == currentYObjective) {
                     drawRect(currentColor, x, y, widthTile, heightTile);

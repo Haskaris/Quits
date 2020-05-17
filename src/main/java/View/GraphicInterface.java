@@ -147,6 +147,12 @@ public class GraphicInterface implements Runnable, Observateur {
             this.mediator.resetGame();
         });
         
+        JMenuItem newItem = new JMenuItem("Nouvelle partie");
+        newItem.setToolTipText("Créer une nouvelle partie en modifant les paramètres");
+        newItem.addActionListener((event) -> {
+            this.mediator.newGame();
+        });
+        
         JMenuItem rulesItem = new JMenuItem("Règles");
         rulesItem.setToolTipText("Afficher les règles");
         rulesItem.addActionListener((event) -> {
@@ -227,7 +233,6 @@ public class GraphicInterface implements Runnable, Observateur {
         });
         this.names.get(this.mediator.getBoard().currentPlayer).setForeground(Color.red);*/
         nameLabel.setText(this.mediator.getBoard().getCurrentPlayer().name);
-        System.err.println(this.mediator.getBoard().getCurrentPlayer().name);
         nameLabel.setForeground(this.mediator.getBoard().getCurrentPlayer().color);
     }
     
