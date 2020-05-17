@@ -120,11 +120,19 @@ public class Board {
 
             player.Jouer(this, column, line);
 
+            if (player.getStatus() != Tools.PlayerStatus.ActionSelection && !getCurrentPlayer().getClass().equals(HumanPlayer.class)) {
+                List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
+                Move move = getCurrentPlayer().Jouer(possibleMoves);
+                getHistory().doMove(move);
+                endTurn();
+
+            }
+
         } else {
             List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
             Move move = getCurrentPlayer().Jouer(possibleMoves);
             getHistory().doMove(move);
-            nextPlayer();
+            endTurn();
         }
         this.mediator.getGraphicInterface().update();
     }

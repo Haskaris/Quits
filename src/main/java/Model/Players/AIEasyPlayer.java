@@ -22,16 +22,11 @@ public class AIEasyPlayer extends AI {
 
     @Override
     public Move Jouer(List<Move> coups_possibles) {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        }catch (Exception e){
-            System.out.println("Erreur d'attente de l'IA");
-        }
-        try {
+        /*try {
             TimeUnit.SECONDS.sleep(1);
         }catch (Exception e) {
             System.out.println("Erreur d'attente de l'IA");
-        }
+        }*/
         AIEnvironnement iaEnv  = new AIEnvironnement(this._board);
         Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE, 0, iaEnv.getCurrentPlayer());
 
