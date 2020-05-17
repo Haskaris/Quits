@@ -145,6 +145,9 @@ public class Mediator {
             case 2:
                 //Well, we do nothing :x
                 break;
+            case 3:
+                this.newGame();
+                break;
             default:
                 System.out.println("AH, une erreure innatendue a spawn");
         }

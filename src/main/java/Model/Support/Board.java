@@ -124,7 +124,7 @@ public class Board {
             List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
             Move move = getCurrentPlayer().Jouer(possibleMoves);
             getHistory().doMove(move);
-            nextPlayer();
+            endTurn();
         }
         this.mediator.getGraphicInterface().update();
     }
