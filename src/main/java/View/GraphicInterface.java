@@ -167,6 +167,7 @@ public class GraphicInterface implements Runnable, Observateur {
         fileMenu.add(saveItem);
         fileMenu.add(loadItem);
         fileMenu.add(startOverItem);
+        fileMenu.add(newItem);
         fileMenu.add(rulesItem);
         fileMenu.add(quitItem);
         menuBar.add(fileMenu);

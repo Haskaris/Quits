@@ -33,7 +33,7 @@ public class AIEasyPlayer extends Player {
     @Override
     public void print(OutputStream stream) throws IOException {
         stream.write("AIEasyPlayer".getBytes());
-        stream.write(' ');
+        stream.write("-!-".getBytes());
         super.print(stream);
     }
 }

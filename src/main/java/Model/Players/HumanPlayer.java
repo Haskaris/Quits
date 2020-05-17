@@ -49,7 +49,7 @@ public class HumanPlayer extends Player {
     @Override
     public void print(OutputStream stream) throws IOException {
         stream.write("HumanPlayer".getBytes());
-        stream.write(' ');
+        stream.write("-!-".getBytes());
         super.print(stream);
     }
 

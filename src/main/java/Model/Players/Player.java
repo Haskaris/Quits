@@ -109,10 +109,10 @@ public abstract class Player {
     public void print(OutputStream stream) throws IOException {
         //On écrit le nom
         stream.write(this.name.getBytes());
-        stream.write(' ');
+        stream.write("-!-".getBytes());
         //On écrit la couleur
         stream.write(String.valueOf(this.color.getRGB()).getBytes());
-        stream.write(' ');
+        stream.write("-!-".getBytes());
         //On écrit sa position
         stream.write(this.startPoint.toString().getBytes());
         stream.write('\n');
@@ -130,7 +130,7 @@ public abstract class Player {
      */
     public static Player load(InputStream in_stream) throws IOException  {
         Player tmp = null;
-        String[] dataPlayer = ReaderWriter.readLine(in_stream).split(" ");
+        String[] dataPlayer = ReaderWriter.readLine(in_stream).split("-!-");
         switch (dataPlayer[0]){
                 case "HumanPlayer":
                     tmp = new HumanPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));

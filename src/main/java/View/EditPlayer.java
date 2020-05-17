@@ -21,7 +21,11 @@ public class EditPlayer extends javax.swing.JPanel {
     public Tools.AILevel aiLevel = Tools.AILevel.Player;
     public ColorPicker colorPicker;
 
-    /** Creates new form EditPlayerAuto */
+    /** Creates new form EditPlayerAuto
+     * @param playerName Nom du joueur à afficher lors de la création de l'objet
+     * @param playerColor Couleur du joueur à afficher lors de la création de l'objet
+     * ATTENTION : '-!-' dans le nom du joueur cassera la sauvegarde
+     */
     public EditPlayer(String playerName, Color playerColor) {
         this.playerColor = playerColor;
         this.playerName = playerName;
