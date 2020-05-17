@@ -7,11 +7,16 @@ package View;
 
 import View.Filters.SaveFilter;
 import Controleur.Mediator;
+import Global.Configuration;
 import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
 /**
@@ -25,6 +30,7 @@ public class InitGame extends javax.swing.JPanel {
     MainGraphicInterface frame;
     private final JFileChooser fc;
     private ArrayList<EditPlayer> listOfEditPlayers;
+    private ImageQuits StartScreenBackground;
     
     /**
      * Creates new form InitGameAuto
@@ -53,6 +59,7 @@ public class InitGame extends javax.swing.JPanel {
         this.fc.setFileFilter(new SaveFilter());
         
         this.updateUI();
+        initTile();
     }
 
     /**
@@ -209,6 +216,33 @@ public class InitGame extends javax.swing.JPanel {
         }
         return tmp;
     }
+    
+    private void initTile() {
+        StartScreenBackground = readImage("StartScreenBackground");
+    }
+    
+    private ImageQuits readImage(String name) {
+        String ressource = (String) Configuration.read(name);
+        Configuration.instance().logger().info("Image " + ressource + " read as " + name);
+        InputStream in = Configuration.charge(ressource);
+        try {
+            // Chargement d'une image utilisable dans Swing
+            return new ImageQuits(ImageIO.read(in));
+        } catch (IOException e) {
+            Configuration.instance().logger().severe("Image " + ressource + " impossible to charge.");
+            System.exit(1);
+        }
+        return null;
+    }
+    
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        //ImageQuits i = new ImageQuits(Configuration.StartScreenBackground);
+        super.paintComponent(g);
+        g.drawImage(StartScreenBackground.image(), 0, 0, null);
+    }
+    
     
     public void reset() {
         this.editPlayers.removeAll();

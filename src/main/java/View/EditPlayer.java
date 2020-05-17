@@ -41,6 +41,9 @@ public class EditPlayer extends javax.swing.JPanel {
         jTextField1 = new javax.swing.JTextField();
         aiLevelList = new javax.swing.JComboBox<>();
         jButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField1.setText(this.playerName);
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -56,6 +59,7 @@ public class EditPlayer extends javax.swing.JPanel {
                 jTextField1KeyTyped(evt);
             }
         });
+        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 200, -1));
 
         aiLevelList.setMaximumRowCount(4);
         aiLevelList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Humain", "Ordinateur facile", "Ordinateur normal", "Ordinateur difficile" }));
@@ -64,6 +68,7 @@ public class EditPlayer extends javax.swing.JPanel {
                 aiLevelListItemStateChanged(evt);
             }
         });
+        add(aiLevelList, new org.netbeans.lib.awtextra.AbsoluteConstraints(218, 13, -1, -1));
 
         jButton.setBackground(this.playerColor);
         jButton.setMargin(new java.awt.Insets(14, 14, 14, 14));
@@ -72,28 +77,10 @@ public class EditPlayer extends javax.swing.JPanel {
                 jButtonActionPerformed(evt);
             }
         });
+        add(jButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 0, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(aiLevelList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(aiLevelList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/startscreen_background.png"))); // NOI18N
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 60));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionPerformed
@@ -136,6 +123,7 @@ public class EditPlayer extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> aiLevelList;
     private javax.swing.JButton jButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 

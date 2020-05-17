@@ -41,6 +41,7 @@ public final class Configuration {
     private static String DefaultMarble = "Marbles/default_marble.png";
     private static String Background = "Tiles/background.png";
     private static String SelectedActions = "Tiles/selected_actions.png";
+    public static String StartScreenBackground = "ChoiceGameMode/startscreen_background.png";
     
     
     
