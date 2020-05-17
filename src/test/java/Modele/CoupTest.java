@@ -20,9 +20,9 @@ class CoupTest {
 
     @BeforeEach
     public void init(){
+        board = new Board();
         player = new AIEasyPlayer("default", Color.BLUE, board);
         player.setStartPoint(Tools.Direction.SW);
-        board = new Board();
         board.addPlayer(player);
         marble = player.addMarble();
         board.getGrid()[2][2].addMarble(marble);

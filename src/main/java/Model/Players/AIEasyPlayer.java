@@ -6,10 +6,11 @@ import Model.Move;
 import Model.Support.AIEnvironnement;
 import Model.Support.Board;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +39,13 @@ public class AIEasyPlayer extends AI {
         /*System.out.println(m.getDirection());
         System.out.println(m.getPosition());*/
         return m;
+    }
+
+    public ArrayList<Point> aiTrain(AIEnvironnement env) {
+        Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE, 0, env.getCurrentPlayer());
+        //iaEnv.printBoard();
+        calculBestMove(getMaxDepth(), env, node);
+        return node.getNodeMove();
     }
     
     /**
