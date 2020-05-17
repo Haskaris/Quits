@@ -10,16 +10,26 @@ import Controleur.Mediator;
 
 
 import Paterns.Observateur;
+import View.Filters.SaveFilter;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
 
 /**
@@ -34,20 +44,25 @@ public class GraphicInterface implements Runnable, Observateur {
     
     boolean maximized;
     
-    JToggleButton menu;
+    JToggleButton menu, oneMoveBefore;
     JButton undo, redo;
-    InGameMenu inGameMenu;
+    JPanel inGameMenu;
     
     ArrayList<JLabel> names;
     
     JLabel nameLabel;
     
-    Box totalMenu, boxPlayer, boxPlayerAndBoard;
+    Box boxPlayer, boxPlayerAndBoard;
+    
+    private final JFileChooser fc;
     
     
     GraphicInterface(Mediator m) {
         this.mediator = m;
         this.names = new ArrayList<>();
+        this.fc = new JFileChooser();
+        this.fc.setAcceptAllFileFilterUsed(false);
+        this.fc.setFileFilter(new SaveFilter());
     }
 
     public static void start(Mediator m) {
@@ -71,36 +86,87 @@ public class GraphicInterface implements Runnable, Observateur {
     @Override
     public void run() {
         this.frame = new JFrame("Quits");
-        this.inGameMenu = new InGameMenu(this.mediator);
 
         this.boxPlayerAndBoard = Box.createVerticalBox();
         
-        this.createPlayers();
+        
         this.createMenu();
+        this.createPlayers();
         this.createBoard();
         
         // Mise en place de l'interface
         //j.ajouteObservateur(this);
         //chrono.start();
+        
         frame.add(boxPlayerAndBoard);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 485);
-        frame.setMinimumSize(new Dimension(500, 485));
+        frame.setSize(500, 600);
+        frame.setMinimumSize(new Dimension(500, 600));
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         this.update();
     }
     
     private void createMenu() {
-        totalMenu = Box.createHorizontalBox();
         
-        Box boxMenu = Box.createVerticalBox();
-        this.menu = new JToggleButton("Menu");
-        this.menu.setAlignmentX(Component.LEFT_ALIGNMENT);
-        this.menu.addActionListener((ActionEvent e) -> {
-            this.inGameMenu.setVisible(!this.inGameMenu.isVisible());
+        JMenuBar menuBar = new JMenuBar();
+
+        JMenu fileMenu = new JMenu("Menu");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+        
+        JMenuItem saveItem = new JMenuItem("Sauvegarder");
+        saveItem.setToolTipText("Sauvegarder la partie");
+        saveItem.addActionListener((event) -> {
+            fc.setDialogTitle("Sauvegarder");
+            fc.setApproveButtonText("Sauvegarder");
+            int returnVal = fc.showOpenDialog(null);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                this.mediator.saveGame(file.getName());
+            }
         });
+        
+        JMenuItem loadItem = new JMenuItem("Charger");
+        loadItem.setToolTipText("Charger une partie");
+        loadItem.addActionListener((event) -> {
+            fc.setDialogTitle("Charger");
+            fc.setApproveButtonText("Charger");
+            int returnVal = fc.showOpenDialog(null);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                this.mediator.loadGame(file.getName());
+            }
+        });
+        
+        JMenuItem startOverItem = new JMenuItem("Recommencer une partie");
+        startOverItem.setToolTipText("Recommencer une nouvelle partie avec les mêmes paramètres");
+        startOverItem.addActionListener((event) -> {
+            this.mediator.resetGame();
+        });
+        
+        JMenuItem rulesItem = new JMenuItem("Règles");
+        rulesItem.setToolTipText("Afficher les règles");
+        rulesItem.addActionListener((event) -> {
+            this.mediator.rules();
+        });
+
+        JMenuItem quitItem = new JMenuItem("Quitter");
+        //eMenuItem.setMnemonic(KeyEvent.VK_E);
+        quitItem.setToolTipText("Quitter le jeu");
+        quitItem.addActionListener((event) -> this.mediator.quitGame());
+
+        fileMenu.add(saveItem);
+        fileMenu.add(loadItem);
+        fileMenu.add(startOverItem);
+        fileMenu.add(rulesItem);
+        fileMenu.add(quitItem);
+        menuBar.add(fileMenu);
+
+        
+        Box boxMenu = Box.createHorizontalBox();
         
         this.undo = new JButton("Défaire");
         this.undo.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -118,28 +184,26 @@ public class GraphicInterface implements Runnable, Observateur {
             this.mediator.redo();
         });
         
-        boxMenu.add(this.menu);
-        boxMenu.add(this.undo);
-        boxMenu.add(this.redo);
-        totalMenu.add(boxMenu);
-        totalMenu.add(this.inGameMenu);
+        this.oneMoveBefore = new JToggleButton("Revoir");
+        this.oneMoveBefore.setAlignmentX(Component.LEFT_ALIGNMENT);
+        this.oneMoveBefore.setFocusable(false);
+        this.oneMoveBefore.setEnabled(this.mediator.canUndo());
+        this.oneMoveBefore.addActionListener((ActionEvent e) -> {
+            this.mediator.seeOneMoveBefore(this.oneMoveBefore.isSelected());
+        });
         
-        this.frame.add(totalMenu, BorderLayout.WEST);
+        menuBar.add(undo);
+        menuBar.add(redo);
+        menuBar.add(oneMoveBefore);
+        
+        this.frame.setJMenuBar(menuBar);
+      
     }
     
     private void createPlayers() {
         boxPlayer = Box.createHorizontalBox();
         
         nameLabel = new JLabel("");
-
-        /*this.mediator.getBoard().getPlayers().forEach((player) -> {
-            JLabel titre = new JLabel(player.name);
-            titre.setAlignmentX(Component.CENTER_ALIGNMENT);
-            boxPlayer.add(titre);
-            this.names.add(titre);
-        });
-        
-        this.frame.add(boxPlayer, BorderLayout.EAST);*/
         
         this.boxPlayer.add(new JLabel("Tour de "));
         this.boxPlayer.add(nameLabel);
@@ -156,6 +220,7 @@ public class GraphicInterface implements Runnable, Observateur {
     public void update() {
         boardGraphic.repaint();
         this.undo.setEnabled(this.mediator.canUndo());
+        this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.redo.setEnabled(this.mediator.canRedo());
         /*this.names.forEach((name) -> {
             name.setForeground(Color.black);
@@ -169,6 +234,12 @@ public class GraphicInterface implements Runnable, Observateur {
     public void dispose() {
         this.frame.setVisible(false);
         this.frame.dispose();
+    }
+    
+    public void blockUndoRedo() {
+        this.undo.setEnabled(false);
+        this.redo.setEnabled(false);
+        this.oneMoveBefore.setEnabled(true);
     }
 
     @Override

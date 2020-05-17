@@ -23,6 +23,7 @@ public class Mediator {
     private GraphicInterface graphicInterface;
     private MainGraphicInterface mainGraphicInterface;
     private final FileGestion fileGestion;
+    private boolean isGameBlocked;
     
     private Timer timer;
 
@@ -33,6 +34,7 @@ public class Mediator {
     public Mediator(MainGraphicInterface mainGraphicInterface) {
         this.fileGestion = new FileGestion(this);
         this.mainGraphicInterface = mainGraphicInterface;
+        this.isGameBlocked = false;
     }
 
     /**
@@ -98,7 +100,9 @@ public class Mediator {
      * @param l ligne où le clique a été effectué
      */
     public void mouseClick(int c, int l) {
-        board.playTurn(c, l);
+        if (!this.isGameBlocked) {
+            this.board.playTurn(c, l);
+        }
     }
     
     public void addObservateur(Observateur a) {
@@ -225,5 +229,24 @@ public class Mediator {
     public void clearSelectedMarble() {
         this.graphicInterface.boardGraphic.setSelectedMarble(null);
         this.timer.stop();
+    }
+
+    public void seeOneMoveBefore(Boolean isSelected) {
+        if (isSelected) {
+            this.blockGame();
+            this.undo();
+            this.graphicInterface.blockUndoRedo();
+        } else {
+            this.redo();
+            this.unBlockGame();
+        }
+    }
+
+    private void unBlockGame() {
+        this.isGameBlocked = false;
+    }
+
+    private void blockGame() {
+        this.isGameBlocked = true;
     }
 }
