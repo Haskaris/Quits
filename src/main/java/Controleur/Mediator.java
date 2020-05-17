@@ -5,7 +5,6 @@ import Global.Tools.AILevel;
 
 import Model.Players.*;
 import Model.Support.Board;
-import Model.Support.Marble;
 import Paterns.Observateur;
 import View.Dialogs.RulesDialog;
 import View.EditPlayer;
@@ -13,11 +12,8 @@ import View.EditPlayer;
 import View.GraphicInterface;
 import View.MainGraphicInterface;
 import View.Dialogs.VictoryDialog;
-import View.ViewBoard;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.Timer;
 
@@ -26,7 +22,7 @@ public class Mediator {
     private Board board;
     private GraphicInterface graphicInterface;
     private MainGraphicInterface mainGraphicInterface;
-    private FileGestion fileGestion;
+    private final FileGestion fileGestion;
     
     private Timer timer;
 

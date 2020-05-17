@@ -183,6 +183,7 @@ public class InitGame extends javax.swing.JPanel {
     }//GEN-LAST:event_buttonRulesActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+        fc.setApproveButtonText("Charger");
         int returnVal = fc.showOpenDialog(this);
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
