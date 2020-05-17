@@ -39,7 +39,7 @@ public class ReaderWriter {
                 //Format :
                 //TYPE NOM COULEUR POSITION
                 //Bille1X-Bille1Y/Bille2X-Bille2Y
-                Player tmp = Player.load(in_stream);
+                Player tmp = Player.load(in_stream, board);
                 String[] metadonees = readLine(in_stream).split("/");
                 for(String coord : metadonees) {
                     String[] xy = coord.split("-");

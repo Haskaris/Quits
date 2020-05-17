@@ -3,6 +3,7 @@ package Model.Players;
 import Global.Tools.Direction;
 import Model.Move;
 import Model.ReaderWriter;
+import Model.Support.Board;
 import Model.Support.Marble;
 import java.awt.Color;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public abstract class Player {
      * @param name
      * @param color
      */
-    Player(String name, Color color){
+    public Player(String name, Color color){
         this.name = name;
         this.color = color;
         marbles = new ArrayList<>();
@@ -128,7 +129,7 @@ public abstract class Player {
      * @return Player
      * @throws IOException 
      */
-    public static Player load(InputStream in_stream) throws IOException  {
+    public static Player load(InputStream in_stream, Board board) throws IOException  {
         Player tmp = null;
         String[] dataPlayer = ReaderWriter.readLine(in_stream).split(" ");
         switch (dataPlayer[0]){
@@ -139,13 +140,13 @@ public abstract class Player {
                     tmp = new DistantPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
                 case "AIEasyPlayer":
-                    tmp = new AIEasyPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
+                    tmp = new AIEasyPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])), board);
                     break;
                 case "AINormalPlayer":
                     tmp = new AINormalPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
                     break;
                 case "AIHardPlayer":
-                    tmp = new AIHardPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
+                    tmp = new AIHardPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])), board);
                     break;
             }
         tmp.setStartPoint(Direction.valueOf(dataPlayer[3]));
