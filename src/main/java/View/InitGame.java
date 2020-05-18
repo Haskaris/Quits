@@ -11,13 +11,18 @@ import Global.Configuration;
 import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Insets;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 /**
@@ -32,6 +37,7 @@ public class InitGame extends javax.swing.JPanel {
     private final JFileChooser fc;
     private ArrayList<EditPlayer> listOfEditPlayers;
     private ImageQuits StartScreenBackground;
+    private ImageQuits PlayButton;
     
     /**
      * Creates new form InitGameAuto
@@ -90,7 +96,20 @@ public class InitGame extends javax.swing.JPanel {
 
         labelGameMode.setText("Mode de jeu");
 
-        ButtonPlay.setText("Jouer");
+        ImageIcon MyImage = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/play_button.png"));
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(100, 46, Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        ButtonPlay.setIcon(image);
+        ButtonPlay.setBorderPainted(false);
+        ButtonPlay.setMaximumSize(new java.awt.Dimension(62, 32));
+        ButtonPlay.setMinimumSize(new java.awt.Dimension(62, 32));
+        ButtonPlay.setPreferredSize(new java.awt.Dimension(100, 46));
+        ImageIcon MyImage2 = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/play_button_pressed.png"));
+        Image img2 = MyImage2.getImage();
+        Image newImg2 = img2.getScaledInstance(100, 46, Image.SCALE_SMOOTH);
+        ImageIcon image2 = new ImageIcon(newImg2);
+        ButtonPlay.setPressedIcon(image2);
         ButtonPlay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonPlayActionPerformed(evt);
@@ -129,11 +148,11 @@ public class InitGame extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(gameModeList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(loadButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonPlay)))
+                        .addComponent(ButtonPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -147,10 +166,10 @@ public class InitGame extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(labelGameMode)
                             .addComponent(gameModeList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonPlay)
+                    .addComponent(ButtonPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(loadButton))
                 .addContainerGap())
         );

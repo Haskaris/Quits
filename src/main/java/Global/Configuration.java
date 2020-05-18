@@ -43,6 +43,7 @@ public final class Configuration {
     private static String SelectedActions = "Tiles/selected_actions.png";
     public static String StartScreenBackground = "ChoiceGameMode/startscreen_background_brighter.png";
     public static String PlayButton = "ChoiceGameMode/play_button.png";
+    public static String PlayButtonPressed = "ChoiceGameMode/play_button_pressed.png";
     
     
     
