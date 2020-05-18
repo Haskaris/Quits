@@ -2,6 +2,7 @@ package Model.Players;
 
 import Global.Tools;
 import Model.AI.AI;
+import Model.AI.NeuronalNetwork;
 import Model.Move;
 import Model.MoveCalculator;
 import Model.Support.AIEnvironnement;
@@ -25,68 +26,43 @@ public class AIHardPlayer2 extends AI {
     }
 
     @Override
-    public Move Jouer(List<Move> coups_possibles) {
+    public Move Jouer(List<Move> coups_possibles) throws IOException {
         //boolean impossibleMove = false;
         //AIEnvironnement iaEnv  = new AIEnvironnement(this._board);
-        if(this._result.length != 18 ){
-            System.out.println("Problème taille renvoyée incorrecte");
-        } else {
-            int x = 0;
-            float max_x = -1;
-            //on prend la valeur de x
-            for (int i = 0; i < 5; i++) {
-                if (this._result[i] > max_x) {
-                    x = i;
-                    max_x = this._result[i];
-                }
-            }
-            float max_y = -1;
-            int y = 0;
-            //on prend la valeur de y
-            for (int i = 0; i < 5; i++) {
-                if (this._result[i + 5] > max_y) {
-                    y = i;
-                    max_y = this._result[i + 5];
-                }
-            }
-            Tools.Direction dir = Tools.Direction.N;
-            float max_dir = -1;
-            boolean isMarble = true;
-            //on prend la direction
-            for (int i = 0; i < 8; i++) {
-                if (this._result[i + 10] > max_dir) {
-                    if (i >= 4) {
-                        isMarble = false;
+        NeuronalNetwork nt = new NeuronalNetwork();
+
+        AIEnvironnement env  = new AIEnvironnement(this._board);
+
+        //joueur nnnetwork
+        float[] result;
+        //on crée les entrées
+        float[] tInputs = new float[100];
+        //On ajoute chaque bille du plateau dans les inputs
+        int currentMarble = 0;
+        for (ArrayList<Point> arrayMarble : env.getPlayerMarble()) {
+            for (Point p : arrayMarble) {
+                for (int k = 0; k < 5; k++) {
+                    if (p.x == k) {
+                        tInputs[currentMarble + k] = 1;
+                    } else {
+                        tInputs[currentMarble + k] = -1;
                     }
-                    dir = getDirectionByIndex(i);
-                    max_dir = this._result[i + 10];
-                }
-            }
-            Move convertMove;
-            if(isMarble){
-                Marble goodMarble = null;
-                for (Marble m : this._board.getCurrentPlayer().getMarbles()) {
-                    if (m.getTile().getPosition().x == x && m.getTile().getPosition().y == y) {
-                        goodMarble = m;
-                        break;
+                    if (p.y == k) {
+                        tInputs[currentMarble + k + 5] = 1;
+                    } else {
+                        tInputs[currentMarble + k + 5] = -1;
                     }
                 }
-                if(goodMarble != null) {
-                    convertMove = new Move(goodMarble, dir, this._board.getCurrentPlayer());
-                } else {
-                    convertMove = coups_possibles.get(0);
-                    this._impossibleMove = true;
-                }
-            } else {
-                convertMove = new Move(new Point(x, y), dir, this._board.getCurrentPlayer());
-                MoveCalculator moveCalculator = new MoveCalculator(this._board);
-                if(!moveCalculator.possibleMoves().contains(convertMove)){
-                    this._impossibleMove = true;
-                }
+                currentMarble += 10;
             }
-            //convertMove.Afficher();
         }
-        return coups_possibles.get(0);
+        result = nt.FeedForward(tInputs);
+        ArrayList<Point> move = AIHardPlayer2.Jouer3(env, result);
+
+        //env.perform(move);
+        Move m = env.convertMove(move, this._board);
+
+        return m;
     }
 
     public void setResult(float[] result){
