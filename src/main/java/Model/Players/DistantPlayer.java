@@ -1,6 +1,7 @@
 package Model.Players;
 
 import Model.Move;
+import Model.WebManager;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 public class DistantPlayer extends Player {
     public DistantPlayer(String name, Color color) {
@@ -37,26 +39,22 @@ public class DistantPlayer extends Player {
         return message;
     }
 
-    private void webReceiver(){
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        try {
-            Connection connection = factory.newConnection();
-            Channel channel = connection.createChannel();
+    private void webReceiver() {
+        Channel channel = WebManager.channelCreatorLocal(QUEUE_NAME);
 
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-            System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
-            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                 message = SerializationUtils.deserialize(delivery.getBody());
                 System.out.println(" [x] Received '" + message + "'");
-            };
+        };
+        try {
             channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {
             });
-
         }catch (Exception e){
-            System.out.println("Erreur de reception des données");
+            System.out.println("Erreur de consommation");
         }
+
     }
 
 

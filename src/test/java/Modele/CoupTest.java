@@ -76,11 +76,11 @@ class CoupTest {
 
     @Test
     public void TestReseau() throws Exception {
-        WebSender webSender = new WebSender();
+        WebManager webSender = new WebManager();
         webSender.Send(new Move(new Point(1,1), Tools.Direction.NO,player.name));
-        Player player = new DistantPlayer("p", Color.RED);
-        Move m = player.Jouer(null);
-        m.print();
+        //Player player = new DistantPlayer("p", Color.RED);
+        //Move m = player.Jouer(null);
+        //m.print();
     }
 }
 
