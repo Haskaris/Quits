@@ -35,8 +35,15 @@ public abstract class AI extends Player {
     public float eval_func(AIEnvironnement iaEnv) {
         //with float we can do 1/current number for other player and choose de good one
         //a changer prendre en compte toutes les billes
-        if(iaEnv.playerWin()){
+        if(iaEnv.playerWinGiven(iaEnv.getIaPlayer())){
             return 0;
+        } else {
+            //Un autre joueur a gagné
+            for(Integer n :iaEnv.getPlayers()){
+                if(iaEnv.playerWinGiven(n)){
+                    return 100;
+                }
+            }
         }
         float sum = 0;
         Point goal = new Point(Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getIaPlayer()).x) , Math.abs(4-iaEnv.getStartingPoint().get(iaEnv.getIaPlayer()).y));
@@ -78,11 +85,29 @@ public abstract class AI extends Player {
             AIEnvironnement new_env = iaEnv.copy();
 
             new_env.perform(move);
-
             Node new_node = new Node(-1, null, node, null, Node.Node_type.MIN_NODE, name, iaEnv.getCurrentPlayer());
             node.setNodeChild(new_node);
             //sert au sotckage de l'arbre
             node.addNodeChild(new_node);
+
+            //noeud Max
+            if(new_env.getCurrentPlayer() == new_env.getIaPlayer()) {
+                //test si le joueur courant gagne
+                //si le joueur courant est l'IA
+                if (new_env.playerWinGiven(new_env.getIaPlayer())) {
+                    node.setNodeValue(0);
+                    node.setNodeMove(move);
+                    return node.getNodeValue();
+                }
+            } else {
+                //test si le joueur courant gagne
+                //si le joueur courant est l'IA
+                if (new_env.playerWin()) {
+                    node.setNodeValue(50);
+                    node.setNodeMove(move);
+                    return node.getNodeValue();
+                }
+            }
 
             //recurence
             //On passe au joueur suivant dans notre copie de l'environnement
@@ -95,13 +120,12 @@ public abstract class AI extends Player {
                 break;
             }
 
-            if (node.getNodeType() == Node.Node_type.MAX_NODE) {
+            //noeud Max
+            if (new_env.getCurrentPlayer() == new_env.getIaPlayer()) {
                 if (potential_value < node.getNodeValue() || node.getNodeValue() == -1 ) {
                     node.setNodeValue(potential_value);
                     node.setNodeMove(move);
                 }
-
-
             } else {
                 if (potential_value > node.getNodeValue() || node.getNodeValue() == -1) {
                     node.setNodeValue(potential_value);

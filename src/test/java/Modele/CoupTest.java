@@ -2,6 +2,7 @@ package Modele;
 
 import Global.Tools;
 import Model.*;
+import Model.AI.NNManager;
 import Model.Support.*;
 import Model.Players.*;
 
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,6 +67,12 @@ class CoupTest {
         coupspossible = new MoveCalculator(board).possibleMoves();
         board.getHistory().doMove(player.Jouer(coupspossible));
         //LecteurRedacteur.AffichePartie(board);
+    }
+
+    @Test
+    public void TestTrainAI() throws IOException {
+        NNManager manager = new NNManager();
+
     }
 }
 

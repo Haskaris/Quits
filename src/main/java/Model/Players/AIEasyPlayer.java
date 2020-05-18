@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class AIEasyPlayer extends AI {
 
     public AIEasyPlayer(String name, Color color, Board board) {
-        super(name, color, board, 2);
+        super(name, color, board, 3);
     }
 
     @Override
@@ -45,6 +45,9 @@ public class AIEasyPlayer extends AI {
         Node node = new Node(-1, null, null, null, Node.Node_type.MAX_NODE, 0, env.getCurrentPlayer());
         //iaEnv.printBoard();
         calculBestMove(getMaxDepth(), env, node);
+        //System.out.println(env.getCurrentPlayer());
+        //System.out.println(env.getStartingPoint());
+        //System.out.println(node.getNodeMove());
         return node.getNodeMove();
     }
     
