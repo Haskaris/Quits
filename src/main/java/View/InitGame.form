@@ -34,7 +34,7 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="editPlayers" pref="344" max="32767" attributes="0"/>
+                      <Component id="editPlayers" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="loadButton" min="-2" max="-2" attributes="0"/>
@@ -59,7 +59,7 @@
                           <Component id="gameModeList" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="editPlayers" pref="93" max="32767" attributes="0"/>
+                  <Component id="editPlayers" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -111,6 +111,9 @@
       </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="editPlayers">
+      <Properties>
+        <Property name="opaque" type="boolean" value="false"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="InitGameAuto_editPlayers"/>
       </AuxValues>

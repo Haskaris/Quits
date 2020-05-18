@@ -41,8 +41,10 @@ public class EditPlayer extends javax.swing.JPanel {
         jTextField1 = new javax.swing.JTextField();
         aiLevelList = new javax.swing.JComboBox<>();
         jButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 0, 0));
+        setForeground(new java.awt.Color(255, 255, 102));
+        setOpaque(false);
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField1.setText(this.playerName);
@@ -78,9 +80,6 @@ public class EditPlayer extends javax.swing.JPanel {
             }
         });
         add(jButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 0, -1, -1));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/startscreen_background.png"))); // NOI18N
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 60));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionPerformed
@@ -123,7 +122,6 @@ public class EditPlayer extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> aiLevelList;
     private javax.swing.JButton jButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
