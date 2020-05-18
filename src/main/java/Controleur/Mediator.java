@@ -14,7 +14,10 @@ import View.MainGraphicInterface;
 import View.Dialogs.VictoryDialog;
 
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 
 public class Mediator {
@@ -56,7 +59,12 @@ public class Mediator {
      * @param fileName Nom de la partie à sauvegarder
      */
     public void saveGame(String fileName) {
-        this.fileGestion.saveGame(fileName);
+        try {
+            this.fileGestion.saveGame(fileName);
+            this.board.print(System.out);
+        } catch (IOException ex) {
+            Logger.getLogger(Mediator.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**

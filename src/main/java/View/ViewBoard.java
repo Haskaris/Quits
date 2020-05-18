@@ -123,8 +123,6 @@ public class ViewBoard extends BoardGraphic {
 
                 tracer(tileImages.get(index), x, y, widthTile, heightTile);
                 
-                System.out.println(tileImages.get(index).toString());
-                
                 if (i == currentXObjective && j == currentYObjective) {
                     drawRect(currentColor, x, y, widthTile, heightTile);
                 }

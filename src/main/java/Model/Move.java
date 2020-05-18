@@ -7,6 +7,9 @@ import Model.Support.Board;
 import static Global.Tools.*;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class Move {
 
@@ -47,10 +50,10 @@ public class Move {
      * @param direction Direction du mouvement
      * @param player Responsable du mouvement
      */
-    public Move(Marble marble, Direction direction, Player player) {
+    public Move(Marble marble, Direction direction/*, Player player*/) {
         this.marble = marble;
         this.direction = direction;
-        this.player = player;
+        //this.player = player;
     }
 
     /**
@@ -60,10 +63,10 @@ public class Move {
      * @param direction Direction du mouvement
      * @param player Responsable du mouvement
      */
-    public Move(Point line, Direction direction, Player player) {
+    public Move(Point line, Direction direction/*, Player player*/) {
         this.line = line;
         this.direction = direction;
-        this.player = player;
+        //this.player = player;
     }
 
     public void perform(Board board) {
@@ -71,7 +74,20 @@ public class Move {
             board.moveMarble(marble, direction);
         }
         if (line != null) {
-            board.moveLine(line, direction);
+            switch(direction) {
+                case N:
+                case E:
+                case S:
+                case W:
+                    board.moveLine(line, direction);
+                    break;
+                case NE:
+                case SE:
+                case SW:
+                case NW:
+                    board.moveMarble(line, direction);
+                    break;
+            }
         }
     }
 
@@ -80,7 +96,20 @@ public class Move {
             board.moveMarble(marble, reverse(direction));
         }
         if (line != null) {
-            board.moveLine(line, reverse(direction));
+            switch(direction) {
+                case N:
+                case E:
+                case S:
+                case W:
+                    board.moveLine(line, reverse(direction));
+                    break;
+                case NE:
+                case SE:
+                case SW:
+                case NW:
+                    board.moveMarble(line, reverse(direction));
+                    break;
+            }
         }
     }
 
@@ -117,63 +146,91 @@ public class Move {
         return (marble == null);
     }
 
-    public void Display() {
-
-        if (line != null) {
-            int number = -1;
-            String cardinalPoint = "";
-            String isRowOrCol = "";
-            switch (direction) {
-                case S:
-                    //Moving on y axis
-                    cardinalPoint = "South";
-                    isRowOrCol = "Column";
-                    number = line.x;
-                    break;
-                case N:
-                    //Moving on y axis
-                    cardinalPoint = "North";
-                    isRowOrCol = "Column";
-                    number = line.x;
-                    break;
-                case W:
-                    //Moving on x axis
-                    cardinalPoint = "West";
-                    isRowOrCol = "Row";
-                    number = line.y;
-                    break;
-                case E:
-                    //Moving on x axis
-                    cardinalPoint = "East";
-                    isRowOrCol = "Row";
-                    number = line.y;
-                    break;
-                default:
-                    System.out.println("Erreur");
-                    break;
-            }
-            System.out.println(isRowOrCol + " n°" + number + " shiftable towards " + cardinalPoint + ".");
-            return;
-        }
-        if (marble != null) {
-            System.out.println(marble.getPosition());
-            System.out.println(direction);
-        }
-    }
-
+    /**
+     * Permet de savoir si un mouvement est égale à un autre
+     * @param toBeCompared Mouvement à comparer
+     * @return Vrai si les mouvements sont égaux
+     */
     public boolean isEqual(Move toBeCompared) {
+        boolean sameDirection = (this.direction == toBeCompared.direction);
         if (line != null && toBeCompared.line != null) {
-
-            return this.direction == toBeCompared.direction
+            return sameDirection
                     && this.line.x == toBeCompared.line.x
                     && this.line.y == toBeCompared.line.y;
-        }
-        if (marble != null && toBeCompared.marble != null) {
-            return this.direction == toBeCompared.direction
+        } else if (marble != null && toBeCompared.marble != null) {
+            return sameDirection
                     && this.marble.getPosition().x == toBeCompared.marble.getPosition().x
                     && this.marble.getPosition().y == toBeCompared.marble.getPosition().y;
         }
         return false;
+    }
+
+    /////////////////////////////////  IO  /////////////////////////////////////
+    public void printPast(OutputStream stream) throws IOException {
+        if (this.lastMove != null) {
+            this.lastMove.printPast(stream);
+        }
+        
+        this.print(stream);
+    }
+    
+    public void printFuture(OutputStream stream) throws IOException {
+        this.print(stream);
+        
+        if (this.nextMove != null) {
+            this.nextMove.printFuture(stream);
+        }
+    }
+    
+    public void print(OutputStream stream) throws IOException {
+        //Début du mouvement
+        stream.write("#".getBytes());
+        if (this.marble != null) {
+            this.marble.print(stream);
+        } else if (this.line != null) {
+            stream.write(String.valueOf(this.line.x).getBytes());
+            stream.write('-');
+            stream.write(String.valueOf(this.line.y).getBytes());
+            stream.write('/');
+        }
+        stream.write(direction.name().getBytes());
+        stream.write("#".getBytes());
+        //Fin du mouvement
+    }
+    
+    public static Move loadPast(String in_stream) {
+        String param = in_stream.split("#")[1];
+        Move oldestMove = load(param);
+        
+        String tmp = in_stream.substring(param.length()+2);
+        if (!"".equals(tmp)) {
+            Move tmpMove = loadPast(tmp);
+            oldestMove.nextMove = tmpMove;
+            tmpMove.lastMove = oldestMove;
+            oldestMove = tmpMove;
+        }
+        
+        return oldestMove;
+    }
+    
+    public static Move loadFuture(String in_stream) {
+        String param = in_stream.split("#")[1];
+        Move toReturn = load(param);
+        
+        String tmp = in_stream.substring(param.length()+2);
+        if (!"".equals(tmp)) {
+            toReturn.nextMove = loadFuture(tmp);
+            toReturn.nextMove.lastMove = toReturn;
+        }
+        
+        return toReturn;
+    }
+    
+    public static Move load(String in_stream) {
+        String[] coord = in_stream.split("/")[0].split("-");
+        String dir = in_stream.split("/")[1];
+        Move toReturn = new Move(new Point(Integer.parseInt(coord[0]), Integer.parseInt(coord[1])), Direction.valueOf(dir));
+        return toReturn;
     }
 
 }

@@ -1,6 +1,9 @@
 package Model;
 
 import Model.Support.Board;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Classe permettant la gestion de l'historique
@@ -101,6 +104,29 @@ public class History {
     public Move lastMove(){
         return past;
     }
+
+    /////////////////////////////////  IO  /////////////////////////////////////
+    public void print(OutputStream stream) throws IOException {
+        stream.write("past ".getBytes());
+        if (!this.isEmptyPast()) {
+            this.past.printPast(stream);
+        }
+        stream.write('\n');
+        stream.write("future ".getBytes());
+        if (!this.isEmptyFuture()) {
+            this.future.printFuture(stream);
+        }
+    }
     
+    public void load(InputStream in_stream) throws IOException {
+        String[] paramLine = ReaderWriter.readLine(in_stream).split(" ");
+        if (paramLine[0].equals("past")) {
+            this.past = Move.loadPast(paramLine[1]);
+        }
+        paramLine = ReaderWriter.readLine(in_stream).split(" ");
+        if (paramLine[0].equals("future")) {
+            this.future = Move.loadFuture(paramLine[1]);
+        }
+    }
     
 }

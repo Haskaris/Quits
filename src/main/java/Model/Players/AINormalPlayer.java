@@ -26,7 +26,7 @@ public class AINormalPlayer extends Player {
     @Override
     public void print(OutputStream stream) throws IOException {
         stream.write("AINormalPlayer".getBytes());
-        stream.write("-!-".getBytes());
+        stream.write('\n');
         super.print(stream);
     }
 }

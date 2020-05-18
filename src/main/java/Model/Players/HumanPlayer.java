@@ -49,7 +49,7 @@ public class HumanPlayer extends Player {
     @Override
     public void print(OutputStream stream) throws IOException {
         stream.write("HumanPlayer".getBytes());
-        stream.write("-!-".getBytes());
+        stream.write('\n');
         super.print(stream);
     }
 
@@ -124,7 +124,7 @@ public class HumanPlayer extends Player {
                 Move move = new Move(
                         new Point(Tools.findAppropriateCoordinatesForTileShifts(column),
                                 Tools.findAppropriateCoordinatesForTileShifts(line)), 
-                                d, this);
+                                d/*, this*/);
                 
                 
                 if (moveExists(move, board.allPotentialShifts)) {
@@ -151,8 +151,8 @@ public class HumanPlayer extends Player {
 
                     board.getHistory().doMove(
                             new Move(board.selectedMarble,
-                                    Tools.PointToDir(Tools.PointToPointDiff(pos, new Point(column, line))),
-                                    this)
+                                    Tools.PointToDir(Tools.PointToPointDiff(pos, new Point(column, line)))/*,
+                                    this*/)
                     );
 
                     this.setStatus(Tools.PlayerStatus.MarbleSelection);

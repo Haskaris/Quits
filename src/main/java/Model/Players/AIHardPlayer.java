@@ -26,7 +26,7 @@ public class AIHardPlayer extends Player {
     @Override
     public void print(OutputStream stream) throws IOException {
         stream.write("AIHardPlayer".getBytes());
-        stream.write("-!-".getBytes());
+        stream.write('\n');
         super.print(stream);
     }
 }

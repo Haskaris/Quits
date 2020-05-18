@@ -192,6 +192,19 @@ public class Board {
         grid[startPoint.x][startPoint.y].removeMarble();
         this.grid[finishPoint.x][finishPoint.y].addMarble(marble);
     }
+    
+    /**
+     * Deplace la bille de la tuile aux coordonées précisées, dans la direction précisé.
+     *
+     * @param startPoint
+     * @param direction
+     */
+    public void moveMarble(Point startPoint, Tools.Direction direction) {
+        Point finishPoint = Tools.getNextPoint(startPoint, direction);
+        Marble tmp = grid[startPoint.x][startPoint.y].removeMarble();
+        this.grid[finishPoint.x][finishPoint.y].addMarble(tmp);
+    }
+
 
     /**
      * DEPRECATED Mets à jours les positions des tuiles
@@ -391,7 +404,7 @@ public class Board {
     /////////////////////////////////  IO  /////////////////////////////////////
     /**
      * S'imprime dans la sortie stream
-     * @param stream
+     * @param stream Sortie sur laquelle imprimer le plateau
      * @throws IOException
      */
     public void print(OutputStream stream) throws IOException {
@@ -411,11 +424,13 @@ public class Board {
             }
             stream.write('\n');
         }
+        
+        this.history.print(stream);
     }
 
     /**
      * Charge le plateau à partir de l'entrée stream
-     * @param in_stream
+     * @param in_stream Entrée sur laquelle imprimer le plateau
      * @throws IOException
      */
     public void load(InputStream in_stream) throws IOException {
@@ -430,5 +445,7 @@ public class Board {
                 this.grid[i][j].setIndexOfColor(indexOfColor);
             }
         }
+        
+        this.history.load(in_stream);
     }
 }
