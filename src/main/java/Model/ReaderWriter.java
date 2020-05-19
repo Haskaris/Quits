@@ -42,7 +42,7 @@ public class ReaderWriter {
                 Player tmp = Player.load(in_stream);
                 String[] metadonees = readLine(in_stream).split("/");
                 for(String coord : metadonees) {
-                    String[] xy = coord.split("-");
+                    String[] xy = coord.split(",");
                     Marble btmp = tmp.addMarble();
                     board.placeMarbleOn(btmp, Integer.parseInt(xy[0]), Integer.parseInt(xy[1]));
                 }

@@ -118,6 +118,7 @@ public abstract class Player {
         stream.write('\n');
         for(Marble m : this.marbles) {
             m.print(stream);
+            stream.write('/');
         }
         stream.write('\n');
     }

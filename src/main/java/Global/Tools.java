@@ -49,6 +49,15 @@ public class Tools {
         NODIR;
     }
 
+    public static enum MoveType {
+        MARBLE,
+        TILE,
+    }
+
+    public static boolean isDiagonal(Direction d) {
+        return Direction.NE == d || Direction.NW == d || Direction.SE == d || Direction.SW == d;
+    }
+
     public static Point getNextPoint(Point p, Direction d) {
         Point tmp = new Point();
         switch (d) {
@@ -73,9 +82,10 @@ public class Tools {
     }
 
     /**
-     * Convertit une direction en un point
-     * Permet de se décaler en ajoutant le retour à un point éxistant
-     * Exemple : Point(1,1) + DirToPoint(NE) = Point(2,0)
+     * Convertit une direction en un point Permet de se décaler en ajoutant le
+     * retour à un point éxistant Exemple : Point(1,1) + DirToPoint(NE) =
+     * Point(2,0)
+     *
      * @param d Direction - Direction à convertir
      * @return Point - Point calculé
      */
@@ -174,6 +184,7 @@ public class Tools {
 
     /**
      * Clamp coordinates
+     *
      * @param value int - Value to clamp
      * @return int - Value clamped
      */

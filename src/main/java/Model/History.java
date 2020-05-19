@@ -1,132 +1,156 @@
 package Model;
 
+import Global.Tools;
+import Global.Tools.Direction;
 import Model.Support.Board;
+import Model.Support.Marble;
+import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 /**
  * Classe permettant la gestion de l'historique
+ *
  * @author Mathis
  */
 public class History {
+
     private final Board board;
-    private Move past;
-    private Move future;
+
+    private ArrayList<Move> historyMoves;
+    private int indexHistory;
 
     /**
      * Constructeur
-     * @param board 
+     *
+     * @param board
      */
-    public History(Board board){
+    public History(Board board) {
         this.board = board;
+        historyMoves = new ArrayList<>();
+        indexHistory = 0;
     }
 
     /**
      * Effectue le coup c et l'ajoute à l'historique
-     * @param c 
+     *
+     * @param c
      */
-    public void doMove(Move c){
-        if(c == null)
+    public void doMove(Move c) {
+        if (c == null) {
             return; // Correspond a une impossibilite de se deplacer pour le player. Rien n'est enregistre
+        }
         c.perform(board);
         this.addToHistory(c);
     }
-    
+
     /**
      * Ajoute un coup à l'historique
+     *
      * @param m
      */
     public void addToHistory(Move m) {
-        //Le prochaine mouvement dans la liste chainée est mis à jour
-        if (!isEmptyPast()) {
-            this.past.nextMove = m;
-            m.lastMove = this.past;
+
+        //On commence par supprimer les mouvements suivants
+        for (int i = historyMoves.size() - 1; i > indexHistory; i--) {
+            historyMoves.remove(i);
         }
-        
-        //Le dernier mouvement effectué est m
-        this.past = m;
-        
-        //Future est null car on écrase le futur
-        this.future = null;
+
+        //Ensuite on ajoute le nouveau mouvement à la fin de notre historique
+        historyMoves.add(m);
+        indexHistory++;
+
     }
 
     /**
-     * Permet d'anuller la dernière action
+     * Permet d'annuler la dernière action
      */
-    public void undo(){
-        if(isEmptyPast())
+    public void undo() {
+        if (isEmptyPast()) {
             return;
-        
-        //J'annule le dernier mouvement
-        this.past.cancel(this.board);
-        
-        //Le dernier mouvement devient donc mon nouveau futur
-        this.future = past;
-        
-        //Le dernier mouvement avant ce mouvement, devient le nouveau passé
-        this.past = this.past.lastMove;
-        
+        }
+
+        //J'annule le dernier mouvement, mais rien n'est supprimé pour pouvoir redo derrière si besoin
+        indexHistory--;
+        historyMoves.get(indexHistory).cancel(this.board);
+
         this.board.previousPlayer();
     }
 
     /**
      * Permet de refaire une action annulée
      */
-    public void redo(){
-        if(isEmptyFuture())
+    public void redo() {
+        if (isEmptyFuture()) {
             return;
-        
+        }
+
         //Je refais le dernier mouvement
-        this.future.perform(board);
-        
-        //Le prochain mouvement est donc mon nouveau dernier mouvement
-        this.past = this.future;
-        
-        //Le future mouvement est donc 
-        this.future = this.future.nextMove;
-        
+        historyMoves.get(indexHistory).perform(board);
+        indexHistory++;
+
         this.board.nextPlayer();
     }
 
-    public boolean isEmptyPast(){
-        return this.past == null;
+    public boolean isEmptyPast() {
+        return indexHistory == 0;
     }
-    
-    public boolean isEmptyFuture(){
-        return this.future == null;
+
+    public boolean isEmptyFuture() {
+        return indexHistory == historyMoves.size();
     }
-    
+
     /**
      * Retourne le dernier coup, null sinon
-     * @return 
+     *
+     * @return
      */
-    public Move lastMove(){
-        return past;
+    public Move lastMove() {
+        if (isEmptyPast()) {
+            return null;
+        }
+        return historyMoves.get(indexHistory - 1);
     }
 
     /////////////////////////////////  IO  /////////////////////////////////////
     public void print(OutputStream stream) throws IOException {
-        stream.write("past ".getBytes());
-        if (!this.isEmptyPast()) {
-            this.past.printPast(stream);
+        // 2,3 NE;3,2 SW;0,4 W;2,4 S
+        // 2
+        for (int i = 0; i < historyMoves.size(); i++) {
+            if (i != 0) {
+                stream.write(';');
+            }
+            historyMoves.get(i).print(stream);
+
         }
         stream.write('\n');
-        stream.write("future ".getBytes());
-        if (!this.isEmptyFuture()) {
-            this.future.printFuture(stream);
-        }
+        stream.write(String.valueOf(indexHistory).getBytes());
     }
-    
+
     public void load(InputStream in_stream) throws IOException {
-        String[] paramLine = ReaderWriter.readLine(in_stream).split(" ");
-        if (paramLine[0].equals("past")) {
-            this.past = Move.loadPast(paramLine[1]);
+        // 2,3 NE;3,2 SW;0,4 W;2,4 S
+        // 2
+        String[] paramLine = ReaderWriter.readLine(in_stream).split(";");
+        for (String s : paramLine) {
+            historyMoves.add(Move.load(s));
         }
-        paramLine = ReaderWriter.readLine(in_stream).split(" ");
-        if (paramLine[0].equals("future")) {
-            this.future = Move.loadFuture(paramLine[1]);
+        indexHistory = Integer.valueOf(ReaderWriter.readLine(in_stream));
+
+    }
+
+    public void clear() {
+        historyMoves.clear();
+        indexHistory = 0;
+    }
+
+    public void display() {
+        System.out.println("\nHISTORY :");
+        for (int i = 0; i < historyMoves.size(); i++) {
+            if(i == indexHistory) System.out.println(" <[]> ");
+            historyMoves.get(i).display();
         }
     }
-    
+
 }
