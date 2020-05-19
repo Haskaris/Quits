@@ -7,11 +7,22 @@ package View;
 
 import View.Filters.SaveFilter;
 import Controleur.Mediator;
+import Global.Configuration;
 import Global.Tools;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 /**
@@ -25,6 +36,8 @@ public class InitGame extends javax.swing.JPanel {
     MainGraphicInterface frame;
     private final JFileChooser fc;
     private ArrayList<EditPlayer> listOfEditPlayers;
+    private ImageQuits StartScreenBackground;
+    private ImageQuits PlayButton;
     
     /**
      * Creates new form InitGameAuto
@@ -53,6 +66,7 @@ public class InitGame extends javax.swing.JPanel {
         this.fc.setFileFilter(new SaveFilter());
         
         this.updateUI();
+        initTile();
     }
 
     /**
@@ -73,16 +87,46 @@ public class InitGame extends javax.swing.JPanel {
 
         setMinimumSize(new java.awt.Dimension(643, 158));
 
-        buttonRules.setText("Règles");
+        ImageIcon MyImage5 = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/rules_button.png"));
+        Image img5 = MyImage5.getImage();
+        Image newImg5 = img5.getScaledInstance(114, 46, Image.SCALE_SMOOTH);
+        ImageIcon image5 = new ImageIcon(newImg5);
+        buttonRules.setIcon(image5);
+        buttonRules.setBorderPainted(false);
+        buttonRules.setPreferredSize(new java.awt.Dimension(114, 46));
+        ImageIcon MyImage6 = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/rules_button_pressed.png"));
+        Image img6 = MyImage6.getImage();
+        Image newImg6 = img6.getScaledInstance(114, 46, Image.SCALE_SMOOTH);
+        ImageIcon image6 = new ImageIcon(newImg6);
+        buttonRules.setPressedIcon(image6);
         buttonRules.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonRulesActionPerformed(evt);
             }
         });
 
-        labelGameMode.setText("Mode de jeu");
+        ImageIcon MyImage7 = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/game_mode.png"));
+        Image img7 = MyImage7.getImage();
+        Image newImg7 = img7.getScaledInstance(124, 14, Image.SCALE_SMOOTH);
+        ImageIcon image7 = new ImageIcon(newImg7);
+        labelGameMode.setIcon(image7);
+        labelGameMode.setFont(new java.awt.Font("Backtrack Demo", 0, 11)); // NOI18N
+        labelGameMode.setPreferredSize(new java.awt.Dimension(124, 14));
 
-        ButtonPlay.setText("Jouer");
+        ImageIcon MyImage = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/play_button.png"));
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(100, 46, Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        ButtonPlay.setIcon(image);
+        ButtonPlay.setBorderPainted(false);
+        ButtonPlay.setMaximumSize(new java.awt.Dimension(62, 32));
+        ButtonPlay.setMinimumSize(new java.awt.Dimension(62, 32));
+        ButtonPlay.setPreferredSize(new java.awt.Dimension(100, 46));
+        ImageIcon MyImage2 = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/play_button_pressed.png"));
+        Image img2 = MyImage2.getImage();
+        Image newImg2 = img2.getScaledInstance(100, 46, Image.SCALE_SMOOTH);
+        ImageIcon image2 = new ImageIcon(newImg2);
+        ButtonPlay.setPressedIcon(image2);
         ButtonPlay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonPlayActionPerformed(evt);
@@ -96,9 +140,21 @@ public class InitGame extends javax.swing.JPanel {
             }
         });
 
+        editPlayers.setOpaque(false);
         editPlayers.setLayout(new javax.swing.BoxLayout(editPlayers, javax.swing.BoxLayout.Y_AXIS));
 
-        loadButton.setText("Charger une partie");
+        ImageIcon MyImage3 = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/load_button.png"));
+        Image img3 = MyImage3.getImage();
+        Image newImg3 = img3.getScaledInstance(175, 71, Image.SCALE_SMOOTH);
+        ImageIcon image3 = new ImageIcon(newImg3);
+        loadButton.setIcon(image3);
+        loadButton.setBorderPainted(false);
+        loadButton.setPreferredSize(new java.awt.Dimension(175, 71));
+        ImageIcon MyImage4 = new javax.swing.ImageIcon(getClass().getResource("/ChoiceGameMode/load_button_pressed.png"));
+        Image img4 = MyImage4.getImage();
+        Image newImg4 = img4.getScaledInstance(175, 71, Image.SCALE_SMOOTH);
+        ImageIcon image4 = new ImageIcon(newImg4);
+        loadButton.setPressedIcon(image4);
         loadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadButtonActionPerformed(evt);
@@ -114,17 +170,18 @@ public class InitGame extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(buttonRules)
+                            .addComponent(buttonRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(labelGameMode)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(6, 6, 6)
+                                .addComponent(labelGameMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(gameModeList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE))
+                        .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(loadButton)
+                        .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ButtonPlay)))
+                        .addComponent(ButtonPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -133,16 +190,16 @@ public class InitGame extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(buttonRules)
+                        .addComponent(buttonRules, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelGameMode)
-                            .addComponent(gameModeList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(gameModeList)
+                            .addComponent(labelGameMode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(editPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonPlay)
-                    .addComponent(loadButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonPlay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -154,13 +211,13 @@ public class InitGame extends javax.swing.JPanel {
                     this.editPlayers.add(this.listOfEditPlayers.get(0));
                     this.editPlayers.add(this.listOfEditPlayers.get(1));
                     this.gameMode = Tools.GameMode.TwoPlayersFiveBalls;
-                    this.frame.updateSize(675, 225);
+                    this.frame.updateSize(725, 250);
                     break;
                 case 1:
                     this.editPlayers.add(this.listOfEditPlayers.get(0));
                     this.editPlayers.add(this.listOfEditPlayers.get(1));
                     this.gameMode = Tools.GameMode.TwoPlayersThreeBalls;
-                    this.frame.updateSize(675, 225);
+                    this.frame.updateSize(725, 250);
                     break;
                 case 2:
                     this.editPlayers.add(this.listOfEditPlayers.get(0));
@@ -168,7 +225,7 @@ public class InitGame extends javax.swing.JPanel {
                     this.editPlayers.add(this.listOfEditPlayers.get(2));
                     this.editPlayers.add(this.listOfEditPlayers.get(3));
                     this.gameMode = Tools.GameMode.FourPlayersFiveBalls;
-                    this.frame.updateSize(675, 325);
+                    this.frame.updateSize(725, 350);
                     break;
             }
         this.updateUI();
@@ -211,6 +268,33 @@ public class InitGame extends javax.swing.JPanel {
         }
         return tmp;
     }
+    
+    private void initTile() {
+        StartScreenBackground = readImage("StartScreenBackground");
+    }
+    
+    private ImageQuits readImage(String name) {
+        String ressource = (String) Configuration.read(name);
+        Configuration.instance().logger().info("Image " + ressource + " read as " + name);
+        InputStream in = Configuration.charge(ressource);
+        try {
+            // Chargement d'une image utilisable dans Swing
+            return new ImageQuits(ImageIO.read(in));
+        } catch (IOException e) {
+            Configuration.instance().logger().severe("Image " + ressource + " impossible to charge.");
+            System.exit(1);
+        }
+        return null;
+    }
+    
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        //ImageQuits i = new ImageQuits(Configuration.StartScreenBackground);
+        super.paintComponent(g);
+        g.drawImage(StartScreenBackground.image(), 0, 0, null);
+    }
+    
     
     public void reset() {
         this.editPlayers.removeAll();
