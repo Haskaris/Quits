@@ -9,8 +9,12 @@ package View;
 import View.ColorPicker.ColorPicker;
 import Global.Tools;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Insets;
 import javax.swing.ImageIcon;
+import javax.swing.border.Border;
 
 /**
  *
@@ -30,7 +34,23 @@ public class EditPlayer extends javax.swing.JPanel {
         this.colorPicker = new ColorPicker(this.playerColor);
         initComponents();
     }
+    private static class RoundedBorder implements Border {
 
+        private int radius;
+
+        RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius+1, this.radius+1, this.radius+2, this.radius);
+        }
+        public boolean isBorderOpaque() {
+            return true;
+        }
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.drawRoundRect(x, y, width-1, height-1, radius, radius);
+        }
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -49,6 +69,7 @@ public class EditPlayer extends javax.swing.JPanel {
         setOpaque(false);
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jTextField1.setBackground(new java.awt.Color(224, 224, 224));
         jTextField1.setText(this.playerName);
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -75,6 +96,8 @@ public class EditPlayer extends javax.swing.JPanel {
         add(aiLevelList, new org.netbeans.lib.awtextra.AbsoluteConstraints(218, 13, -1, -1));
 
         jButton.setBackground(this.playerColor);
+        jButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton.setFocusPainted(false);
         jButton.setMargin(new java.awt.Insets(14, 14, 14, 14));
         jButton.setPreferredSize(new java.awt.Dimension(33, 33));
         jButton.addActionListener(new java.awt.event.ActionListener() {
