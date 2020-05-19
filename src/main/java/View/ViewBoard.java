@@ -36,7 +36,6 @@ public class ViewBoard extends BoardGraphic {
         tileImages.add(readImage("Tile2"));
         tileImages.add(readImage("Tile3"));
         tileImages.add(readImage("Tile4"));
-        
         selectedTile = readImage("SelectedTile");
         arrowUp = readImage("ArrowUp");
         arrowRight = readImage("ArrowRight");

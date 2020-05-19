@@ -3,6 +3,7 @@ package Model.Players;
 import Global.Tools.Direction;
 import Model.Move;
 import Model.ReaderWriter;
+import Model.Support.Board;
 import Model.Support.Marble;
 import java.awt.Color;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public abstract class Player {
      * @param name
      * @param color
      */
-    Player(String name, Color color){
+    public Player(String name, Color color){
         this.name = name;
         this.color = color;
         marbles = new ArrayList<>();
@@ -124,12 +125,12 @@ public abstract class Player {
     }
     
     /**
-     * Créée un joueur à partir de l'entrée stream
+     * Créée un joueur à partir de l'entrée stream 
      * @param in_stream
      * @return Player
      * @throws IOException 
      */
-    public static Player load(InputStream in_stream) throws IOException  {
+    public static Player load(InputStream in_stream, Board board) throws IOException  {
         Player tmp = null;
         String playerType = ReaderWriter.readLine(in_stream);
         String playerName = ReaderWriter.readLine(in_stream);
@@ -142,13 +143,13 @@ public abstract class Player {
                     tmp = new DistantPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
                     break;
                 case "AIEasyPlayer":
-                    tmp = new AIEasyPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
+                    tmp = new AIEasyPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
                 case "AINormalPlayer":
                     tmp = new AINormalPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
                     break;
                 case "AIHardPlayer":
-                    tmp = new AIHardPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
+                    tmp = new AIHardPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
             }
         tmp.setStartPoint(Direction.valueOf(dataPlayer[1]));
