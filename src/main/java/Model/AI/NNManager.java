@@ -54,7 +54,7 @@ public class NNManager {
     /**
      * Dimension de nos réseaux de neuronnes
      */
-    private int[] _layers = new int[]{100, 10, 10, 10, 1};
+    private int[] _layers = new int[]{100, 20, 10, 5, 1};
 
     /**
      * Boolean nus indiquant si un de nos réseaux de neuronnes à gagné
@@ -232,7 +232,7 @@ public class NNManager {
                 env.perform(move);
                 aiTrainTurn = false;
             } else {
-                ArrayList<Point> move = this._aiHard.aiTrain(env);
+                ArrayList<Point> move = this._aiEasy.aiTrain(env);
                 env.perform(move);
                 aiTrainTurn = true;
                 //System.out.println(env.getOnePlayerMarble(env.getCurrentPlayer()).size());
@@ -243,7 +243,9 @@ public class NNManager {
         if (!aiTrainTurn && nbTour < 100) {
             System.out.println("Le reseau de neuronnes à gagné");
             this._iaWin = true;
-        }
+        }/* else {
+            System.out.println("le reseau de neuronne a perdu");
+        }*/
         nt.setFitness(evalAI(env));
         return nt.getFitness();
     }
