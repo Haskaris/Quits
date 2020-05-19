@@ -44,9 +44,9 @@ class CoupTest {
     @Test
     public void TestHistorique() {
         History historique = new History(board);
-        Move c1 = new Move(marble.getPosition(), Tools.Direction.NW/*, player*/);
-        Move c2 = new Move(marble.getPosition(), Tools.Direction.SW/*, player*/);
+        Move c1 = new Move(marble.getPosition(), Tools.Direction.NW);
         historique.doMove(c1);
+        Move c2 = new Move(marble.getPosition(), Tools.Direction.SW);
         historique.doMove(c2);
         historique.undo();
         historique.redo();
