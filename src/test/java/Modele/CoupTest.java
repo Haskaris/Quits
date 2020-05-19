@@ -5,11 +5,14 @@ import Model.*;
 import Model.Support.*;
 import Model.Players.*;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.DeliverCallback;
 import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,19 +79,7 @@ class CoupTest {
 
     }
 
-    @Test
-    public void TestReseau() throws Exception {
-        WebManager webSender = new WebManager();
-        webSender.createGame("test");
-        webSender.Send(new Move(marble, Tools.Direction.NO,player.name));
 
-        Player player = new DistantPlayer("p", Color.RED, webSender.queuename);
-        Move m = player.Jouer(null);
-        m.perform(board);
-
-        assertFalse(board.getGrid()[2][2].hasMarble());
-        assertTrue(board.getGrid()[1][1].hasMarble());
-    }
 }
 
 

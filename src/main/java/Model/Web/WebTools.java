@@ -1,5 +1,6 @@
-package Model;
+package Model.Web;
 
+import Model.Move;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -10,7 +11,21 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 public class WebTools {
-    public static Channel channelCreatorCloud(String queuename) {
+
+    public static void addQueue(Channel channel, String queuename){
+        boolean durable = false;    //durable - RabbitMQ will never lose the queue if a crash occurs
+        boolean exclusive = false;  //exclusive - if queue only will be used by one connection
+        boolean autoDelete = false; //autodelete - queue is deleted when last consumer unsubscribes
+
+        try {
+            channel.queueDeclare(queuename, durable, exclusive, autoDelete, null);
+        }
+        catch (Exception e){
+            System.out.println("Erreur de creation de queue " + queuename + " sur le channel : "+ e.getMessage());
+        }
+    }
+
+    public static Channel channelCreatorCloud(String queuename1, String queuename2) {
         ConnectionFactory factory = new ConnectionFactory();
 
         factory.setHost("chinook.rmq.cloudamqp.com");
@@ -18,15 +33,20 @@ public class WebTools {
         factory.setPassword("IOZfKOaTzJ9eIfyHXNalUBvvlgNRRP6T");
         factory.setVirtualHost("bosxyftt");
 
+        return channelCreator(factory,queuename1,queuename2);
+    }
+
+    public static Channel channelCreatorLocal(String queuename1, String queuename2) {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+
+        return channelCreator(factory,queuename1,queuename2);
+    }
+
+    private static Channel channelCreator(ConnectionFactory factory,String queuename1, String queuename2){
         //Recommended settings
         factory.setRequestedHeartbeat(30);
         factory.setConnectionTimeout(30000);
-
-
-
-        boolean durable = false;    //durable - RabbitMQ will never lose the queue if a crash occurs
-        boolean exclusive = false;  //exclusive - if queue only will be used by one connection
-        boolean autoDelete = false; //autodelete - queue is deleted when last consumer unsubscribes
 
         Connection connection = null;
         Channel channel = null;
@@ -41,69 +61,47 @@ public class WebTools {
 
         try {
             channel = connection.createChannel();
-            channel.queueDeclare(queuename, durable, exclusive, autoDelete, null);
         }
         catch (Exception e){
             System.out.println("Erreur de creation de channel sur le serveur");
             return null;
         }
 
+        addQueue(channel,queuename1);
+        addQueue(channel,queuename2);
 
         return channel;
     }
 
-    public static Channel channelCreatorLocal(String queuename) {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
 
-        Connection connection = null;
-        Channel channel = null;
-
-        try {
-            connection = factory.newConnection();
-        }
-        catch (Exception e){
-            System.out.println("Erreur de connection au serveur local : " + e.getMessage());
-            return null;
-        }
-
-        try {
-            channel = connection.createChannel();
-            channel.queueDeclare(queuename, false, false, false, null);
-        }
-        catch (Exception e){
-            System.out.println("Erreur de creation de channel sur le serveur");
-            return null;
-        }
-        return channel;
-    }
 
     public static Object message;
     public static void receiveMessage(Channel channel, String queuename){
         message = null;
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            message = SerializationUtils.deserialize(delivery.getBody());
+            message = delivery.getBody();
         };
         try {
             channel.basicConsume(queuename, true, deliverCallback, consumerTag -> {
             });
         }catch (Exception e){
-            System.out.println("Erreur de consommation");
+            System.out.println("Erreur de consommation na : " + e.getMessage());
         }
     }
 
-    public static Object receiveMessageWaited(Channel channel, String queuename){
+    public static byte[] receiveMessageWaited(Channel channel, String queuename){
         message = null;
-        int waittimemax = 200;
+        int waittimemax = 100;
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            message = SerializationUtils.deserialize(delivery.getBody());
+            message = delivery.getBody();
         };
         try {
             channel.basicConsume(queuename, true, deliverCallback, consumerTag -> {
             });
         }catch (Exception e){
-            System.out.println("Erreur de consommation");
+            System.out.println("Erreur de consommation a : " +e.getMessage());
         }
+
         while (message == null){
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
@@ -116,7 +114,14 @@ public class WebTools {
                 return null;
             }
         }
-        return message;
+        return (byte[])message;
+    }
+
+    public static String getMessageAsString(){
+        return new String((byte[])message);
+    }
+    public Move getMessageAsMove(){
+        return  SerializationUtils.deserialize((byte[])message);
     }
 }
 
