@@ -11,14 +11,38 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class NeuronalNetwork {
+    /**
+     * Chemin pour le fichier de sauvegarde du réseau de neuronne entrainé
+     * */
     private final String _filepath = "Sauvegardes/AINeuronalNetwork";
+
+    /***
+     * Tableau contenant la taille des différentes couches du réseau de neuronnes
+     * */
     private int[] _layers; //layers list
+
+    /**
+     * Matrice contenant les neuronnes
+     * Sert au calcul du coup que doit jouer l'IA
+     * */
     private float[][] _neurons; //neuron matrix
+
+    /**
+     * Matrice des poids pour chaque neuronne
+     * */
     private float[][][] _weights; //weight matrix
-    //private int _fitness; //network fitness
+
+    /**
+     * Valeur attribué au réseau de neuronne pour savoir si
+     * il est plus efficace qu'un autre réseau de neuronne
+     * (plus la valeur est petite plus il est performant)
+     * */
     private float _fitness;         //network fitness
 
-    public void writeGame() throws IOException{
+    /**
+     * Ecrit le réseau de neuronne dans le fichier de sauvegarde
+     * */
+    public void writeNN() throws IOException{
         File out = new File(this._filepath);
         OutputStream stream;
         try {
@@ -50,6 +74,10 @@ public class NeuronalNetwork {
         stream.close();
     }
 
+    /**
+     * Ecrit la matrice des poids du réseau de neuronne dans le
+     * fichier de sauvegarde
+     * */
     public void printWeigths(OutputStream stream) throws IOException {
         //Print chaque valeur des poids
         for(int i = 0; i < this._weights.length; i++){
@@ -65,6 +93,9 @@ public class NeuronalNetwork {
         }
     }
 
+    /**
+     * Ecrit la matrice des neuronnes du reseau dans le fichier
+     * */
     public void printNeurons(OutputStream stream) throws IOException {
         //Print chaque valeur des Neurons
         for(int i = 0; i < this._neurons.length; i++){
@@ -76,6 +107,9 @@ public class NeuronalNetwork {
         }
     }
 
+    /**
+     * Ecrit le tableau contenant la taille des couches du réseau
+     * */
     public void printLayers(OutputStream stream) throws IOException {
         //Print de chaque valeur du layer
         for(int i = 0; i < this._layers.length; i++){
@@ -85,6 +119,9 @@ public class NeuronalNetwork {
         stream.write('\n');
     }
 
+    /**
+     * Lis le réseau de neuronne dans le fichier de suavegarde
+     * */
     public void readNeuronalNetwork() throws IOException {
         try (InputStream in_stream = new FileInputStream(this._filepath)) {
             //System.out.println("In read neuronal network");
@@ -156,6 +193,10 @@ public class NeuronalNetwork {
         }
     }
 
+    /**
+     * Fonction pour lire une ligne dans un fichier donné
+     * @param stream
+     * */
     public static String readLine(InputStream stream) throws IOException {
         String S = "";
         byte[] data = new byte [1];
@@ -167,11 +208,19 @@ public class NeuronalNetwork {
         return S;
     }
 
-    //Read a neuronal network in the file
+    /**
+     * Instanciation d'un réseau de neuronnes à partir
+     * du fichier de sauvegarde
+     * */
     public NeuronalNetwork() throws IOException {
         readNeuronalNetwork();
     }
 
+    /**
+     * Instanciation d'un réseau de neuronne
+     * à partir d'un tableau de taille de couche du réseau
+     * @param layers
+     * */
     public NeuronalNetwork(int[] layers) {
         this._layers = new int[layers.length];
         for (int i = 0; i < layers.length; i++) {
@@ -182,7 +231,10 @@ public class NeuronalNetwork {
         weightsInit();
     }
 
-    //copy of previous neuronal network
+    /**
+     * Création d'une copie d'un réseau de neuronne
+     * @param copyNetwork
+     * */
     public NeuronalNetwork(NeuronalNetwork copyNetwork) {
         this._layers = new int[copyNetwork.getLayers().length];
         for (int i = 0; i < copyNetwork.getLayers().length; i++) {
@@ -194,7 +246,11 @@ public class NeuronalNetwork {
         CopyWeights(copyNetwork.getWeights());
     }
 
-    //Copie tout les poids du reseau donne en parametres
+    /**
+     * Copie les poids passé en paramètre dans le réseau de neuronne
+     * appelant
+     * @param copyWeights
+     * */
     private void CopyWeights(float[][][] copyWeights) {
         for (int i = 0; i < this._weights.length; i++) {
             for (int j = 0; j < this._weights[i].length; j++) {
@@ -205,39 +261,50 @@ public class NeuronalNetwork {
         }
     }
 
+    /**
+     * Récupère la valeur du réseau de neuronne
+     * @return float
+     * */
     public float getFitness(){
         return this._fitness;
     }
 
+    /**
+     * Change la valeur du réseau de neuronne
+     * @param fitness
+     * */
     public void setFitness(float fitness){
         this._fitness = fitness;
     }
 
+    /**
+     * Initialise la matrice du réseau de neuronne
+     * */
     public void neuronalInit() {
         ArrayList<float[]> neurons = new ArrayList<>();
         for (int i = 0; i < this._layers.length; i++) {
             neurons.add(new float[this._layers[i]]);
         }
-        //test if it works
         this._neurons = neurons.toArray(new float[0][0]);
     }
 
+    /**
+     * Initialise la matrice des poids du réseau de neuronne
+     * avec chaque poids choisit aléatoirement entre -1 et 1
+     * */
     public void weightsInit() {
-        ArrayList<float[][]> layersWeightList = new ArrayList<>(); //weights list which will later will converted into a weights 3D array
+        ArrayList<float[][]> layersWeightList = new ArrayList<>(); //Liste des poids que l'on va convertir en matrice
 
         int min = -1;
         int max = 1;
-        //Iteration sur tout les neurones ayant des connexions entrantes
         for (int i = 1; i < this._layers.length; i++) {
             ArrayList<float[]> layerWeightsList = new ArrayList<>();
 
             int neuronsInPreviousLayer = this._layers[i - 1];
 
-            //Iteration sur tout les neurones du layer actuel
             for (int j = 0; j < this._neurons[i].length; j++) {
                 float[] neuronWeights = new float[neuronsInPreviousLayer];
 
-                //Iteration sur tout les neurones du layer precedent, et set leurs poids entre -1 et 1
                 for (int k = 0; k < neuronsInPreviousLayer; k++) {
                     neuronWeights[k] = (float) (Math.random() * (max - min + 1) + min);
                 }
@@ -249,50 +316,50 @@ public class NeuronalNetwork {
 
     }
 
-    //FeedForward
-    public float[] FeedForward(float[] inputs)
-    {
-        //Ajoute nos inputs dans la matrices des neurones d'entree
+    /**
+     * Renvoi le résultat du réseau de neuronne pour une entrée donné
+     * @param inputs
+     * @return float[]
+     * */
+    public float[] FeedForward(float[] inputs) {
+        //Ajoute nos entrees dans la matrices des neurones d'entree
         for (int i = 0; i < inputs.length; i++)
         {
             getNeurons()[0][i] = inputs[i];
         }
 
         //Calculs
-        //Iteration sur toute les couches, tout les neurones, puis toutes les connexions entrante et fait les calculs du feedforward
-        for (int i = 1; i < getLayers().length; i++)
-        {
-            for (int j = 0; j < getNeurons()[i].length; j++)
-            {
+        //Iteration sur toute les couches du réseau
+        for (int i = 1; i < getLayers().length; i++) {
+            for (int j = 0; j < getNeurons()[i].length; j++) {
                 float value = 0f;
-                for (int k = 0; k < getNeurons()[i-1].length; k++)
-                {
-                    //System.out.println(getWeights()[i - 1][j][k]);
-                    //System.out.println(getNeurons()[i - 1][k]);
-                    value += getWeights()[i - 1][j][k] * getNeurons()[i - 1][k]; //sum off all weights connections of this neuron weight their values in previous layer
+                for (int k = 0; k < getNeurons()[i-1].length; k++) {
+                    //Somme des poids connecté et des valeurs des neuronnes de la couches précédente
+                    value += getWeights()[i - 1][j][k] * getNeurons()[i - 1][k];
                 }
-                getNeurons()[i][j] = (float)Math.tanh(value); //Fonction d'activation : tangente hyperbolique
+                //Fonction d'activation d'un neuronne, on utilise la tangente hyperbolique
+                getNeurons()[i][j] = (float)Math.tanh(value);
             }
         }
-        return getNeurons()[getNeurons().length-1]; //retourne le resultat
+        //retourne le resultat
+        return getNeurons()[getNeurons().length-1];
     }
 
-    //Mutation
-    public void Mutate(float condition)
-    {
-        //Iteration sur tout les poids du reseau
-        for (int i = 0; i < getWeights().length; i++)
-        {
-            for (int j = 0; j < getWeights()[i].length; j++)
-            {
-                for (int k = 0; k < getWeights()[i][j].length; k++)
-                {
-
-                    //Un pourcent de chance de faire muter notre poids en une valeure aleatoire entre -1 et 1
+    /**
+     * Fait muter le réseau de neuronne en fonction de la condition
+     * donnée, plus la condiiton est grande, plus il y aura de mutatioon
+     * @param condition
+     * */
+    public void Mutate(float condition) {
+        //Iteration sur tous les poids du réseau
+        for (int i = 0; i < getWeights().length; i++) {
+            for (int j = 0; j < getWeights()[i].length; j++) {
+                for (int k = 0; k < getWeights()[i][j].length; k++) {
                     float weight = getWeights()[i][j][k];
+                    //Nombre aléatoire pour savoir si on fait muter le réseau de neuronne
                     float randomNumber = (float) (Math.random() * (100 + 1));
-                    if (randomNumber <= condition)
-                    {
+                    //Si le nombre est inférieur à notre condition on change le poids pour une valeur aléatoire entre -1 et 1
+                    if (randomNumber <= condition) {
                         float randomNumber2 = (float) (Math.random() * (1 - (-1) + 1) + (-1));
                         weight = randomNumber2;
                     }
@@ -302,21 +369,42 @@ public class NeuronalNetwork {
         }
     }
 
+    /**
+     * Récupére la liste contenant la taille
+     * de chaque couche du réseau
+     * @return int[]
+     * */
     public int[] getLayers() {
         return this._layers;
     }
 
+    /**
+     * Récupére la matrice des neuronnes
+     * du réseau
+     * @return float[][]
+     * */
     public float[][] getNeurons() {
         return this._neurons;
     }
 
+    /**
+     * Récupére la matrice des poids du réseau
+     * @return float[][][]
+     * */
     public float[][][] getWeights() {
         return this._weights;
     }
 
-    //Compare le fitness de deux reseaux
-    public int compareTo(NeuronalNetwork other)
-    {
+    /**
+     * Compare l'efficacité du réseau de neuronne à un autre
+     * réseau donné, retourne
+     * 1 si notre réseau est plus efficace
+     * 0 si les 2 réseaux sont autant efficace
+     * -1 si notre réseau est moins efficace
+     * @param other
+     * @return int
+     * */
+    public int compareTo(NeuronalNetwork other) {
         if (other == null) return 1;
 
         if (getFitness() < other.getFitness())
@@ -327,39 +415,17 @@ public class NeuronalNetwork {
             return 0;
     }
 
-    /*public float getFitness() {
-        return this._fitness;
-    }*/
-
-    //Ajoute du fitness au reseau
-    /*public void AddFitness(float fit)
-    {
-        this._fitness += fit;
-    }*/
-
-    //donne une valeur fixe de fitness au reseau
-    /*public void SetFitness(float fit)
-    {
-        this._fitness = fit;
-    }*/
-
-    //Compare le fitness de deux reseaux
-    /*public int CompareTo(NeuronalNetwork other)
-    {
-        if (other == null) return 1;
-
-        if (getFitness() > other.getFitness())
-            return 1;
-        else if (getFitness() < other.getFitness())
-            return -1;
-        else
-            return 0;
-    }*/
-
+    /**
+     * Change la valeur de la matrice des poids
+     * @param weight
+     * */
     public void setWeight(float[][][] weight){
         this._weights = weight;
     }
 
+    /**
+     * Affiche le réseau de neuronne
+     * */
     public void printNeuronalNetwork(){
         System.out.println("Layers : ");
         for(int f: this._layers){

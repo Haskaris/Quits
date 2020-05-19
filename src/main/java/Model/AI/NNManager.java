@@ -565,7 +565,7 @@ public class NNManager {
         if(this._IATrainWin ){
             System.out.println("Un réseau de neuronne à gagné");
             //this._AIWin.printNeuronalNetwork();
-            this._AIWin.writeGame();
+            this._AIWin.writeNN();
         } else {
             System.out.println("Aucun réseau de neuronne n'a gagné");
         }
