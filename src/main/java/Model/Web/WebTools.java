@@ -12,6 +12,34 @@ import java.util.concurrent.TimeUnit;
 
 public class WebTools {
 
+    public static void addExchange(Channel channel, String exchangename){
+        boolean durable = false;    //durable - RabbitMQ will never lose the queue if a crash occurs
+        boolean exclusive = false;  //exclusive - if queue only will be used by one connection
+        boolean autoDelete = false; //autodelete - queue is deleted when last consumer unsubscribes
+
+        try {
+            channel.exchangeDeclare(exchangename, "fanout");
+        }
+        catch (Exception e){
+            System.out.println("Erreur de creation de exchanger " + exchangename + " sur le channel : ");
+            e.printStackTrace();
+        }
+    }
+    public static String addQueueBound(Channel channel, String exchangename){
+        boolean durable = false;    //durable - RabbitMQ will never lose the queue if a crash occurs
+        boolean exclusive = false;  //exclusive - if queue only will be used by one connection
+        boolean autoDelete = false; //autodelete - queue is deleted when last consumer unsubscribes
+        String queuename = null;
+        try {
+            channel.exchangeDeclare(exchangename, "fanout");
+            queuename = channel.queueDeclare().getQueue();
+            channel.queueBind(queuename, exchangename, "");
+        }
+        catch (Exception e){
+            System.out.println("Erreur de creation de queue " + exchangename + " sur le channel : "+ e.getMessage());
+        }
+        return queuename;
+    }
     public static void addQueue(Channel channel, String queuename){
         boolean durable = false;    //durable - RabbitMQ will never lose the queue if a crash occurs
         boolean exclusive = false;  //exclusive - if queue only will be used by one connection
@@ -25,7 +53,7 @@ public class WebTools {
         }
     }
 
-    public static Channel channelCreatorCloud(String queuename1, String queuename2) {
+    public static Channel channelCreatorCloud() {
         ConnectionFactory factory = new ConnectionFactory();
 
         factory.setHost("chinook.rmq.cloudamqp.com");
@@ -33,17 +61,17 @@ public class WebTools {
         factory.setPassword("IOZfKOaTzJ9eIfyHXNalUBvvlgNRRP6T");
         factory.setVirtualHost("bosxyftt");
 
-        return channelCreator(factory,queuename1,queuename2);
+        return channelCreator(factory);
     }
 
-    public static Channel channelCreatorLocal(String queuename1, String queuename2) {
+    public static Channel channelCreatorLocal() {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
-        return channelCreator(factory,queuename1,queuename2);
+        return channelCreator(factory);
     }
 
-    private static Channel channelCreator(ConnectionFactory factory,String queuename1, String queuename2){
+    private static Channel channelCreator(ConnectionFactory factory){
         //Recommended settings
         factory.setRequestedHeartbeat(30);
         factory.setConnectionTimeout(30000);
@@ -66,9 +94,6 @@ public class WebTools {
             System.out.println("Erreur de creation de channel sur le serveur");
             return null;
         }
-
-        addQueue(channel,queuename1);
-        addQueue(channel,queuename2);
 
         return channel;
     }

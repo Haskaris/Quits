@@ -1,11 +1,10 @@
 package Model.Web;
 
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.DeliverCallback;
 
 import java.io.IOException;
-
-import static Model.Web.WebTools.*;
-import static Model.Web.WebTools.message;
+import java.util.concurrent.TimeUnit;
 
 public class HostWaiter implements Runnable {
     public boolean running;
@@ -14,6 +13,7 @@ public class HostWaiter implements Runnable {
     private String queue_in;
     private String queue_out;
     private String[] players;
+    private Object message;
 
     public HostWaiter(Channel channel, String queue_in, String queue_out, String[] players){
         running = true;
@@ -26,28 +26,45 @@ public class HostWaiter implements Runnable {
 
     @Override
     public void run() {
-        WebTools.receiveMessage(channel, queue_in);
+        receiveMessage();
+
         while (running) {
-            if (WebTools.message != null) {
-                if (WebTools.getMessageAsString().split(" ")[0].equals("disconnect"))
-                    removePlayer(WebTools.getMessageAsString().substring("disconnect ".length()));
+            if (this.message != null) {
+                String message = new String((byte[])this.message);
+                if (message.split(" ")[0].equals("disconnect"))
+                    removePlayer(message.substring("disconnect ".length()));
                 else
-                    addPlayer(WebTools.getMessageAsString());
+                    addPlayer(message);
 
                 if(emptyPlayer())
-                    try {
-                        channel.basicPublish("", queue_out, null, "OK".getBytes());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    sendMessage("OK");
                 else
-                    try {
-                        channel.basicPublish("", queue_out, null, "Room pleine".getBytes());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    sendMessage("Room pleine");
+
+                receiveMessage();
             }
-            WebTools.receiveMessage(channel, queue_in);
+
+
+        }
+    }
+
+    public void receiveMessage(){
+        message = null;
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            message = delivery.getBody();
+        };
+        try {
+            channel.basicConsume(queue_in, true, deliverCallback, consumerTag -> {
+            });
+        }catch (Exception e){
+            System.out.println("Erreur de consommation na : " + e.getMessage());
+        }
+    }
+    public void sendMessage(String s){
+        try {
+            channel.basicPublish(queue_out, "", null, s.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -60,17 +77,18 @@ public class HostWaiter implements Runnable {
     }
 
     void addPlayer(String name) {
-        for (String player :  players) {
-            if (player == null) {
-                player = name;
+        System.out.println("Joueur arrivé : "+ name);
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] == null) {
+                players[i] = name;
                 return;
             }
         }
     }
     void removePlayer(String name) {
-        for (String player :  players) {
-            if (player.equals(name)) {    //pas de vérification des noms identique ici
-                player = null;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].equals(name)) {    //pas de vérification des noms identique ici
+                players[i] = null;
                 return;
             }
         }
