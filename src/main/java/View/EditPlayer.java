@@ -9,6 +9,8 @@ package View;
 import View.ColorPicker.ColorPicker;
 import Global.Tools;
 import java.awt.Color;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -74,12 +76,13 @@ public class EditPlayer extends javax.swing.JPanel {
 
         jButton.setBackground(this.playerColor);
         jButton.setMargin(new java.awt.Insets(14, 14, 14, 14));
+        jButton.setPreferredSize(new java.awt.Dimension(33, 33));
         jButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonActionPerformed(evt);
             }
         });
-        add(jButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 0, -1, -1));
+        add(jButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionPerformed
