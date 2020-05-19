@@ -1,6 +1,7 @@
 import Global.Properties;
 import Model.Support.Board;
 import View.MainGraphicInterface;
+import View.StartScreen;
 import java.awt.EventQueue;
 
 import java.io.IOException;
@@ -16,7 +17,8 @@ public class Quits {
     public static void main(String[] args) throws IOException {
         Properties.load();
         EventQueue.invokeLater(() -> {
-            MainGraphicInterface mainGraphicInterface = new MainGraphicInterface();
+            StartScreen startScreen = new StartScreen();
+            startScreen.setVisible(true);
         });
     }
 }

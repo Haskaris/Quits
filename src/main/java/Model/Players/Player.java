@@ -110,46 +110,49 @@ public abstract class Player {
     public void print(OutputStream stream) throws IOException {
         //On écrit le nom
         stream.write(this.name.getBytes());
-        stream.write(' ');
+        stream.write('\n');
         //On écrit la couleur
         stream.write(String.valueOf(this.color.getRGB()).getBytes());
-        stream.write(' ');
+        stream.write(" ".getBytes());
         //On écrit sa position
         stream.write(this.startPoint.toString().getBytes());
         stream.write('\n');
         for(Marble m : this.marbles) {
             m.print(stream);
+            stream.write('/');
         }
         stream.write('\n');
     }
     
     /**
-     * Créée un joueur à partir de l'entrée stream
+     * Créée un joueur à partir de l'entrée stream 
      * @param in_stream
      * @return Player
      * @throws IOException 
      */
     public static Player load(InputStream in_stream, Board board) throws IOException  {
         Player tmp = null;
+        String playerType = ReaderWriter.readLine(in_stream);
+        String playerName = ReaderWriter.readLine(in_stream);
         String[] dataPlayer = ReaderWriter.readLine(in_stream).split(" ");
-        switch (dataPlayer[0]){
+        switch (playerType){
                 case "HumanPlayer":
-                    tmp = new HumanPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
+                    tmp = new HumanPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
                     break;
                 case "DistantPlayer":
-                    tmp = new DistantPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
+                    tmp = new DistantPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
                     break;
                 case "AIEasyPlayer":
-                    tmp = new AIEasyPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])), board);
+                    tmp = new AIEasyPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
                 case "AINormalPlayer":
-                    tmp = new AINormalPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
+                    tmp = new AINormalPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
                     break;
                 case "AIHardPlayer":
-                    tmp = new AIHardPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])), board);
+                    tmp = new AIHardPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
             }
-        tmp.setStartPoint(Direction.valueOf(dataPlayer[3]));
+        tmp.setStartPoint(Direction.valueOf(dataPlayer[1]));
         return tmp;
     }
 }

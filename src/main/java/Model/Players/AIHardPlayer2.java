@@ -72,13 +72,13 @@ public class AIHardPlayer2 extends AI {
                     }
                 }
                 if(goodMarble != null) {
-                    convertMove = new Move(goodMarble, dir, this._board.getCurrentPlayer());
+                    convertMove = new Move(goodMarble, dir);
                 } else {
                     convertMove = coups_possibles.get(0);
                     this._impossibleMove = true;
                 }
             } else {
-                convertMove = new Move(new Point(x, y), dir, this._board.getCurrentPlayer());
+                convertMove = new Move(new Point(x, y), dir);
                 MoveCalculator moveCalculator = new MoveCalculator(this._board);
                 if(!moveCalculator.possibleMoves().contains(convertMove)){
                     this._impossibleMove = true;

@@ -13,10 +13,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-/**
- *
- * @author Mathis
- */
 public class VictoryDialog extends javax.swing.JDialog {
 
     public static final int QUIT = 0;
@@ -26,6 +22,8 @@ public class VictoryDialog extends javax.swing.JDialog {
     public static final int PLAY_AGAIN = 1;
     
     public static final int DO_NOTHING = 2;
+    
+    public static final int NEW_GAME = 2;
 
     /**
      * Creates new form VictoryDialog
@@ -34,6 +32,7 @@ public class VictoryDialog extends javax.swing.JDialog {
      */
     public VictoryDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        super.setResizable(false);
         
         initComponents();
 
@@ -69,6 +68,7 @@ public class VictoryDialog extends javax.swing.JDialog {
         playAgainButton = new javax.swing.JButton();
         victoryText = new javax.swing.JLabel();
         quitButton = new javax.swing.JButton();
+        newGameButton = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -83,6 +83,7 @@ public class VictoryDialog extends javax.swing.JDialog {
             }
         });
 
+        victoryText.setFont(new java.awt.Font("Bahnschrift", 0, 36)); // NOI18N
         victoryText.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         quitButton.setText("Quitter");
@@ -92,29 +93,39 @@ public class VictoryDialog extends javax.swing.JDialog {
             }
         });
 
+        newGameButton.setText("Nouvelle partie");
+        newGameButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newGameButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(victoryText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(newGameButton, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addComponent(playAgainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(playAgainButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(victoryText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(victoryText, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                .addComponent(victoryText, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(playAgainButton)
-                    .addComponent(quitButton))
+                    .addComponent(quitButton)
+                    .addComponent(playAgainButton))
+                .addGap(18, 18, 18)
+                .addComponent(newGameButton)
                 .addContainerGap())
         );
 
@@ -137,6 +148,10 @@ public class VictoryDialog extends javax.swing.JDialog {
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         doClose(QUIT);
     }//GEN-LAST:event_quitButtonActionPerformed
+
+    private void newGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newGameButtonActionPerformed
+        doClose(NEW_GAME);
+    }//GEN-LAST:event_newGameButtonActionPerformed
     
     private void doClose(int retStatus) {
         returnStatus = retStatus;
@@ -145,6 +160,7 @@ public class VictoryDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton newGameButton;
     private javax.swing.JButton playAgainButton;
     private javax.swing.JButton quitButton;
     private javax.swing.JLabel victoryText;
