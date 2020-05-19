@@ -85,7 +85,12 @@ public abstract class AI extends Player {
             AIEnvironnement new_env = iaEnv.copy();
 
             new_env.perform(move);
-            Node new_node = new Node(-1, null, node, null, Node.Node_type.MIN_NODE, name, iaEnv.getCurrentPlayer());
+            Node new_node=null;
+            if(new_env.getCurrentPlayer() == new_env.getIaPlayer()) {
+                new_node = new Node(-1, null, node, null, Node.Node_type.MAX_NODE, name, iaEnv.getCurrentPlayer());
+            } else {
+                new_node = new Node(-1, null, node, null, Node.Node_type.MIN_NODE, name, iaEnv.getCurrentPlayer());
+            }
             node.setNodeChild(new_node);
             //sert au sotckage de l'arbre
             node.addNodeChild(new_node);
@@ -137,7 +142,7 @@ public abstract class AI extends Player {
         return node.getNodeValue();
     }
 
-    public boolean pruning(int depth, Node node, float p_value) {
+    public boolean pruningSave(int depth, Node node, float p_value) {
         // Enlève le nullpointer exception
         if (node.getNodeParent() == null) {
             return false;
@@ -152,6 +157,40 @@ public abstract class AI extends Player {
             potential_test = node_value > p_value;
         } else {
             potential_test = node_value < p_value;
+        }
+
+        if (_max_depth - depth >= 2) {
+
+            if (node_value != -1 && potential_test) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean pruning(int depth, Node node, float p_value) {
+        // Enlève le nullpointer exception
+        if (node.getNodeParent() == null) {
+            return false;
+        }
+
+        boolean potential_test;
+
+        float node_value = node.getNodeParent().getNodeValue();
+        Node.Node_type pruning_type = node.getNodeType();
+        Node.Node_type pruning_parent_type = node.getNodeParent().getNodeType();
+
+        if (pruning_type == Node.Node_type.MAX_NODE) {
+            //Forcément un noeud min au dessus d'un noeud max
+            potential_test = node_value > p_value;
+        } else {
+            if(pruning_parent_type == Node.Node_type.MAX_NODE) {
+                potential_test = node_value < p_value;
+            } else {
+                //noeud Min au dessus d'un noeud min pas de condition pour élaguer
+                potential_test = false;
+
+            }
         }
 
         if (_max_depth - depth >= 2) {

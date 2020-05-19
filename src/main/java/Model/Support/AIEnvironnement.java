@@ -647,10 +647,20 @@ public class AIEnvironnement {
     }
 
     public boolean playerWinGiven(int player){
-        if(getOnePlayerMarble(player).size() == 2){
-            return true;
+        //test if 4 or 2 players
+        if(getPlayers().size() == 2) {
+            if (getOnePlayerMarble(player).size() == 2) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            //joue à 4
+            if (getOnePlayerMarble(player).size() == 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 

@@ -58,7 +58,7 @@ class CoupTest {
     }
 
     @Test
-    public void TestEntreeController() {
+    public void TestEntreeController() throws IOException {
         MoveCalculator mc = new MoveCalculator(board);
         List<Move> coupspossible = mc.possibleMoves();
         //LecteurRedacteur.AffichePartie(board);
@@ -69,11 +69,11 @@ class CoupTest {
         //LecteurRedacteur.AffichePartie(board);
     }
 
-    @Test
+    /*@Test
     public void TestTrainAI() throws IOException {
         NNManager manager = new NNManager();
 
-    }
+    }*/
 }
 
 
