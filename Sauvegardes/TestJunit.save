@@ -1,8 +1,12 @@
 5 2
-AINormalPlayer Default1 -16776961 SW
-1-1/
-AINormalPlayer Default2 -16711936 NE
-2-2/
+AINormalPlayer
+Default1
+-16776961 SW
+1,1/
+AINormalPlayer
+Default2
+-16711936 NE
+2,2/
 TwoPlayersThreeBalls 0
 00212
 33212
@@ -10,3 +14,4 @@ TwoPlayersThreeBalls 0
 32121
 32222
 
+0

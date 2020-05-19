@@ -25,6 +25,7 @@ public class MainGraphicInterface extends JFrame {
         super.add(initGame);
         super.pack();
         super.setLocationRelativeTo(null);
+        super.setResizable(false);
         super.setVisible(true);
     }
     
@@ -43,7 +44,7 @@ public class MainGraphicInterface extends JFrame {
      * @param minHeight int - minimum height the frame can be
      */
     public void updateSize(int minWidth, int minHeight) {
-        this.setMinimumSize(new Dimension(minWidth, minHeight));
+        //this.setMinimumSize(new Dimension(minWidth, minHeight));
         this.setSize(minWidth, minHeight);
     }
     
