@@ -18,6 +18,7 @@ import View.ViewBoard;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.Timer;
 
@@ -101,7 +102,7 @@ public class Mediator {
      * @param c colonne où le clique a été effectué
      * @param l ligne où le clique a été effectué
      */
-    public void mouseClick(int c, int l) {
+    public void mouseClick(int c, int l) throws IOException {
         board.playTurn(c, l);
     }
     

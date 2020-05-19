@@ -1,6 +1,7 @@
 package Model.AI;
 
 import Model.Players.AIEasyPlayer;
+import Model.Players.AIHardPlayer;
 import Model.Players.AINeuronalNetwork;
 import Model.Support.AIEnvironnement;
 import Model.Support.Board;
@@ -43,7 +44,12 @@ public class NNManager {
     /**
      * Instance d'une IA facile, normale, ou difficile selon contre qui on fait jouer notre réseau de neuronne
      */
-    public AIEasyPlayer aiEasy;
+    public AIEasyPlayer _aiEasy;
+
+    /**
+     * Instance d'une IA difficile contre qui on fait jouer notre réseau de neuronne
+     */
+    public AIHardPlayer _aiHard;
 
     /**
      * Dimension de nos réseaux de neuronnes
@@ -63,7 +69,7 @@ public class NNManager {
     /**
      * Boolean pour savoir si notre IA a gagné contre l'IA facile
      */
-    public boolean _iaWinAgainstEasy = false;
+    public boolean _iaWin = false;
 
     /**
      * Fonction nous permettant d'évaluer d'efficacité de notre réseau de neuronne
@@ -137,10 +143,11 @@ public class NNManager {
      */
     public NNManager() throws IOException {
         this._board = null;
-        this.aiEasy = new AIEasyPlayer("default", Color.BLACK, null);
+        this._aiEasy = new AIEasyPlayer("default", Color.BLACK, null);
+        this._aiHard = new AIHardPlayer("default", Color.BLACK, null);
         initNeuralNetworks();
         createAIBodies();
-        trainAI();
+        trainAI2();
     }
 
     /**
@@ -150,7 +157,7 @@ public class NNManager {
      * @param nt
      * @return float
      */
-    public float playAgainstEasyPlayer(NeuronalNetwork nt) {
+    public float playAgainstIA(NeuronalNetwork nt) {
         //On fait jouer 2 IA, celle qui gagne est ajouté à la liste winner IA on joue dans AIEnvironnement
         AIEnvironnement env = new AIEnvironnement();
         //On ajoute les 2 joueurs
@@ -225,7 +232,7 @@ public class NNManager {
                 env.perform(move);
                 aiTrainTurn = false;
             } else {
-                ArrayList<Point> move = aiEasy.aiTrain(env);
+                ArrayList<Point> move = this._aiHard.aiTrain(env);
                 env.perform(move);
                 aiTrainTurn = true;
                 //System.out.println(env.getOnePlayerMarble(env.getCurrentPlayer()).size());
@@ -235,7 +242,7 @@ public class NNManager {
         }
         if (!aiTrainTurn && nbTour < 100) {
             System.out.println("Le reseau de neuronnes à gagné");
-            this._iaWinAgainstEasy = true;
+            this._iaWin = true;
         }
         nt.setFitness(evalAI(env));
         return nt.getFitness();
@@ -372,9 +379,9 @@ public class NNManager {
                     nbTour++;
                 }
                 //On fait jouer notre IA contre l'IA facile aussi
-                float val = playAgainstEasyPlayer(this._nets.get(i));
+                float val = playAgainstIA(this._nets.get(i));
 
-                if (!aiTrainTurn && nbTour < 100 && this._iaWinAgainstEasy) {
+                if (!aiTrainTurn && nbTour < 100 && this._iaWin) {
                     System.out.println("Un reseau de neuronnes à gagné");
                     this._IATrainWin = true;
                     this._AIWin = new NeuronalNetwork(this._nets.get(i));
@@ -456,8 +463,8 @@ public class NNManager {
             //Faire jouer les IA instanciées entre elles;
             for (int i = 0; i < this._populationSize; i++) {
 
-                float result = playAgainstEasyPlayer(this._nets.get(i));
-                if (this._iaWinAgainstEasy) {
+                float result = playAgainstIA(this._nets.get(i));
+                if (this._iaWin) {
                     System.out.println("Un reseau de neuronnes à gagné");
                     this._IATrainWin = true;
                     this._AIWin = new NeuronalNetwork(this._nets.get(i));
