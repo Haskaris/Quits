@@ -69,11 +69,11 @@ class CoupTest {
         //LecteurRedacteur.AffichePartie(board);
     }
 
-    /*@Test
+    @Test
     public void TestTrainAI() throws IOException {
         NNManager manager = new NNManager();
 
-    }*/
+    }
 }
 
 

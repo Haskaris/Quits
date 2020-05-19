@@ -4,10 +4,8 @@ import Global.Tools;
 import Model.AI.AI;
 import Model.AI.NeuronalNetwork;
 import Model.Move;
-import Model.MoveCalculator;
 import Model.Support.AIEnvironnement;
 import Model.Support.Board;
-import Model.Support.Marble;
 
 import java.awt.*;
 import java.io.IOException;
@@ -15,13 +13,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AIHardPlayer2 extends AI {
+public class AINeuronalNetwork extends AI {
 
     //for the result of neuronal network
     public float[] _result;
     public boolean _impossibleMove = false;
 
-    public AIHardPlayer2(String name, Color color, Board board) {
+    public AINeuronalNetwork(String name, Color color, Board board) {
         super(name, color, board, 2);
     }
 
@@ -57,7 +55,7 @@ public class AIHardPlayer2 extends AI {
             }
         }
         result = nt.FeedForward(tInputs);
-        ArrayList<Point> move = AIHardPlayer2.Jouer3(env, result);
+        ArrayList<Point> move = AINeuronalNetwork.Jouer3(env, result);
 
         //env.perform(move);
         Move m = env.convertMove(move, this._board);
