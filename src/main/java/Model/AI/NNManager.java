@@ -208,9 +208,27 @@ public class NNManager {
                 float[] result;
                 //on crée les entrées
                 float[] tInputs = new float[100];
+                for(int init = 0; init < tInputs.length; init++){
+                    tInputs[init] = -1;
+                }
                 //On ajoute chaque bille du plateau dans les inputs
                 int currentMarble = 0;
+                for (Point p : env.getOnePlayerMarble(env.getCurrentPlayer())) {
+                    for (int k = 0; k < 5; k++) {
+                        if (p.x == k) {
+                            tInputs[currentMarble + k] = 1;
+                        }
+                        if (p.y == k) {
+                            tInputs[currentMarble + k + 5] = 1;
+                        }
+                    }
+                    currentMarble += 10;
+                }
+                currentMarble = 50;
                 for (ArrayList<Point> arrayMarble : env.getPlayerMarble()) {
+                    if(arrayMarble == env.getOnePlayerMarble(env.getCurrentPlayer())){
+                        continue;
+                    }
                     for (Point p : arrayMarble) {
                         for (int k = 0; k < 5; k++) {
                             if (p.x == k) {
