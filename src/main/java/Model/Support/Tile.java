@@ -105,4 +105,14 @@ public class Tile {
     public void print(OutputStream stream) throws IOException {
         stream.write(String.valueOf(this.indexOfColor).getBytes());
     }
+
+    /**
+     * Retournela bille, null sinon
+     * @return Marble
+     */
+    public Marble getMarble(){
+        if(marble == null)
+            return null;
+        return marble;
+    }
 }

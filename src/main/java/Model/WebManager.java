@@ -1,94 +1,99 @@
 package Model;
+import com.rabbitmq.client.*;
 import org.apache.commons.lang3.SerializationUtils;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-
 import java.io.IOException;
-import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeoutException;
 
-public class WebManager {
-
-    private final static String QUEUE_NAME = "QQ";
-
-    public static Channel channelCreatorCloud(String queuename) {
-        String uri = "amqp://bosxyftt:5quOiGijmZhtC_J9w6iCat7khaq2jVVb@chinook.rmq.cloudamqp.com/bosxyftt";
-        ConnectionFactory factory = new ConnectionFactory();
-        try {
-            factory.setUri(uri);
-        }catch (Exception e){
-            System.out.println("Erreur de connection factory");
-            return null;
-        }
-
-        //Recommended settings
-        factory.setRequestedHeartbeat(30);
-        factory.setConnectionTimeout(30000);
-
-        boolean durable = false;    //durable - RabbitMQ will never lose the queue if a crash occurs
-        boolean exclusive = false;  //exclusive - if queue only will be used by one connection
-        boolean autoDelete = false; //autodelete - queue is deleted when last consumer unsubscribes
-
-        Connection connection = null;
-        Channel channel = null;
-
-        try {
-            connection = factory.newConnection();
-        }
-        catch (Exception e){
-            System.out.println("Erreur de connection au serveur CloudAmq : " + e.getMessage());
-            return null;
-        }
-
-        try {
-            channel = connection.createChannel();
-            channel.queueDeclare(queuename, durable, exclusive, autoDelete, null);
-        }
-        catch (Exception e){
-            System.out.println("Erreur de creation de channel sur le serveur");
-            return null;
-        }
+import static Model.WebTools.channelCreatorLocal;
+import static Model.WebTools.message;
 
 
-        return channel;
+public class WebManager implements Runnable {
+
+    public String queuename = "QQ";
+    public boolean isMaster;
+    public String[] players = new String[3];
+    private Channel channel;
+    private boolean waitingthread;
+
+    public void Send(Move message) throws Exception {
+        if (channel == null)
+            return;
+
+        channel.basicPublish("", queuename, null, SerializationUtils.serialize(message));
+        System.out.println(" [x] Sent '" + message + "'");
     }
 
-    public static Channel channelCreatorLocal(String queuename) {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
-
-        Connection connection = null;
-        Channel channel = null;
-
-        try {
-            connection = factory.newConnection();
+    public void joinGame(String roomname) {
+        Channel channel = channelCreatorLocal(roomname);
+        if (channel == null) {
+            System.out.println("Impossible de se connecter au serveur ");
+            return;
         }
-        catch (Exception e){
-            System.out.println("Erreur de connection au serveur local : " + e.getMessage());
-            return null;
+        WebTools.receiveMessage(channel,roomname);
+        if (channel == null) {
+            System.out.println("Impossible de se connecter au serveur ");
+            return;
         }
 
-        try {
-            channel = connection.createChannel();
-            channel.queueDeclare(queuename, false, false, false, null);
+        queuename = roomname;
+        System.out.println("Partie rejointe : " + roomname);
+        isMaster = false;
+
+    }
+
+    public void createGame(String roomname) throws IOException {
+        queuename = roomname;
+        Channel channel = channelCreatorLocal(queuename);
+        if (channel == null) {
+            System.out.println("Erreur de creation de la partie");
+            return;
         }
-        catch (Exception e){
-            System.out.println("Erreur de creation de channel sur le serveur");
-            return null;
+        channel.basicPublish("", queuename, null, "0".getBytes());
+
+        waitingthread = true;
+        new Thread(this).start();
+    }
+
+    @Override
+    public void run() {
+        WebTools.receiveMessage(channel, queuename);
+        while (waitingthread) {
+            if (WebTools.message != null) {
+                if (message.toString().split(" ")[0] == "disconnect") {
+                    removePlayer(message.toString().substring("disconnect ".length()));
+                }
+                else{
+                    addPlayer(message.toString());
+                }
+            }
+
         }
-        return channel;
+    }
+
+    public void stopThread() {
+        waitingthread = false;
     }
 
 
-        public void Send(Move message) throws Exception {
-        Channel channel = channelCreatorLocal(QUEUE_NAME);
-        if(channel != null){
-            channel.basicPublish("", QUEUE_NAME, null, SerializationUtils.serialize(message));
-            System.out.println(" [x] Sent '" + message + "'");
+    boolean addPlayer(String name) {
+        for (String player : players) {
+            if (player == null) {
+                player = name;
+                return true;
+            }
         }
-
+        return false;
     }
+
+
+    void removePlayer(String name) {
+        for (String player : players) {
+            if (player == name) {    //pas de vérification des noms identique ici
+                player = null;
+                return;
+            }
+        }
+    }
+
 }

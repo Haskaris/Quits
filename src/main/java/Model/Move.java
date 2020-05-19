@@ -17,7 +17,7 @@ public class Move implements Serializable {
  positif est vrai si la line bouge vers le positif (chaque indice i deviendra i+1) et inversement si faux
  player indique le player responsable du coup
      */
-    Marble marble = null;
+    Point marble = null;
     Direction direction;
     Point line = null;
     String playername;
@@ -30,7 +30,7 @@ public class Move implements Serializable {
      * @param playername Responsable du mouvement
     */
     public Move(Marble marble, Direction direction, String playername) {
-        this.marble = marble;
+        this.marble = marble.getTile().getPosition();
         this.direction = direction;
         this.playername = playername;
     }
@@ -49,7 +49,7 @@ public class Move implements Serializable {
 
     public void perform(Board board) {
         if(marble != null){
-            board.moveMarble(marble, direction);
+            board.moveMarble(getMarble(board), direction);
         }
         if(line != null){
             board.moveLine(line, direction);
@@ -58,7 +58,7 @@ public class Move implements Serializable {
 
     public void cancel(Board board){
         if(marble != null){
-            board.moveMarble(marble, reverse(direction));
+            board.moveMarble(getMarble(board), reverse(direction));
         }
         if(line != null){
             board.moveLine(line, reverse(direction));
@@ -67,12 +67,16 @@ public class Move implements Serializable {
 
     public void print() {
         if (marble != null) {
-            System.out.println(marble.getTile().getPosition());
+            System.out.println(marble);
             System.out.println(direction);
         }
         if (line != null) {
             System.out.println(line);
             System.out.println(direction);
         }
+    }
+
+    public Marble getMarble(Board b){
+        return b.getGrid()[marble.x][marble.y].getMarble();
     }
 }

@@ -3,8 +3,9 @@ package Model.Support;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 
-public class Marble {
+public class Marble implements Serializable {
     private final Color color;
     private Tile tile;
 

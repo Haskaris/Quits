@@ -4,6 +4,7 @@ import Model.Players.Player;
 import Global.Configuration;
 import Model.Support.Marble;
 import Model.Support.Board;
+import Model.Support.Tile;
 
 import java.io.*;
 
@@ -114,20 +115,26 @@ public class ReaderWriter {
 
     /**
      * Permet d'afficher l'etat du jeu dans la sortie standard.
-     * Les 0 sont des cases vides, les chiffres sont les billes des joueurs
+     * Les . sont des cases vides
      */
-    /*public static void AffichePartie(Board p){
-        Tile[][] tab = p.GetGrille();
+    public static void PrintGame(Board p){
+        Tile[][] tab = p.getGrid();
         for(int i=0;i<tab.length;i++){
             for(int j=0;j<tab[0].length;j++){
-                if(tab[i][j].getCouleurBille() != 9)
-                    System.out.print(tab[i][j].CouleurBille());
+                if(tab[i][j].getMarbleColor() != null)
+                    switch (tab[i][j].getMarbleColor().toString()){
+                        case "java.awt.Color[r=0,g=0,b=255]":
+                            System.out.print("b");
+                            break;
+                        default: System.out.println(tab[i][j].getMarbleColor().toString());
+                        break;
+                    }
                 else
                     System.out.print(".");
             }
             System.out.print('\n');
         }
         System.out.println("\n");
-    }*/
+    }
 
 }

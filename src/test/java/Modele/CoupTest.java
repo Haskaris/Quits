@@ -60,27 +60,34 @@ class CoupTest {
     public void TestEntreeController() {
         MoveCalculator mc = new MoveCalculator(board);
         List<Move> coupspossible = mc.coupsPossibles();
-        //LecteurRedacteur.AffichePartie(board);
         board.history.doMove(coupspossible.get(0));
-        //LecteurRedacteur.AffichePartie(board);
+
         coupspossible = new MoveCalculator(board).coupsPossibles();
         board.history.doMove(player.Jouer(coupspossible));
-        //LecteurRedacteur.AffichePartie(board);
+
     }
 
     @Test
     public void TestSerialization(){
         Move m = new Move(new Point(1,1), Tools.Direction.NO,player.name);
         SerializationUtils.serialize(m);
+        m = new Move(marble, Tools.Direction.NO,player.name);
+        SerializationUtils.serialize(m);
+
     }
 
     @Test
     public void TestReseau() throws Exception {
         WebManager webSender = new WebManager();
-        webSender.Send(new Move(new Point(1,1), Tools.Direction.NO,player.name));
-        //Player player = new DistantPlayer("p", Color.RED);
-        //Move m = player.Jouer(null);
-        //m.print();
+        webSender.createGame("test");
+        webSender.Send(new Move(marble, Tools.Direction.NO,player.name));
+
+        Player player = new DistantPlayer("p", Color.RED, webSender.queuename);
+        Move m = player.Jouer(null);
+        m.perform(board);
+
+        assertFalse(board.getGrid()[2][2].hasMarble());
+        assertTrue(board.getGrid()[1][1].hasMarble());
     }
 }
 
