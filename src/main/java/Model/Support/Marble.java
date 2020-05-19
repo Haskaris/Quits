@@ -1,8 +1,12 @@
 package Model.Support;
 
+import Model.AI.Node;
+import Model.Players.Player;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class Marble {
     private final Color color;
