@@ -15,11 +15,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -175,7 +177,13 @@ public class GraphicInterface implements Runnable, Observateur {
         
         Box boxMenu = Box.createHorizontalBox();
         
-        this.undo = new JButton("Défaire");
+        this.undo = new JButton();
+        ImageIcon MyImage = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_backward_notpressed.png"));
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        this.undo.setIcon(image);
+        this.undo.setPreferredSize(new java.awt.Dimension(50, 50));
         this.undo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.undo.setFocusable(false);
         this.undo.setEnabled(this.mediator.canUndo());
@@ -183,7 +191,13 @@ public class GraphicInterface implements Runnable, Observateur {
             this.mediator.undo();
         });
         
-        this.redo = new JButton("Refaire");
+        this.redo = new JButton();
+        ImageIcon MyImage2 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_forward_notpressed.png"));
+        Image img2 = MyImage2.getImage();
+        Image newImg2 = img2.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image2 = new ImageIcon(newImg2);
+        this.redo.setIcon(image2);
+        this.redo.setPreferredSize(new java.awt.Dimension(50, 50));
         this.redo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.redo.setFocusable(false);
         this.redo.setEnabled(this.mediator.canRedo());
@@ -191,7 +205,13 @@ public class GraphicInterface implements Runnable, Observateur {
             this.mediator.redo();
         });
         
-        this.oneMoveBefore = new JToggleButton("Revoir");
+        this.oneMoveBefore = new JToggleButton();
+        ImageIcon MyImage3 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_eye_notpressed.png"));
+        Image img3 = MyImage3.getImage();
+        Image newImg3 = img3.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image3 = new ImageIcon(newImg3);
+        this.oneMoveBefore.setIcon(image3);
+        this.oneMoveBefore.setPreferredSize(new java.awt.Dimension(50, 50));
         this.oneMoveBefore.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.oneMoveBefore.setFocusable(false);
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
