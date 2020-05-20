@@ -41,15 +41,19 @@ public class Marble implements Serializable {
         return this.tile;
     }
     
+    public Point getPosition() {
+        return this.tile.getPosition();
+    }
+    
     /**
      * S'imprime dans la sortie stream
      * @param stream
      * @throws IOException 
      */
     public void print(OutputStream stream) throws IOException {
+        // x,y
         stream.write(String.valueOf(this.getTile().getPosition().x).getBytes());
-        stream.write('-');
+        stream.write(',');
         stream.write(String.valueOf(this.getTile().getPosition().y).getBytes());
-        stream.write('/');
     }
 }

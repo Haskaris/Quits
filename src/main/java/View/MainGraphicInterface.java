@@ -1,45 +1,60 @@
 package View;
 
 import Controleur.Mediator;
-import Global.Tools;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
 public class MainGraphicInterface extends JFrame {
-    InitGame initGameInterface;
-    Mediator mediator;
+    private InitGame initGame;
+    private final Mediator mediator;
     
+    /**
+     * Constructeur
+     */
     public MainGraphicInterface() {
-        super();
-        this.mediator = new Mediator();
-        this.mediator.addMainInterface(this);
+        super("Quits");
+        super.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.mediator = new Mediator(this);
         
-        this.setTitle("Quits");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        super.setMinimumSize(new Dimension(725, 250));
+        super.setSize(725, 250);
         
-        //this.setMinimumSize(new Dimension(500,500));
-        initGameInterface = new InitGame(mediator);
-        //gameInterface = new GameInterface(this);
+        this.initGame = new InitGame(this, mediator);
         
-        this.add(initGameInterface);
-        this.pack();
-        this.setVisible(true);
+        super.add(initGame);
+        super.pack();
+        super.setLocationRelativeTo(null);
+        super.setResizable(false);
+        super.setVisible(true);
     }
     
-    public void initGame() {
-        //À mettre dans le mediator ?
-        //Ajout des joueurs dans la partie
-        ArrayList<EditPlayer> tmp = this.initGameInterface.getEditsPlayers();
-        for (EditPlayer e : tmp) {
-            this.mediator.addPlayer(e.playerName, e.playerColor, e.aiLevel);
-        }
-        
+    /**
+     * Démare la partie
+     */
+    public void startGame() {
         //Pour "fermer" la fenêtre
         this.setVisible(false);
-        
-        //Démarer la partie
-        GraphicInterface.start(mediator);
+        GraphicInterface.start(this.mediator);
+    }
+    
+    /**
+     * Mets à jour la taille actuelle de la fenêtre et sa taille minimum
+     * @param minWidth int - minimum width the frame can be
+     * @param minHeight int - minimum height the frame can be
+     */
+    public void updateSize(int minWidth, int minHeight) {
+        //this.setMinimumSize(new Dimension(minWidth, minHeight));
+        this.setSize(minWidth, minHeight);
+    }
+    
+    ///Getters
+    public ArrayList<EditPlayer> getEditsPlayers() {
+        return this.initGame.getEditsPlayers();
+    }
+
+    public void reset() {
+        this.initGame.reset();
+        this.setVisible(true);
     }
 }

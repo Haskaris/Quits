@@ -24,9 +24,9 @@ class CoupTest {
 
     @BeforeEach
     public void init(){
-        player = new AIEasyPlayer("default", Color.BLUE);
-        player.setStartPoint(Tools.Direction.SO);
         board = new Board();
+        player = new AIEasyPlayer("default", Color.BLUE, board);
+        player.setStartPoint(Tools.Direction.SW);
         board.addPlayer(player);
         marble = player.addMarble();
         board.getGrid()[2][2].addMarble(marble);
@@ -34,7 +34,7 @@ class CoupTest {
 
     @Test
     public void TestCoup() {
-        Move c = new Move(marble, Tools.Direction.NO, player.name);
+        Move c = new Move(marble, Tools.Direction.NW/*, player*/);
         c.perform(board);
         assertFalse(board.getGrid()[2][2].hasMarble());
         assertTrue(board.getGrid()[1][1].hasMarble());
@@ -48,9 +48,9 @@ class CoupTest {
     @Test
     public void TestHistorique() {
         History historique = new History(board);
-        Move c1 = new Move(marble, Tools.Direction.NO, player.name);
-        Move c2 = new Move(marble, Tools.Direction.SO, player.name);
+        Move c1 = new Move(marble.getPosition(), Tools.Direction.NW);
         historique.doMove(c1);
+        Move c2 = new Move(marble.getPosition(), Tools.Direction.SW);
         historique.doMove(c2);
         historique.undo();
         historique.redo();
@@ -62,12 +62,13 @@ class CoupTest {
     @Test
     public void TestEntreeController() {
         MoveCalculator mc = new MoveCalculator(board);
-        List<Move> coupspossible = mc.coupsPossibles();
-        board.history.doMove(coupspossible.get(0));
-
-        coupspossible = new MoveCalculator(board).coupsPossibles();
-        board.history.doMove(player.Jouer(coupspossible));
-
+        List<Move> coupspossible = mc.possibleMoves();
+        //LecteurRedacteur.AffichePartie(board);
+        board.getHistory().doMove(coupspossible.get(0));
+        //LecteurRedacteur.AffichePartie(board);
+        coupspossible = new MoveCalculator(board).possibleMoves();
+        board.getHistory().doMove(player.Jouer(coupspossible));
+        //LecteurRedacteur.AffichePartie(board);
     }
 
     @Test

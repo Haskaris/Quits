@@ -5,11 +5,11 @@ import java.awt.*;
 public class ImageQuits {
     Image img;
 
-    ImageQuits(Image i) {
+    public ImageQuits(Image i) {
         img = i;
     }
 
-    Image image() {
+    public Image image() {
         return img;
     }
 }

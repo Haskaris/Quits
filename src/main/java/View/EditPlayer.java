@@ -9,6 +9,12 @@ package View;
 import View.ColorPicker.ColorPicker;
 import Global.Tools;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
+import javax.swing.ImageIcon;
+import javax.swing.border.Border;
 
 /**
  *
@@ -21,14 +27,34 @@ public class EditPlayer extends javax.swing.JPanel {
     public Tools.AILevel aiLevel = Tools.AILevel.Player;
     public ColorPicker colorPicker;
 
-    /** Creates new form EditPlayerAuto */
+    /** Creates new form EditPlayerAuto
+     * @param playerName Nom du joueur à afficher lors de la création de l'objet
+     * @param playerColor Couleur du joueur à afficher lors de la création de l'objet
+     * ATTENTION : '-!-' dans le nom du joueur cassera la sauvegarde
+     */
     public EditPlayer(String playerName, Color playerColor) {
         this.playerColor = playerColor;
         this.playerName = playerName;
         this.colorPicker = new ColorPicker(this.playerColor);
         initComponents();
     }
+    private static class RoundedBorder implements Border {
 
+        private int radius;
+
+        RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius+1, this.radius+1, this.radius+2, this.radius);
+        }
+        public boolean isBorderOpaque() {
+            return true;
+        }
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.drawRoundRect(x, y, width-1, height-1, radius, radius);
+        }
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -42,7 +68,25 @@ public class EditPlayer extends javax.swing.JPanel {
         aiLevelList = new javax.swing.JComboBox<>();
         jButton = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 0, 0));
+        setForeground(new java.awt.Color(255, 255, 102));
+        setOpaque(false);
+
+        jTextField1.setBackground(new java.awt.Color(224, 224, 224));
         jTextField1.setText(this.playerName);
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         aiLevelList.setMaximumRowCount(4);
         aiLevelList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Humain", "Ordinateur facile", "Ordinateur normal", "Ordinateur difficile" }));
@@ -53,7 +97,10 @@ public class EditPlayer extends javax.swing.JPanel {
         });
 
         jButton.setBackground(this.playerColor);
+        jButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton.setFocusPainted(false);
         jButton.setMargin(new java.awt.Insets(14, 14, 14, 14));
+        jButton.setPreferredSize(new java.awt.Dimension(33, 33));
         jButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonActionPerformed(evt);
@@ -69,17 +116,18 @@ public class EditPlayer extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(aiLevelList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton))
+                .addComponent(jButton, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(aiLevelList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(aiLevelList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -103,6 +151,18 @@ public class EditPlayer extends javax.swing.JPanel {
                 break;
         }
     }//GEN-LAST:event_aiLevelListItemStateChanged
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        this.playerName = jTextField1.getText();
+    }//GEN-LAST:event_jTextField1KeyReleased
 
     public void updateButtonColor(Color c) {
         this.jButton.setBackground(c);

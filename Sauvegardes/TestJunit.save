@@ -1,11 +1,17 @@
 5 2
-AINormalPlayer Default1 -16776961 SO
-1-1/
-AINormalPlayer Default2 -16711936 NE
-2-2/
-65612
-55345
-56133
-30536
-45225
+AINormalPlayer
+Default1
+-16776961 SW
+1,1/
+AINormalPlayer
+Default2
+-16711936 NE
+2,2/
+TwoPlayersThreeBalls 0
+12130
+22310
+20132
+32321
+13113
 
+0
