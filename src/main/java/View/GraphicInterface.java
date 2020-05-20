@@ -107,8 +107,8 @@ public class GraphicInterface implements Runnable, Observateur {
         frame.add(boxPlayerAndBoard);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1100, 950);
-        frame.setMinimumSize(new Dimension(500, 600));
+        frame.setSize(510, 620);
+        frame.setMinimumSize(new Dimension(510, 620));
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         this.update();
@@ -179,7 +179,6 @@ public class GraphicInterface implements Runnable, Observateur {
         menuBar.add(fileMenu);
 
         
-        Box boxMenu = Box.createHorizontalBox();
         Border emptyBorder = BorderFactory.createEmptyBorder();
         this.undo = new JButton();
         ImageIcon MyImage = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_backward_notpressed.png"));
@@ -281,10 +280,7 @@ public class GraphicInterface implements Runnable, Observateur {
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.redo.setEnabled(this.mediator.canRedo());
         this.fileMenu.setEnabled(this.mediator.canUndo());
-        /*this.names.forEach((name) -> {
-            name.setForeground(Color.black);
-        });
-        this.names.get(this.mediator.getBoard().currentPlayer).setForeground(Color.red);*/
+        
         nameLabel.setText(this.mediator.getBoard().getCurrentPlayer().name);
         nameLabel.setForeground(this.mediator.getBoard().getCurrentPlayer().color);
     }
