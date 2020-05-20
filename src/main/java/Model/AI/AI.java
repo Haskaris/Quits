@@ -150,7 +150,7 @@ public abstract class AI extends Player {
         float node_value = node.getNodeParent().getNodeValue();
         Node.Node_type pruning_type = node.getNodeType();
         Node.Node_type pruning_parent_type = node.getNodeParent().getNodeType();
-
+        
         if (pruning_type == Node.Node_type.MAX_NODE) {
             //Forcément un noeud min au dessus d'un noeud max
             potential_test = node_value > p_value;
