@@ -308,6 +308,8 @@ public class InitGame extends javax.swing.JPanel {
         
         this.editPlayers.add(this.listOfEditPlayers.get(0));
         this.editPlayers.add(this.listOfEditPlayers.get(1));
+        
+        this.gameModeList.setSelectedIndex(0);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
