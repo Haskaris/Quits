@@ -71,7 +71,7 @@ class CoupTest {
 
     @Test
     public void TestTrainAI() throws IOException {
-        NNManager manager = new NNManager();
+        //NNManager manager = new NNManager();
 
     }
 }
