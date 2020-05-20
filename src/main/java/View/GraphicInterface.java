@@ -194,6 +194,11 @@ public class GraphicInterface implements Runnable, Observateur {
         this.undo.setBorderPainted(false);
         this.undo.setOpaque(false);
         this.undo.setBorder(emptyBorder);
+        ImageIcon MyImage10 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_backward_pressed.png"));
+        Image img10 = MyImage10.getImage();
+        Image newImg10 = img10.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image10 = new ImageIcon(newImg10);
+        this.undo.setPressedIcon(image10);
         this.undo.setEnabled(this.mediator.canUndo());
         this.undo.addActionListener((ActionEvent e) -> {
             this.mediator.undo();
@@ -211,6 +216,11 @@ public class GraphicInterface implements Runnable, Observateur {
         this.redo.setBorderPainted(false);
         this.redo.setOpaque(false);
         this.redo.setBorder(emptyBorder);
+        ImageIcon MyImage20 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_forward_pressed.png"));
+        Image img20 = MyImage20.getImage();
+        Image newImg20 = img20.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image20 = new ImageIcon(newImg20);
+        this.redo.setPressedIcon(image20);
         this.redo.setEnabled(this.mediator.canRedo());
         this.redo.addActionListener((ActionEvent e) -> {
             this.mediator.redo();
@@ -228,6 +238,11 @@ public class GraphicInterface implements Runnable, Observateur {
         this.oneMoveBefore.setBorderPainted(false);
         this.oneMoveBefore.setOpaque(false);
         this.oneMoveBefore.setBorder(emptyBorder);
+        ImageIcon MyImage30 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_eye_pressed.png"));
+        Image img30 = MyImage30.getImage();
+        Image newImg30 = img30.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image30 = new ImageIcon(newImg30);
+        this.oneMoveBefore.setPressedIcon(image30);
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.oneMoveBefore.addActionListener((ActionEvent e) -> {
             
