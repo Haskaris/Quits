@@ -103,7 +103,7 @@ public class MoveCalculator {
             Tile tileStudied = board.getGrid()[tmpTileX][0];
 
             if (!tileStudied.hasMarble()) {
-                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.N, player);
+                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.N/*, player*/);
                 if (!moveExists(toBeAdded)) {
                     moves.add(toBeAdded);
                 }
@@ -112,7 +112,7 @@ public class MoveCalculator {
             tileStudied = board.getGrid()[tmpTileX][4];
 
             if (!tileStudied.hasMarble()) {
-                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.S, player);
+                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.S/*, player*/);
                 if (!moveExists(toBeAdded)) {
                     moves.add(toBeAdded);
                 }
@@ -121,7 +121,7 @@ public class MoveCalculator {
             tileStudied = board.getGrid()[0][tmpTileY];
 
             if (!tileStudied.hasMarble()) {
-                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.W, player);
+                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.W/*, player*/);
                 if (!moveExists(toBeAdded)) {
                     moves.add(toBeAdded);
                 }
@@ -130,7 +130,7 @@ public class MoveCalculator {
             tileStudied = board.getGrid()[4][tmpTileY];
 
             if (!tileStudied.hasMarble()) {
-                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.E, player);
+                Move toBeAdded = new Move(tileStudied.getPosition(), Direction.E/*, player*/);
                 if (!moveExists(toBeAdded)) {
                     moves.add(toBeAdded);
                 }
@@ -144,16 +144,16 @@ public class MoveCalculator {
             Marble b = board.getGrid()[line][column].getMarble();
             Point pos = b.getTile().getPosition();
             if (this.playerStart != Direction.NW && isTileFree(add(pos, DirToPoint(Direction.NW)))) {
-                this.moves.add(new Move(b, Direction.NW, this.player));
+                this.moves.add(new Move(b, Direction.NW/*, this.player*/));
             }
             if (this.playerStart != Direction.NE && isTileFree(add(pos, DirToPoint(Direction.NE)))) {
-                this.moves.add(new Move(b, Direction.NE, this.player));
+                this.moves.add(new Move(b, Direction.NE/*, this.player*/));
             }
             if (this.playerStart != Direction.SE && isTileFree(add(pos, DirToPoint(Direction.SE)))) {
-                this.moves.add(new Move(b, Direction.SE, this.player));
+                this.moves.add(new Move(b, Direction.SE/*, this.player*/));
             }
             if (this.playerStart != Direction.SW && isTileFree(add(pos, DirToPoint(Direction.SW)))) {
-                this.moves.add(new Move(b, Direction.SW, this.player));
+                this.moves.add(new Move(b, Direction.SW/*, this.player*/));
             }
         }
     }

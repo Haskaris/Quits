@@ -1,0 +1,17 @@
+5 2
+HumanPlayer
+Joueur A
+-16776961 SW
+1,2/2,4/2,2/3,3/2,3/
+HumanPlayer
+Joueur B
+-65536 NE
+0,1/4,4/3,1/2,1/3,2/
+TwoPlayersFiveBalls 1
+03133
+20111
+30001
+01100
+13123
+1,3 NE;2,0 SW;1,4 NE;4,2 SW;0,3 NE;0,1 W;4,2 E;3,3 SE;3,4 S;4,2 E;2,2 NW;2,1 SW;1,1 NE
+9

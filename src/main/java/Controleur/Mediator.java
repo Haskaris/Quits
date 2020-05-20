@@ -5,7 +5,6 @@ import Global.Tools.AILevel;
 
 import Model.Players.*;
 import Model.Support.Board;
-import Model.Support.Marble;
 import Paterns.Observateur;
 import View.Dialogs.RulesDialog;
 import View.EditPlayer;
@@ -13,13 +12,12 @@ import View.EditPlayer;
 import View.GraphicInterface;
 import View.MainGraphicInterface;
 import View.Dialogs.VictoryDialog;
-import View.ViewBoard;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 
 public class Mediator {
@@ -27,7 +25,8 @@ public class Mediator {
     private Board board;
     private GraphicInterface graphicInterface;
     private MainGraphicInterface mainGraphicInterface;
-    private FileGestion fileGestion;
+    private final FileGestion fileGestion;
+    private boolean isGameBlocked;
     
     private Timer timer;
 
@@ -38,6 +37,7 @@ public class Mediator {
     public Mediator(MainGraphicInterface mainGraphicInterface) {
         this.fileGestion = new FileGestion(this);
         this.mainGraphicInterface = mainGraphicInterface;
+        this.isGameBlocked = false;
     }
 
     /**
@@ -59,7 +59,12 @@ public class Mediator {
      * @param fileName Nom de la partie à sauvegarder
      */
     public void saveGame(String fileName) {
-        this.fileGestion.saveGame(fileName);
+        try {
+            this.fileGestion.saveGame(fileName);
+            this.board.print(System.out);
+        } catch (IOException ex) {
+            Logger.getLogger(Mediator.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -102,8 +107,10 @@ public class Mediator {
      * @param c colonne où le clique a été effectué
      * @param l ligne où le clique a été effectué
      */
-    public void mouseClick(int c, int l) throws IOException {
-        board.playTurn(c, l);
+    public void mouseClick(int c, int l) {
+        if (!this.isGameBlocked) {
+            this.board.playTurn(c, l);
+        }
     }
     
     public void addObservateur(Observateur a) {
@@ -146,6 +153,9 @@ public class Mediator {
             case 2:
                 //Well, we do nothing :x
                 break;
+            case 3:
+                this.newGame();
+                break;
             default:
                 System.out.println("AH, une erreure innatendue a spawn");
         }
@@ -164,13 +174,13 @@ public class Mediator {
                 this.board.addPlayer(new HumanPlayer(playerName, color));
                 break;
             case Easy:
-                this.board.addPlayer(new AIEasyPlayer(playerName, color, board));
+                this.board.addPlayer(new AIEasyPlayer(playerName, color, this.board));
                 break;
             case Hard:
-                this.board.addPlayer(new AIHardPlayer(playerName, color, board));
+                this.board.addPlayer(new AINormalPlayer(playerName, color));
                 break;
             case Medium:
-                this.board.addPlayer(new AINormalPlayer(playerName, color, board));
+                this.board.addPlayer(new AIHardPlayer(playerName, color, this.board));
                 break;
         }
     }
@@ -227,5 +237,24 @@ public class Mediator {
     public void clearSelectedMarble() {
         this.graphicInterface.boardGraphic.setSelectedMarble(null);
         this.timer.stop();
+    }
+
+    public void seeOneMoveBefore(Boolean isSelected) {
+        if (isSelected) {
+            this.blockGame();
+            this.undo();
+            this.graphicInterface.blockUndoRedo();
+        } else {
+            this.redo();
+            this.unBlockGame();
+        }
+    }
+
+    private void unBlockGame() {
+        this.isGameBlocked = false;
+    }
+
+    private void blockGame() {
+        this.isGameBlocked = true;
     }
 }

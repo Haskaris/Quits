@@ -1,14 +1,11 @@
 package Model.Support;
 
-import Model.AI.Node;
-import Model.Players.Player;
-
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Marble {
+public class Marble implements Serializable {
     private final Color color;
     private Tile tile;
 
@@ -54,9 +51,9 @@ public class Marble {
      * @throws IOException 
      */
     public void print(OutputStream stream) throws IOException {
+        // x,y
         stream.write(String.valueOf(this.getTile().getPosition().x).getBytes());
-        stream.write('-');
+        stream.write(',');
         stream.write(String.valueOf(this.getTile().getPosition().y).getBytes());
-        stream.write('/');
     }
 }

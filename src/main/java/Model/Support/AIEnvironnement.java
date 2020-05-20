@@ -752,7 +752,7 @@ public class AIEnvironnement {
         Move convertMove = null;
         //case move line
         if(move.get(0) == null){
-            convertMove = new Move(move.get(1), convertDirectionLine(move.get(1), move.get(2)), board.getCurrentPlayer());
+            convertMove = new Move(move.get(1), convertDirectionLine(move.get(1), move.get(2)));
         } else {
             Marble goodMarble = null;
             for(Marble m: board.getCurrentPlayer().getMarbles()){
@@ -761,7 +761,7 @@ public class AIEnvironnement {
                     break;
                 }
             }
-            convertMove = new Move(goodMarble, convertDirectionMarble(move.get(0), move.get(1)), board.getCurrentPlayer());
+            convertMove = new Move(goodMarble, convertDirectionMarble(move.get(0), move.get(1)));
         }
         return convertMove;
     }

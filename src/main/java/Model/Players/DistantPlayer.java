@@ -1,6 +1,9 @@
 package Model.Players;
 
 import Model.Move;
+import Model.Web.WebManager;
+import org.apache.commons.lang3.SerializationUtils;
+
 import java.awt.Color;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -8,15 +11,23 @@ import java.io.OutputStream;
 import java.util.List;
 
 public class DistantPlayer extends Player {
-    public DistantPlayer(String name, Color color) {
+    public DistantPlayer(String name, Color color, WebManager webManager) {
         super(name, color);
+        this.webManager = webManager;
     }
+
+    private WebManager webManager;
 
     @Override
     public Move Jouer( List<Move> coups_possibles) {
-        return coups_possibles.get(0);
+        Move move = SerializationUtils.deserialize(webManager.Receive());
+
+        return move;
     }
-    
+
+
+
+
     /**
      * S'imprime dans la sortie stream
      * @param stream
@@ -25,7 +36,7 @@ public class DistantPlayer extends Player {
     @Override
     public void print(OutputStream stream) throws IOException {
         stream.write("DistantPlayer".getBytes());
-        stream.write(' ');
+        stream.write('\n');
         super.print(stream);
     }
 }

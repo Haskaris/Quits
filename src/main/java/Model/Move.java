@@ -1,5 +1,6 @@
 package Model;
 
+import Global.Tools;
 import Model.Players.Player;
 import Model.Support.Marble;
 import Model.Support.Board;
@@ -7,13 +8,17 @@ import Model.Support.Board;
 import static Global.Tools.*;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 
-public class Move {
+public class Move implements Serializable {
 
     /**
      * Indique si une bille doit être bougé dans ce mouvement
      */
-    Marble marble = null;
+    Point marble = null;
 
     /**
      * Indique si une ligne doit être bougé dans ce mouvement
@@ -26,31 +31,37 @@ public class Move {
     Direction direction;
 
     /**
+     * Indique la position initiale, peu importe si le mouvement est un décalage
+     * ou un déplacement de bille
+     */
+    Point position;
+
+    /**
+     * Indique le type de mouvement
+     */
+    MoveType type;
+
+    /**
      * Joueur responsable du mouvement
      */
-    Player player;
-
-    /**
-     * Prochain mouvement de la pile
-     */
-    Move nextMove;
-
-    /**
-     * Mouvement précédent de la pile
-     */
-    Move lastMove;
+    String playername;
 
     /**
      * On veut jouer un deplacement de marble
      *
      * @param marble Bille à déplacer
      * @param direction Direction du mouvement
-     * @param player Responsable du mouvement
      */
-    public Move(Marble marble, Direction direction, Player player) {
-        this.marble = marble;
+    public Move(Marble marble, Direction direction) {
+        this.marble = marble.getPosition();
         this.direction = direction;
-        this.player = player;
+        if (isDiagonal(direction)) {
+            type = MoveType.MARBLE;
+        } else {
+            type = MoveType.TILE;
+        }
+        this.position =this.marble;
+        //this.player = player;
     }
 
     /**
@@ -58,40 +69,43 @@ public class Move {
      *
      * @param line Bille à déplacer
      * @param direction Direction du mouvement
-     * @param player Responsable du mouvement
      */
-    public Move(Point line, Direction direction, Player player) {
+    public Move(Point line, Direction direction) {
         this.line = line;
         this.direction = direction;
-        this.player = player;
+        if (isDiagonal(direction)) {
+            type = MoveType.MARBLE;
+        } else {
+            type = MoveType.TILE;
+        }
+        this.position = new Point(line.x, line.y);
+        //this.player = player;
     }
 
     public void perform(Board board) {
-        if (marble != null) {
-            board.moveMarble(marble, direction);
-        }
-        if (line != null) {
-            board.moveLine(line, direction);
+        if (!isShift()) {
+            board.moveMarble(position, direction);
+        } else {
+            board.moveLine(position, direction);
         }
     }
 
     public void cancel(Board board) {
-        if (marble != null) {
-            board.moveMarble(marble, reverse(direction));
-        }
-        if (line != null) {
-            board.moveLine(line, reverse(direction));
+        if (!isShift()) {
+            board.moveMarble(Tools.getNextPoint(position, direction), reverse(direction));
+        } else {
+            board.moveLine(position, reverse(direction));
         }
     }
 
     public Point getPosition() {
-        return marble.getPosition();
+        return position;
     }
 
     /**
      * Retourne le décalage pour acceder à la position possible
+     *
      * @return Point - Décalage du mouvement par rapport à sa direction
-     * @see Tools.DirToPoint(Direction d)
      */
     public Point getCoordinatesDirection() {
         return DirToPoint(direction);
@@ -99,6 +113,7 @@ public class Move {
 
     /**
      * Retourne la direction du mouvement
+     *
      * @return Direction - Direction du mouvement
      */
     public Direction getDirection() {
@@ -111,69 +126,57 @@ public class Move {
 
     /**
      * Permet de savoir si le mouvement est un déplacement de tuiles
+     *
      * @return boolean - Vrai si c'est un déplacement de tuiles
      */
     public boolean isShift() {
-        return (marble == null);
+        return (type == MoveType.TILE);
     }
 
-    public void Display() {
-
-        if (line != null) {
-            int number = -1;
-            String cardinalPoint = "";
-            String isRowOrCol = "";
-            switch (direction) {
-                case S:
-                    //Moving on y axis
-                    cardinalPoint = "South";
-                    isRowOrCol = "Column";
-                    number = line.x;
-                    break;
-                case N:
-                    //Moving on y axis
-                    cardinalPoint = "North";
-                    isRowOrCol = "Column";
-                    number = line.x;
-                    break;
-                case W:
-                    //Moving on x axis
-                    cardinalPoint = "West";
-                    isRowOrCol = "Row";
-                    number = line.y;
-                    break;
-                case E:
-                    //Moving on x axis
-                    cardinalPoint = "East";
-                    isRowOrCol = "Row";
-                    number = line.y;
-                    break;
-                default:
-                    System.out.println("Erreur");
-                    break;
-            }
-            System.out.println(isRowOrCol + " n°" + number + " shiftable towards " + cardinalPoint + ".");
-            return;
-        }
-        if (marble != null) {
-            System.out.println(marble.getPosition());
-            System.out.println(direction);
-        }
-    }
-
+    /**
+     * Permet de savoir si un mouvement est égale à un autre
+     *
+     * @param toBeCompared Mouvement à comparer
+     * @return Vrai si les mouvements sont égaux
+     */
     public boolean isEqual(Move toBeCompared) {
-        if (line != null && toBeCompared.line != null) {
+        boolean sameDirection = (this.direction == toBeCompared.direction);
+        return sameDirection
+                && position.x == toBeCompared.position.x
+                && position.y == toBeCompared.position.y;
+    }
 
-            return this.direction == toBeCompared.direction
-                    && this.line.x == toBeCompared.line.x
-                    && this.line.y == toBeCompared.line.y;
+    public void print(OutputStream stream) throws IOException {
+        //Début du mouvement
+        // x,y DIR
+        stream.write(String.valueOf(position.x).getBytes());
+        stream.write(',');
+        stream.write(String.valueOf(position.y).getBytes());
+
+        stream.write(' ');
+        stream.write(direction.name().getBytes());
+        //Fin du mouvement
+    }
+
+    public static Move load(String in_stream) {
+        // 2,3 NE
+        String[] sSplit = in_stream.split(" ");//On sépare les coordonnées de la direction
+        String[] coordTab = sSplit[0].split(",");//On sépare les deux coordonnées
+        int x = Integer.valueOf(coordTab[0]);//Ici le x
+        int y = Integer.valueOf(coordTab[1]);//Ici le y
+        Direction d = Tools.Direction.valueOf(sSplit[1]);//Ici la direction
+        return new Move(new Point(x, y), d);
+    }
+
+    public void display() {
+        if (isShift()) {
+            System.out.print("Line move ");
+        } else {
+            System.out.print("Marble move ");
         }
-        if (marble != null && toBeCompared.marble != null) {
-            return this.direction == toBeCompared.direction
-                    && this.marble.getPosition().x == toBeCompared.marble.getPosition().x
-                    && this.marble.getPosition().y == toBeCompared.marble.getPosition().y;
-        }
-        return false;
+        System.out.print(position.x + "|" + position.y);
+        System.out.println("-" + direction.name());
+
     }
 
 }

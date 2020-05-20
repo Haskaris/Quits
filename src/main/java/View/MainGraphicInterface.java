@@ -17,14 +17,15 @@ public class MainGraphicInterface extends JFrame {
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.mediator = new Mediator(this);
         
-        super.setMinimumSize(new Dimension(675, 225));
-        super.setSize(675, 225);
+        super.setMinimumSize(new Dimension(725, 250));
+        super.setSize(725, 250);
         
         this.initGame = new InitGame(this, mediator);
         
         super.add(initGame);
         super.pack();
         super.setLocationRelativeTo(null);
+        super.setResizable(false);
         super.setVisible(true);
     }
     
@@ -43,7 +44,7 @@ public class MainGraphicInterface extends JFrame {
      * @param minHeight int - minimum height the frame can be
      */
     public void updateSize(int minWidth, int minHeight) {
-        this.setMinimumSize(new Dimension(minWidth, minHeight));
+        //this.setMinimumSize(new Dimension(minWidth, minHeight));
         this.setSize(minWidth, minHeight);
     }
     

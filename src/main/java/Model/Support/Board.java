@@ -1,36 +1,35 @@
 package Model.Support;
 
 import Controleur.Mediator;
-import Global.Configuration;
 import Global.Tools;
-import Global.Tools.Direction;
 import Model.MoveCalculator;
 import Model.Move;
 import Model.History;
 import Model.Players.HumanPlayer;
 import Model.ReaderWriter;
 import Model.Players.Player;
+import Model.Web.WebManager;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Board {
 
     private Tile[][] grid;
     private ArrayList<Player> players;
+    History historyMoves;
     public int currentPlayer;
-    private History history;
     private Mediator mediator;
     private Tools.GameMode gameMode;
     public ArrayList<Move> allPotentialShifts;
     public Marble selectedMarble;
     public int[][] availableTiles;
     private int marbleEndObjectiv = 2;
+    public WebManager webManager;
 
     /**
      * Initialise un plateau Taille fixe pour le moment
@@ -49,7 +48,7 @@ public class Board {
         availableTiles = new int[5][5];
         resetAvailableTiles();
 
-        history = new History(this);
+        historyMoves = new History(this);
         currentPlayer = 0;
     }
 
@@ -72,8 +71,8 @@ public class Board {
                 break;
             case FourPlayersFiveBalls:
                 this.players.get(0).setStartPoint(Tools.Direction.SW);
-                this.players.get(1).setStartPoint(Tools.Direction.NE);
-                this.players.get(2).setStartPoint(Tools.Direction.NW);
+                this.players.get(1).setStartPoint(Tools.Direction.NW);
+                this.players.get(2).setStartPoint(Tools.Direction.NE);
                 this.players.get(3).setStartPoint(Tools.Direction.SE);
                 break;
         }
@@ -202,6 +201,19 @@ public class Board {
     }
 
     /**
+     * Deplace la bille de la tuile aux coordonées précisées, dans la direction
+     * précisé.
+     *
+     * @param startPoint
+     * @param direction
+     */
+    public void moveMarble(Point startPoint, Tools.Direction direction) {
+        Point finishPoint = Tools.getNextPoint(startPoint, direction);
+        Marble tmp = grid[startPoint.x][startPoint.y].removeMarble();
+        this.grid[finishPoint.x][finishPoint.y].addMarble(tmp);
+    }
+
+    /**
      * DEPRECATED Mets à jours les positions des tuiles
      */
     private void updatePosition() {
@@ -309,7 +321,7 @@ public class Board {
      */
     public void reset() {
         //J'enlève tous les coups qui ont été fait
-        this.history = new History(this);
+        historyMoves.clear();
 
         //J'enlève toutes les billes du plateau
         for (int i = 0; i < 5; i++) {
@@ -328,7 +340,7 @@ public class Board {
         //Je remets le joueur courant au début
         this.currentPlayer = 0;
     }
-    
+
     public void clearSelectedMarble() {
         this.selectedMarble = null;
         this.mediator.clearSelectedMarble();
@@ -344,7 +356,7 @@ public class Board {
             this.allPotentialShifts.add(m);
         });
     }
-    
+
     /**
      * Clear the shift list
      */
@@ -354,40 +366,41 @@ public class Board {
 
     //////////////////////////////  GETTERS  ///////////////////////////////////
     public History getHistory() {
-        return this.history;
+        return historyMoves;
     }
-    
+
     public Mediator getMediator() {
         return this.mediator;
     }
-    
+
     /**
      * Retourne l'objet du joueur à l'index souhaité
+     *
      * @param index int - index du joueur
      * @return Player - Joueur à l'index
      */
     public Player getPlayer(int index) {
         return this.players.get(index);
     }
-    
+
     public ArrayList<Player> getPlayers() {
         return this.players;
     }
-    
+
     /**
      * Retourne l'objet du joueur courant
+     *
      * @return Player - Joueur courant
      */
     public Player getCurrentPlayer() {
         return this.getPlayer(this.currentPlayer);
     }
-    
+
     public Tile[][] getGrid() {
         return grid;
     }
-    
-    //////////////////////////////  SETTERS  ///////////////////////////////////
 
+    //////////////////////////////  SETTERS  ///////////////////////////////////
     public void setGameMode(Tools.GameMode gameMode) {
         this.gameMode = gameMode;
     }
@@ -395,11 +408,12 @@ public class Board {
     public void setMediator(Mediator m) {
         this.mediator = m;
     }
-    
+
     /////////////////////////////////  IO  /////////////////////////////////////
     /**
      * S'imprime dans la sortie stream
-     * @param stream
+     *
+     * @param stream Sortie sur laquelle imprimer le plateau
      * @throws IOException
      */
     public void print(OutputStream stream) throws IOException {
@@ -419,11 +433,15 @@ public class Board {
             }
             stream.write('\n');
         }
+
+        historyMoves.print(stream);
+        historyMoves.display();
     }
 
     /**
      * Charge le plateau à partir de l'entrée stream
-     * @param in_stream
+     *
+     * @param in_stream Entrée sur laquelle imprimer le plateau
      * @throws IOException
      */
     public void load(InputStream in_stream) throws IOException {
@@ -438,5 +456,10 @@ public class Board {
                 this.grid[i][j].setIndexOfColor(indexOfColor);
             }
         }
+
+        historyMoves.load(in_stream);
+        historyMoves.display();
+
     }
+    
 }
