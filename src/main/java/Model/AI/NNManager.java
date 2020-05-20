@@ -54,7 +54,7 @@ public class NNManager {
     /**
      * Dimension de nos réseaux de neuronnes
      */
-    private int[] _layers = new int[]{100, 20, 10, 5, 1};
+    private int[] _layers = new int[]{100, 10, 10, 10, 1};
 
     /**
      * Boolean nus indiquant si un de nos réseaux de neuronnes à gagné
@@ -147,7 +147,7 @@ public class NNManager {
         this._aiHard = new AIHardPlayer("default", Color.BLACK, null);
         initNeuralNetworks();
         createAIBodies();
-        trainAI2();
+        trainAIAgainstOldWinner();
     }
 
     /**
@@ -233,13 +233,9 @@ public class NNManager {
                         for (int k = 0; k < 5; k++) {
                             if (p.x == k) {
                                 tInputs[currentMarble + k] = 1;
-                            } else {
-                                tInputs[currentMarble + k] = -1;
                             }
                             if (p.y == k) {
                                 tInputs[currentMarble + k + 5] = 1;
-                            } else {
-                                tInputs[currentMarble + k + 5] = -1;
                             }
                         }
                         currentMarble += 10;
@@ -261,9 +257,7 @@ public class NNManager {
         if (!aiTrainTurn && nbTour < 100) {
             System.out.println("Le reseau de neuronnes à gagné");
             this._iaWin = true;
-        }/* else {
-            System.out.println("le reseau de neuronne a perdu");
-        }*/
+        }
         nt.setFitness(evalAI(env));
         return nt.getFitness();
     }
@@ -343,20 +337,34 @@ public class NNManager {
                         float[] result;
                         //on crée les entrées
                         float[] tInputs = new float[100];
+                        for(int init = 0; init < tInputs.length; init++){
+                            tInputs[init] = -1;
+                        }
                         //On ajoute chaque bille du plateau dans les inputs
                         int currentMarble = 0;
+                        for (Point p : env.getOnePlayerMarble(env.getCurrentPlayer())) {
+                            for (int k = 0; k < 5; k++) {
+                                if (p.x == k) {
+                                    tInputs[currentMarble + k] = 1;
+                                }
+                                if (p.y == k) {
+                                    tInputs[currentMarble + k + 5] = 1;
+                                }
+                            }
+                            currentMarble += 10;
+                        }
+                        currentMarble = 50;
                         for (ArrayList<Point> arrayMarble : env.getPlayerMarble()) {
+                            if(arrayMarble == env.getOnePlayerMarble(env.getCurrentPlayer())){
+                                continue;
+                            }
                             for (Point p : arrayMarble) {
                                 for (int k = 0; k < 5; k++) {
                                     if (p.x == k) {
                                         tInputs[currentMarble + k] = 1;
-                                    } else {
-                                        tInputs[currentMarble + k] = -1;
                                     }
                                     if (p.y == k) {
                                         tInputs[currentMarble + k + 5] = 1;
-                                    } else {
-                                        tInputs[currentMarble + k + 5] = -1;
                                     }
                                 }
                                 currentMarble += 10;
@@ -399,15 +407,15 @@ public class NNManager {
                     nbTour++;
                 }
                 //On fait jouer notre IA contre l'IA facile aussi
-                float val = playAgainstIA(this._nets.get(i));
+                //float val = playAgainstIA(this._nets.get(i));
 
-                if (!aiTrainTurn && nbTour < 100 && this._iaWin) {
+                if (!aiTrainTurn && nbTour < 100){// && this._iaWin) {
                     System.out.println("Un reseau de neuronnes à gagné");
                     this._IATrainWin = true;
                     this._AIWin = new NeuronalNetwork(this._nets.get(i));
                 }
 
-                this._nets.get(i).setFitness(evalAI(env) + val);
+                this._nets.get(i).setFitness(evalAI(env));//+ val);
 
                 //on ajoute l'IA dans une liste ordonnée
                 for (int j = 0; j < winnerAI.size(); j++) {
@@ -462,6 +470,254 @@ public class NNManager {
             System.out.println("Aucun réseau de neuronne n'a gagné");
         }
 
+    }
+
+    /**
+     * Fonction d'entrainement de notre IA contre plusieurs IA qui ont déjà gagné
+     */
+    public void trainAIAgainstOldWinner() throws IOException {
+        NeuronalNetwork nt = new NeuronalNetwork();
+        ArrayList<NeuronalNetwork> oldWinner = new ArrayList<>();
+        oldWinner.add(nt);
+        int numberOfPlayer = 5;
+        while (oldWinner.size() != numberOfPlayer) {
+            //On initialise une nouvelle génération d'IA
+            initNeuralNetworks();
+            createAIBodies();
+            this._generationNumber = 0;
+            System.out.println("Start training ");
+            while (this._generationNumber < 1000000 && !this._IATrainWin) {
+                //Liste contenant tous nos réseaux trié du plus au moins performant
+                ArrayList<NeuronalNetwork> winnerAI = new ArrayList<>();
+
+                //On ajoute un réseau de neuronnes qui sera le pire possible
+                NeuronalNetwork netBad = new NeuronalNetwork(this._layers);
+                netBad.Mutate(0.5f);
+                netBad.setFitness(10000);
+                winnerAI.add(netBad);
+
+                boolean AIWinAgainstAll = true;
+                //Faire jouer les IA instanciées entre elles;
+                for (int i = 0; i < this._populationSize; i++) {
+                    AIWinAgainstAll = true;
+                    float value = 0;
+                    for(NeuronalNetwork n : oldWinner) {
+                        //On fait jouer 2 IA, celle qui gagne est ajouté à la liste winner IA on joue dans AIEnvironnement
+                        AIEnvironnement env = new AIEnvironnement();
+
+                        //On ajoute les 2 joueurs
+                        env.addPlayer(0);
+                        env.addPlayer(1);
+
+                        //On met le joueur courant à 1
+                        env.setCurrentPlayer(1);
+
+                        //On ajoute les points de départs des 2 joueurs
+                        /**
+                         * Joueur 0 et 1
+                         * - - 1 1 -
+                         * - - - 1 1
+                         * 0 - - - 1
+                         * 0 0 - - -
+                         * - 0 0 - -
+                         * */
+                        env.addStartingPoint(new Point(4, 0));
+                        env.addStartingPoint(new Point(0, 4));
+
+                        //On met le joueur IA à 1
+                        env.setIaPlayer(1);
+
+                        //On ajoute les billes
+                        //joueur 0
+                        ArrayList<Point> j0Marble = new ArrayList<>();
+                        j0Marble.add(new Point(2, 0));
+                        j0Marble.add(new Point(3, 0));
+                        j0Marble.add(new Point(3, 1));
+                        j0Marble.add(new Point(4, 1));
+                        j0Marble.add(new Point(4, 2));
+                        env.addPlayerMarble(j0Marble);
+                        //joueur 1 qui est le réseau de neuronne sauvegardé
+                        ArrayList<Point> j1Marble = new ArrayList<>();
+                        j1Marble.add(new Point(0, 2));
+                        j1Marble.add(new Point(0, 3));
+                        j1Marble.add(new Point(1, 3));
+                        j1Marble.add(new Point(1, 4));
+                        j1Marble.add(new Point(2, 4));
+                        env.addPlayerMarble(j1Marble);
+
+
+                        //On joue la partie jusqu'à ce qu'on aie un gagnant avec un nombre de tour maximum
+                        int nbTour = 0;
+                        //Nous permet de savoir quelle IA à gagné
+                        boolean aiTrainTurn = true;
+                        while (!env.playerWin() && nbTour < 100) {
+                            //on change de joueur courant
+                            env.nextPlayer();
+                            if (aiTrainTurn) {
+                                //joueur nnnetwork
+                                float[] result;
+                                //on crée les entrées
+                                float[] tInputs = new float[100];
+                                for (int init = 0; init < tInputs.length; init++) {
+                                    tInputs[init] = -1;
+                                }
+                                //On ajoute chaque bille du plateau dans les inputs
+                                int currentMarble = 0;
+                                for (Point p : env.getOnePlayerMarble(env.getCurrentPlayer())) {
+                                    for (int k = 0; k < 5; k++) {
+                                        if (p.x == k) {
+                                            tInputs[currentMarble + k] = 1;
+                                        }
+                                        if (p.y == k) {
+                                            tInputs[currentMarble + k + 5] = 1;
+                                        }
+                                    }
+                                    currentMarble += 10;
+                                }
+                                currentMarble = 50;
+                                for (ArrayList<Point> arrayMarble : env.getPlayerMarble()) {
+                                    if (arrayMarble == env.getOnePlayerMarble(env.getCurrentPlayer())) {
+                                        continue;
+                                    }
+                                    for (Point p : arrayMarble) {
+                                        for (int k = 0; k < 5; k++) {
+                                            if (p.x == k) {
+                                                tInputs[currentMarble + k] = 1;
+                                            }
+                                            if (p.y == k) {
+                                                tInputs[currentMarble + k + 5] = 1;
+                                            }
+                                        }
+                                        currentMarble += 10;
+                                    }
+                                }
+                                result = this._nets.get(i).FeedForward(tInputs);
+                                ArrayList<Point> move = AINeuronalNetwork.Jouer3(env, result);
+                                env.perform(move);
+                                aiTrainTurn = false;
+                            } else {
+                                //joueur nnnetwork
+                                float[] result;
+                                //on crée les entrées
+                                float[] tInputs = new float[100];
+                                for (int init = 0; init < tInputs.length; init++) {
+                                    tInputs[init] = -1;
+                                }
+                                //On ajoute chaque bille du plateau dans les inputs
+                                int currentMarble = 0;
+                                for (Point p : env.getOnePlayerMarble(env.getCurrentPlayer())) {
+                                    for (int k = 0; k < 5; k++) {
+                                        if (p.x == k) {
+                                            tInputs[currentMarble + k] = 1;
+                                        }
+                                        if (p.y == k) {
+                                            tInputs[currentMarble + k + 5] = 1;
+                                        }
+                                    }
+                                    currentMarble += 10;
+                                }
+                                currentMarble = 50;
+                                for (ArrayList<Point> arrayMarble : env.getPlayerMarble()) {
+                                    if (arrayMarble == env.getOnePlayerMarble(env.getCurrentPlayer())) {
+                                        continue;
+                                    }
+                                    for (Point p : arrayMarble) {
+                                        for (int k = 0; k < 5; k++) {
+                                            if (p.x == k) {
+                                                tInputs[currentMarble + k] = 1;
+                                            }
+                                            if (p.y == k) {
+                                                tInputs[currentMarble + k + 5] = 1;
+                                            }
+                                        }
+                                        currentMarble += 10;
+                                    }
+                                }
+                                //On fait jouer l'IA sauvegardée
+                                result = n.FeedForward(tInputs);
+                                ArrayList<Point> move = AINeuronalNetwork.Jouer3(env, result);
+                                env.perform(move);
+                                aiTrainTurn = true;
+                            }
+                            nbTour++;
+                        }
+                        //On fait jouer notre IA contre l'IA facile aussi
+                        //float val = playAgainstIA(this._nets.get(i));
+
+                        if (!aiTrainTurn && nbTour < 100) {// && this._iaWin) {
+                            //System.out.println("Un reseau de neuronnes à gagné");
+                        } else {
+                            AIWinAgainstAll = false;
+                        }
+                        value += evalAI(env);
+                    }
+                    if(AIWinAgainstAll){
+                        System.out.println("Un reseau de neuronnes à gagné");
+                        this._IATrainWin = true;
+                        this._AIWin = new NeuronalNetwork(this._nets.get(i));
+                    }
+                    this._nets.get(i).setFitness(value);//+ val);
+
+                    //on ajoute l'IA dans une liste ordonnée
+                    for (int j = 0; j < winnerAI.size(); j++) {
+                        if (this._nets.get(i).compareTo(winnerAI.get(j)) != -1) {
+                            winnerAI.add(j, this._nets.get(i));
+                            break;
+                        }
+                    }
+                }
+
+                //Garder les gagnantes
+                //Instancie la liste de la generation suivante
+                ArrayList<NeuronalNetwork> newNets = new ArrayList<>();
+
+                //Recupere les IA gagnantes
+                for (int j = 0; j < 15; j++) {
+                    NeuronalNetwork net = new NeuronalNetwork(winnerAI.get(j));
+                    newNets.add(net);
+                }
+
+                //Recupere les IA gagnantes et les fait  muter
+                for (int j = 0; j < 5; j++) {
+                    NeuronalNetwork net = new NeuronalNetwork(winnerAI.get(j));
+                    net.Mutate(0.5f);
+                    newNets.add(net);
+                }
+
+                //Recupere les plus intelligente de nos IA et les fait plus muter
+                for (int j = 0; j < 5; j++) {
+                    NeuronalNetwork net = new NeuronalNetwork(winnerAI.get(j));
+                    net.Mutate(2f);
+                    newNets.add(net);
+                }
+
+                //Recupere les plus intelligentes de nos IA et leurs defonce le cerveau
+                for (int j = 0; j < 5; j++) {
+                    NeuronalNetwork net = new NeuronalNetwork(winnerAI.get(j));
+                    net.Mutate(10f);
+                    newNets.add(net);
+                }
+
+                //Changement d'agents entre les deux generation
+                this._nets = newNets;
+                this._generationNumber++;
+                System.out.println(this._generationNumber);
+
+            }
+            if (this._IATrainWin) {
+                System.out.println("Un réseau de neuronne à gagné");
+                //this._AIWin.writeNN();
+                oldWinner.add(this._AIWin);
+                System.out.println(oldWinner.size());
+                this._IATrainWin = false;
+            } else {
+                System.out.println("Aucun réseau de neuronne n'a gagné");
+            }
+
+        }
+        if(oldWinner.size() == numberOfPlayer){
+            oldWinner.get(oldWinner.size()-1).writeNN();
+        }
     }
 
     /**

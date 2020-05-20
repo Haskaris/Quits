@@ -60,13 +60,9 @@ public class AINeuronalNetwork extends AI {
                 for (int k = 0; k < 5; k++) {
                     if (p.x == k) {
                         tInputs[currentMarble + k] = 1;
-                    } else {
-                        tInputs[currentMarble + k] = -1;
                     }
                     if (p.y == k) {
                         tInputs[currentMarble + k + 5] = 1;
-                    } else {
-                        tInputs[currentMarble + k + 5] = -1;
                     }
                 }
                 currentMarble += 10;

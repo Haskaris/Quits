@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class AIEasyPlayer extends AI {
 
     public AIEasyPlayer(String name, Color color, Board board) {
-        super(name, color, board, 3);
+        super(name, color, board, 2);
     }
 
     @Override
