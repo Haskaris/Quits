@@ -279,7 +279,7 @@ public class GraphicInterface implements Runnable, Observateur {
         this.undo.setEnabled(this.mediator.canUndo());
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.redo.setEnabled(this.mediator.canRedo());
-        this.fileMenu.setEnabled(this.mediator.canUndo());
+        this.fileMenu.setEnabled(true);
         
         nameLabel.setText(this.mediator.getBoard().getCurrentPlayer().name);
         nameLabel.setForeground(this.mediator.getBoard().getCurrentPlayer().color);
