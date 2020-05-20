@@ -131,6 +131,7 @@ public class Board {
             List<Move> possibleMoves = new MoveCalculator(this).possibleMoves();
             Move move = getCurrentPlayer().Jouer(possibleMoves);
             getHistory().doMove(move);
+            if(webManager != null) webManager.sendMove(move, getCurrentPlayer() instanceof HumanPlayer);
             endTurn();
         }
         this.mediator.getGraphicInterface().update();
