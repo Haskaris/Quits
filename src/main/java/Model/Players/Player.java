@@ -140,8 +140,10 @@ public abstract class Player {
                     tmp = new HumanPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
                     break;
                 case "DistantPlayer":
-                    tmp = new DistantPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
-                    break;
+                    System.out.println("Une partie comprenant des joueurs distants ne pout pas être restaurée");
+                    //tmp = new DistantPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
+                    //break;
+                    return null;
                 case "AIEasyPlayer":
                     tmp = new AIEasyPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;

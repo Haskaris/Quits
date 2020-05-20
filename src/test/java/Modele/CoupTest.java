@@ -5,10 +5,14 @@ import Model.*;
 import Model.Support.*;
 import Model.Players.*;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.DeliverCallback;
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,6 +70,8 @@ class CoupTest {
         board.getHistory().doMove(player.Jouer(coupspossible));
         //LecteurRedacteur.AffichePartie(board);
     }
+
+
 }
 
 

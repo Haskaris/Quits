@@ -58,7 +58,11 @@ public class Tile {
         marble = null;
         return tmp;
     }
-    
+
+    /**
+     * Retournela bille, null sinon
+     * @return Marble
+     */
     public Marble getMarble() {
         return marble;
     }
@@ -109,4 +113,5 @@ public class Tile {
     public void print(OutputStream stream) throws IOException {
         stream.write(String.valueOf(this.indexOfColor).getBytes());
     }
+
 }

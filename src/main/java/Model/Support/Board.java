@@ -8,6 +8,7 @@ import Model.History;
 import Model.Players.HumanPlayer;
 import Model.ReaderWriter;
 import Model.Players.Player;
+import Model.Web.WebManager;
 
 import java.awt.*;
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class Board {
     public Marble selectedMarble;
     public int[][] availableTiles;
     private int marbleEndObjectiv = 2;
+    public WebManager webManager;
 
     /**
      * Initialise un plateau Taille fixe pour le moment
