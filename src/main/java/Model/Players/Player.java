@@ -145,13 +145,13 @@ public abstract class Player {
                     //break;
                     return null;
                 case "AIEasyPlayer":
-                    tmp = new AIEasyPlayer(playerName, new Color(Integer.parseInt(dataPlayer[2])), board);
+                    tmp = new AIEasyPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
                 case "AINormalPlayer":
-                    tmp = new AINormalPlayer(playerName, new Color(Integer.parseInt(dataPlayer[2])), board);
+                    tmp = new AINormalPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
                 case "AIHardPlayer":
-                    tmp = new AIHardPlayer(playerName, new Color(Integer.parseInt(dataPlayer[2])), board);
+                    tmp = new AIHardPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
             }
         tmp.setStartPoint(Direction.valueOf(dataPlayer[1]));

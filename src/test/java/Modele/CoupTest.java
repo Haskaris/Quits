@@ -2,15 +2,18 @@ package Modele;
 
 import Global.Tools;
 import Model.*;
-import Model.AI.NNManager;
 import Model.Support.*;
 import Model.Players.*;
 
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.DeliverCallback;
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +35,7 @@ class CoupTest {
 
     @Test
     public void TestCoup() {
-        Move c = new Move(marble, Tools.Direction.NW);
+        Move c = new Move(marble, Tools.Direction.NW/*, player*/);
         c.perform(board);
         assertFalse(board.getGrid()[2][2].hasMarble());
         assertTrue(board.getGrid()[1][1].hasMarble());
@@ -46,9 +49,9 @@ class CoupTest {
     @Test
     public void TestHistorique() {
         History historique = new History(board);
-        Move c1 = new Move(marble, Tools.Direction.NW);
-        Move c2 = new Move(marble, Tools.Direction.SW);
+        Move c1 = new Move(marble.getPosition(), Tools.Direction.NW);
         historique.doMove(c1);
+        Move c2 = new Move(marble.getPosition(), Tools.Direction.SW);
         historique.doMove(c2);
         historique.undo();
         historique.redo();
@@ -69,11 +72,6 @@ class CoupTest {
         //LecteurRedacteur.AffichePartie(board);
     }
 
-    @Test
-    public void TestTrainAI() throws IOException {
-        //NNManager manager = new NNManager();
 
-    }
 }
-
 
