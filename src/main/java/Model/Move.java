@@ -11,13 +11,14 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
-public class Move {
+public class Move implements Serializable {
 
     /**
      * Indique si une bille doit être bougé dans ce mouvement
      */
-    Marble marble = null;
+    Point marble = null;
 
     /**
      * Indique si une ligne doit être bougé dans ce mouvement
@@ -43,24 +44,23 @@ public class Move {
     /**
      * Joueur responsable du mouvement
      */
-    Player player;
+    String playername;
 
     /**
      * On veut jouer un deplacement de marble
      *
      * @param marble Bille à déplacer
      * @param direction Direction du mouvement
-     * @param player Responsable du mouvement
      */
-    public Move(Marble marble, Direction direction/*, Player player*/) {
-        this.marble = marble;
+    public Move(Marble marble, Direction direction) {
+        this.marble = marble.getPosition();
         this.direction = direction;
         if (isDiagonal(direction)) {
             type = MoveType.MARBLE;
         } else {
             type = MoveType.TILE;
         }
-        this.position = new Point(marble.getPosition().x, marble.getPosition().y);
+        this.position =this.marble;
         //this.player = player;
     }
 
@@ -69,9 +69,8 @@ public class Move {
      *
      * @param line Bille à déplacer
      * @param direction Direction du mouvement
-     * @param player Responsable du mouvement
      */
-    public Move(Point line, Direction direction/*, Player player*/) {
+    public Move(Point line, Direction direction) {
         this.line = line;
         this.direction = direction;
         if (isDiagonal(direction)) {
@@ -107,7 +106,6 @@ public class Move {
      * Retourne le décalage pour acceder à la position possible
      *
      * @return Point - Décalage du mouvement par rapport à sa direction
-     * @see Tools.DirToPoint(Direction d)
      */
     public Point getCoordinatesDirection() {
         return DirToPoint(direction);

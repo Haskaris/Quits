@@ -58,7 +58,11 @@ public class Tile {
         marble = null;
         return tmp;
     }
-    
+
+    /**
+     * Retournela bille, null sinon
+     * @return Marble
+     */
     public Marble getMarble() {
         return marble;
     }
@@ -110,13 +114,4 @@ public class Tile {
         stream.write(String.valueOf(this.indexOfColor).getBytes());
     }
 
-    /**
-     * Retournela bille, null sinon
-     * @return Marble
-     */
-    public Marble getMarble(){
-        if(marble == null)
-            return null;
-        return marble;
-    }
 }

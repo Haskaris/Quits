@@ -71,15 +71,6 @@ class CoupTest {
         //LecteurRedacteur.AffichePartie(board);
     }
 
-    @Test
-    public void TestSerialization(){
-        Move m = new Move(new Point(1,1), Tools.Direction.NO,player.name);
-        SerializationUtils.serialize(m);
-        m = new Move(marble, Tools.Direction.NO,player.name);
-        SerializationUtils.serialize(m);
-
-    }
-
 
 }
 

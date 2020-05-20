@@ -21,13 +21,12 @@ class WebTest {
 
     @Test
     public void TestSerialization(){
-        Player player = new AIEasyPlayer("default", Color.BLUE);
-        Marble marble = player.addMarble();
         Board board = new Board();
+        Marble marble = new AIEasyPlayer("default", Color.BLUE,board).addMarble();
         board.getGrid()[2][2].addMarble(marble);
-        Move m = new Move(new Point(1,1), Tools.Direction.NO,player.name);
+        Move m = new Move(new Point(1,1), Tools.Direction.NW);
         SerializationUtils.serialize(m);
-        m = new Move(marble, Tools.Direction.NO,player.name);
+        m = new Move(marble, Tools.Direction.NW);
         SerializationUtils.serialize(m);
 
     }
@@ -47,6 +46,7 @@ class WebTest {
 
         channel.basicConsume("test", true, deliverCallback, consumerTag -> { });
 
+        System.out.println("Waiting for Queue");
         while(true){
             if(message != null)
                 break;
@@ -54,12 +54,15 @@ class WebTest {
         assertEquals("essai",new String((byte[]) message));
 
         message = null;
-        WebTools.addExchange(channel,"extest");
-        String queue2 =  WebTools.addQueueBound(channel,"extest");
+        String exchangename = "ex2test";
+        WebTools.addExchange(channel,exchangename);
+        String queue2 =  WebTools.addQueueBound(channel,exchangename);
         assertNotNull(queue2);
 
-        channel.basicPublish("extest","",null,"essai2".getBytes());
-        channel.basicConsume("extest", true, deliverCallback, consumerTag -> { });
+        channel.basicPublish(exchangename,"",null,"essai2".getBytes());
+        channel.basicConsume(queue2, true, deliverCallback, consumerTag -> { });
+
+        System.out.println("Waiting for Exchanger");
         while(true){
             if(message != null)
                 break;
