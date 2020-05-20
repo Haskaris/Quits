@@ -97,7 +97,7 @@ public class StartScreen extends javax.swing.JFrame {
                 .addGap(175, 175, 175)
                 .addComponent(jLabel1))
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(0, 0, 0)
                 .addComponent(jLabel2))
         );
         jLayeredPane1Layout.setVerticalGroup(

@@ -15,11 +15,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -31,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 /**
  *
@@ -47,6 +51,8 @@ public class GraphicInterface implements Runnable, Observateur {
     JToggleButton menu, oneMoveBefore;
     JButton undo, redo;
     JPanel inGameMenu;
+    
+    JMenu fileMenu;
     
     ArrayList<JLabel> names;
     
@@ -101,8 +107,8 @@ public class GraphicInterface implements Runnable, Observateur {
         frame.add(boxPlayerAndBoard);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 600);
-        frame.setMinimumSize(new Dimension(500, 600));
+        frame.setSize(510, 620);
+        frame.setMinimumSize(new Dimension(510, 620));
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         this.update();
@@ -112,7 +118,7 @@ public class GraphicInterface implements Runnable, Observateur {
         
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu fileMenu = new JMenu("Menu");
+        fileMenu = new JMenu("Menu");
         fileMenu.setMnemonic(KeyEvent.VK_F);
         
         JMenuItem saveItem = new JMenuItem("Sauvegarder");
@@ -173,37 +179,81 @@ public class GraphicInterface implements Runnable, Observateur {
         menuBar.add(fileMenu);
 
         
-        Box boxMenu = Box.createHorizontalBox();
-        
-        this.undo = new JButton("Défaire");
+        Border emptyBorder = BorderFactory.createEmptyBorder();
+        this.undo = new JButton();
+        ImageIcon MyImage = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_backward_notpressed.png"));
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        this.undo.setIcon(image);
+        this.undo.setPreferredSize(new java.awt.Dimension(50, 50));
         this.undo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.undo.setFocusable(false);
+        this.undo.setBorderPainted(false);
+        this.undo.setOpaque(false);
+        this.undo.setBorder(emptyBorder);
+        ImageIcon MyImage10 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_backward_pressed.png"));
+        Image img10 = MyImage10.getImage();
+        Image newImg10 = img10.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image10 = new ImageIcon(newImg10);
+        this.undo.setPressedIcon(image10);
         this.undo.setEnabled(this.mediator.canUndo());
         this.undo.addActionListener((ActionEvent e) -> {
             this.mediator.undo();
         });
         
-        this.redo = new JButton("Refaire");
+        this.redo = new JButton();
+        ImageIcon MyImage2 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_forward_notpressed.png"));
+        Image img2 = MyImage2.getImage();
+        Image newImg2 = img2.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image2 = new ImageIcon(newImg2);
+        this.redo.setIcon(image2);
+        this.redo.setPreferredSize(new java.awt.Dimension(50, 50));
         this.redo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.redo.setFocusable(false);
+        this.redo.setBorderPainted(false);
+        this.redo.setOpaque(false);
+        this.redo.setBorder(emptyBorder);
+        ImageIcon MyImage20 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_forward_pressed.png"));
+        Image img20 = MyImage20.getImage();
+        Image newImg20 = img20.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image20 = new ImageIcon(newImg20);
+        this.redo.setPressedIcon(image20);
         this.redo.setEnabled(this.mediator.canRedo());
         this.redo.addActionListener((ActionEvent e) -> {
             this.mediator.redo();
         });
         
-        this.oneMoveBefore = new JToggleButton("Revoir");
+        this.oneMoveBefore = new JToggleButton();
+        ImageIcon MyImage3 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_eye_notpressed.png"));
+        Image img3 = MyImage3.getImage();
+        Image newImg3 = img3.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image3 = new ImageIcon(newImg3);
+        this.oneMoveBefore.setIcon(image3);
+        this.oneMoveBefore.setPreferredSize(new java.awt.Dimension(50, 50));
         this.oneMoveBefore.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.oneMoveBefore.setFocusable(false);
+        this.oneMoveBefore.setBorderPainted(false);
+        this.oneMoveBefore.setOpaque(false);
+        this.oneMoveBefore.setBorder(emptyBorder);
+        ImageIcon MyImage30 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_eye_pressed.png"));
+        Image img30 = MyImage30.getImage();
+        Image newImg30 = img30.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon image30 = new ImageIcon(newImg30);
+        this.oneMoveBefore.setPressedIcon(image30);
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.oneMoveBefore.addActionListener((ActionEvent e) -> {
             this.mediator.seeOneMoveBefore(this.oneMoveBefore.isSelected());
         });
+        this.fileMenu.setEnabled(true);
         
+        menuBar.add(Box.createHorizontalStrut(60));
         menuBar.add(undo);
         menuBar.add(redo);
         menuBar.add(oneMoveBefore);
         
         this.frame.setJMenuBar(menuBar);
+        
       
     }
     
@@ -229,10 +279,8 @@ public class GraphicInterface implements Runnable, Observateur {
         this.undo.setEnabled(this.mediator.canUndo());
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.redo.setEnabled(this.mediator.canRedo());
-        /*this.names.forEach((name) -> {
-            name.setForeground(Color.black);
-        });
-        this.names.get(this.mediator.getBoard().currentPlayer).setForeground(Color.red);*/
+        this.fileMenu.setEnabled(this.mediator.canUndo());
+        
         nameLabel.setText(this.mediator.getBoard().getCurrentPlayer().name);
         nameLabel.setForeground(this.mediator.getBoard().getCurrentPlayer().color);
     }
@@ -245,6 +293,7 @@ public class GraphicInterface implements Runnable, Observateur {
     public void blockUndoRedo() {
         this.undo.setEnabled(false);
         this.redo.setEnabled(false);
+        this.fileMenu.setEnabled(false);
         this.oneMoveBefore.setEnabled(true);
     }
 
