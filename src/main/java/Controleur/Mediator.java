@@ -167,10 +167,10 @@ public class Mediator {
                 this.board.addPlayer(new AIEasyPlayer(playerName, color, board));
                 break;
             case Hard:
-                this.board.addPlayer(new AINormalPlayer(playerName, color));
+                this.board.addPlayer(new AIHardPlayer(playerName, color, board));
                 break;
             case Medium:
-                this.board.addPlayer(new AIHardPlayer(playerName, color, board));
+                this.board.addPlayer(new AINormalPlayer(playerName, color, board));
                 break;
         }
     }

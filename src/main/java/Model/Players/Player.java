@@ -143,7 +143,7 @@ public abstract class Player {
                     tmp = new AIEasyPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])), board);
                     break;
                 case "AINormalPlayer":
-                    tmp = new AINormalPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])));
+                    tmp = new AINormalPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])), board);
                     break;
                 case "AIHardPlayer":
                     tmp = new AIHardPlayer(dataPlayer[1], new Color(Integer.parseInt(dataPlayer[2])), board);
