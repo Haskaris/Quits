@@ -5,8 +5,10 @@ import Global.Tools;
 import Model.MoveCalculator;
 import Model.Move;
 import Model.History;
+import Model.Players.HumanPlayer;
 import Model.ReaderWriter;
 import Model.Players.Player;
+import Model.Web.WebManager;
 
 import java.awt.*;
 import java.io.IOException;
@@ -20,6 +22,7 @@ public class Board {
     private ArrayList<Player> players;
     public int currentPlayer;
     public History history;
+    public WebManager webManager;
 
     /**
      * Initialise un plateau
@@ -46,6 +49,8 @@ public class Board {
             List<Move> possiblesMoves = new MoveCalculator(this).coupsPossibles();
             Move coup = currentPlayer().Jouer(possiblesMoves);
             history.doMove(coup);
+            if(webManager != null)
+                webManager.sendMove(coup,currentPlayer() instanceof HumanPlayer);
             //LecteurRedacteur.AffichePartie(this);
         }
     }
