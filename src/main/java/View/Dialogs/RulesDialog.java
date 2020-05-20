@@ -122,6 +122,7 @@ public class RulesDialog extends javax.swing.JDialog {
         modGameLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         modGameLabel3.setText("4 joueurs 3 billes");
 
+        modGame7.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         modGame7.setText("<html><b>Déplacements :</b></html>");
 
         movePicture1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Rules/Rules_MB.png"))); // NOI18N
