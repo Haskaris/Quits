@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -34,6 +35,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 /**
@@ -56,7 +58,7 @@ public class GraphicInterface implements Runnable, Observateur {
     
     ArrayList<JLabel> names;
     
-    JLabel nameLabel;
+    JLabel nameLabel, tourDe;
     
     Box boxPlayer, boxPlayerAndBoard;
     
@@ -107,8 +109,9 @@ public class GraphicInterface implements Runnable, Observateur {
         frame.add(boxPlayerAndBoard);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(510, 620);
-        frame.setMinimumSize(new Dimension(510, 620));
+
+        frame.setSize(780, 900);
+        frame.setMinimumSize(new Dimension(500, 600));
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
         this.update();
@@ -119,6 +122,7 @@ public class GraphicInterface implements Runnable, Observateur {
         JMenuBar menuBar = new JMenuBar();
 
         fileMenu = new JMenu("Menu");
+        fileMenu.setFont(new Font("sans-serif", Font.BOLD, 20));
         fileMenu.setMnemonic(KeyEvent.VK_F);
         
         JMenuItem saveItem = new JMenuItem("Sauvegarder");
@@ -183,10 +187,10 @@ public class GraphicInterface implements Runnable, Observateur {
         this.undo = new JButton();
         ImageIcon MyImage = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_backward_notpressed.png"));
         Image img = MyImage.getImage();
-        Image newImg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image newImg = img.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(newImg);
         this.undo.setIcon(image);
-        this.undo.setPreferredSize(new java.awt.Dimension(50, 50));
+        this.undo.setPreferredSize(new java.awt.Dimension(75, 75));
         this.undo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.undo.setFocusable(false);
         this.undo.setBorderPainted(false);
@@ -194,7 +198,7 @@ public class GraphicInterface implements Runnable, Observateur {
         this.undo.setBorder(emptyBorder);
         ImageIcon MyImage10 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_backward_pressed.png"));
         Image img10 = MyImage10.getImage();
-        Image newImg10 = img10.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image newImg10 = img10.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
         ImageIcon image10 = new ImageIcon(newImg10);
         this.undo.setPressedIcon(image10);
         this.undo.setEnabled(this.mediator.canUndo());
@@ -205,10 +209,10 @@ public class GraphicInterface implements Runnable, Observateur {
         this.redo = new JButton();
         ImageIcon MyImage2 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_forward_notpressed.png"));
         Image img2 = MyImage2.getImage();
-        Image newImg2 = img2.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image newImg2 = img2.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
         ImageIcon image2 = new ImageIcon(newImg2);
         this.redo.setIcon(image2);
-        this.redo.setPreferredSize(new java.awt.Dimension(50, 50));
+        this.redo.setPreferredSize(new java.awt.Dimension(75, 75));
         this.redo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.redo.setFocusable(false);
         this.redo.setBorderPainted(false);
@@ -216,7 +220,7 @@ public class GraphicInterface implements Runnable, Observateur {
         this.redo.setBorder(emptyBorder);
         ImageIcon MyImage20 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_forward_pressed.png"));
         Image img20 = MyImage20.getImage();
-        Image newImg20 = img20.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image newImg20 = img20.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
         ImageIcon image20 = new ImageIcon(newImg20);
         this.redo.setPressedIcon(image20);
         this.redo.setEnabled(this.mediator.canRedo());
@@ -227,10 +231,10 @@ public class GraphicInterface implements Runnable, Observateur {
         this.oneMoveBefore = new JToggleButton();
         ImageIcon MyImage3 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_eye_notpressed.png"));
         Image img3 = MyImage3.getImage();
-        Image newImg3 = img3.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image newImg3 = img3.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
         ImageIcon image3 = new ImageIcon(newImg3);
         this.oneMoveBefore.setIcon(image3);
-        this.oneMoveBefore.setPreferredSize(new java.awt.Dimension(50, 50));
+        this.oneMoveBefore.setPreferredSize(new java.awt.Dimension(75, 75));
         this.oneMoveBefore.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.oneMoveBefore.setFocusable(false);
         this.oneMoveBefore.setBorderPainted(false);
@@ -238,7 +242,7 @@ public class GraphicInterface implements Runnable, Observateur {
         this.oneMoveBefore.setBorder(emptyBorder);
         ImageIcon MyImage30 = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_eye_pressed.png"));
         Image img30 = MyImage30.getImage();
-        Image newImg30 = img30.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image newImg30 = img30.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
         ImageIcon image30 = new ImageIcon(newImg30);
         this.oneMoveBefore.setPressedIcon(image30);
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
@@ -261,9 +265,14 @@ public class GraphicInterface implements Runnable, Observateur {
         boxPlayer = Box.createHorizontalBox();
         
         nameLabel = new JLabel("");
+        nameLabel.setFont(new Font("sans-serif", Font.BOLD, 20));
         
-        this.boxPlayer.add(new JLabel("Tour de "));
+        tourDe = new JLabel("Tour de ");
+        tourDe.setFont(new Font("sans-serif", Font.PLAIN, 20));
+        
+        this.boxPlayer.add(tourDe);
         this.boxPlayer.add(nameLabel);
+        
         this.boxPlayerAndBoard.add(boxPlayer, BorderLayout.NORTH);
         
     }
