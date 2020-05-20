@@ -51,6 +51,12 @@ public class AIEnvironnement {
     public AIEnvironnement(){
         this._players = new ArrayList<>();
         this._grid = new int[5][5];
+        //initialisation du plateau
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                this._grid[i][j] = -1;
+            }
+        }
         this._currentPlayer = 0;
         this._iaPlayer = 0;
         this._startingPoint = new ArrayList<>();
@@ -232,6 +238,10 @@ public class AIEnvironnement {
      */
     public void addPlayerMarble(ArrayList<Point> playerMarble){
         this._playerMarble.add(playerMarble);
+        int num = this._playerMarble.size() -1 ;
+        for(Point p: playerMarble){
+            setNumberInGrid(p.x, p.y, num);
+        }
     }
 
     /**
@@ -500,7 +510,6 @@ public class AIEnvironnement {
         return this._grid[p.x][p.y] == -1;
     }
 
-    //Je ne vois pas comment factoriser cette fonction
     /**
      * Joue un déplacement de tuile
      * @param move
@@ -515,18 +524,17 @@ public class AIEnvironnement {
                     //if marble on the last tile change in _playerMarble
                     if(this._grid[move.get(2).x][i+1] != -1){
                         //test if on goal for this marble
-                        if(onGoalPlayer(new Point(move.get(2).x, i+1), this._grid[move.get(2).x][i+1])){
+                        /*if(onGoalPlayer(new Point(move.get(2).x, i+1), this._grid[move.get(2).x][i+1])){
                             //remove from list player marble
-                            this._playerMarble.get(this._grid[move.get(2).x][i+1]).remove(move.get(0));
+                            this._playerMarble.get(this._grid[move.get(1).x][i+1]).remove(move.get(1));
                             this._grid[move.get(2).x][i] = -1;
-                        } else {
-                            for(Point point: this._playerMarble.get(this._grid[move.get(2).x][i+1])){
-                                if(point.x == move.get(2).x && point.y == i+1){
-                                    point.y = i;
-                                }
+                        } else {*/
+                        for(Point point: this._playerMarble.get(this._grid[move.get(2).x][i+1])){
+                            if(point.x == move.get(2).x && point.y == i+1){
+                                point.y = i;
                             }
-                            this._grid[move.get(2).x][i] = this._grid[move.get(2).x][i+1];
                         }
+                        this._grid[move.get(2).x][i] = this._grid[move.get(2).x][i+1];
                     } else {
                         this._grid[move.get(2).x][i] = this._grid[move.get(2).x][i+1];
                     }
@@ -538,18 +546,17 @@ public class AIEnvironnement {
                     //if marble on the last tile change in _playerMarble
                     if(this._grid[move.get(2).x][i-1] != -1){
                         //test if on goal for this marble
-                        if(onGoalPlayer(new Point(move.get(2).x, i-1), this._grid[move.get(2).x][i-1])){
+                        /*if(onGoalPlayer(new Point(move.get(2).x, i-1), this._grid[move.get(2).x][i-1])){
                             //remove from list player marble
-                            this._playerMarble.get(this._grid[move.get(2).x][i-1]).remove(move.get(0));
+                            this._playerMarble.get(this._grid[move.get(1).x][i-1]).remove(move.get(1));
                             this._grid[move.get(2).x][i] = -1;
-                        } else {
-                            for(Point point: this._playerMarble.get(this._grid[move.get(2).x][i-1])){
-                                if(point.x == move.get(2).x && point.y == i-1){
-                                    point.y = i;
-                                }
+                        } else {*/
+                        for(Point point: this._playerMarble.get(this._grid[move.get(2).x][i-1])){
+                            if(point.x == move.get(2).x && point.y == i-1){
+                                point.y = i;
                             }
-                            this._grid[move.get(2).x][i] = this._grid[move.get(2).x][i-1];
                         }
+                        this._grid[move.get(2).x][i] = this._grid[move.get(2).x][i-1];
                     } else {
                         this._grid[move.get(2).x][i] = this._grid[move.get(2).x][i-1];
                     }
@@ -563,18 +570,18 @@ public class AIEnvironnement {
                     //if marble on the last tile change in _playerMarble
                     if(this._grid[i+1][move.get(2).y] != -1){
                         //test if on goal for this marble
-                        if(onGoalPlayer(new Point(i+1, move.get(2).y), this._grid[i+1][move.get(2).y])){
+                        /*if(onGoalPlayer(new Point(i+1, move.get(2).y), this._grid[i+1][move.get(2).y])){
                             //remove from list player marble
-                            this._playerMarble.get(this._grid[i+1][move.get(2).y]).remove(move.get(0));
+                            this._playerMarble.get(this._grid[i+1][move.get(1).y]).remove(move.get(1));
                             this._grid[i][move.get(2).y] = -1;
-                        } else {
-                            for(Point point: this._playerMarble.get(this._grid[i+1][move.get(2).y])){
-                                if(point.x == i+1 && point.y == move.get(2).y){
-                                    point.x = i;
-                                }
+                        } else {*/
+                        for(Point point: this._playerMarble.get(this._grid[i+1][move.get(2).y])){
+                            if(point.x == i+1 && point.y == move.get(2).y){
+                                point.x = i;
                             }
-                            this._grid[i][move.get(2).y] = this._grid[i+1][move.get(2).y];
                         }
+                        this._grid[i][move.get(2).y] = this._grid[i+1][move.get(2).y];
+
                     } else {
                         this._grid[i][move.get(2).y] = this._grid[i+1][move.get(2).y];
                     }
@@ -586,24 +593,34 @@ public class AIEnvironnement {
                     //if marble on the last tile change in _playerMarble
                     if(this._grid[i-1][move.get(2).y] != -1){
                         //test if on goal for this marble
-                        if(onGoalPlayer(new Point(i-1, move.get(2).y), this._grid[i-1][move.get(2).y])){
+                        /*if(onGoalPlayer(new Point(i-1, move.get(2).y), this._grid[i-1][move.get(2).y])){
                             //remove from list player marble
-                            this._playerMarble.get(this._grid[i-1][move.get(2).y]).remove(move.get(0));
+                            this._playerMarble.get(this._grid[i-1][move.get(1).y]).remove(move.get(1));
                             this._grid[i][move.get(2).y] = -1;
-                        } else {
-                            for(Point point: this._playerMarble.get(this._grid[i-1][move.get(2).y])){
-                                if(point.x == i-1 && point.y == move.get(2).y){
-                                    point.x = i;
-                                }
+                        } else {*/
+                        for(Point point: this._playerMarble.get(this._grid[i-1][move.get(2).y])){
+                            if(point.x == i-1 && point.y == move.get(2).y){
+                                point.x = i;
                             }
-                            this._grid[i][move.get(2).y] = this._grid[i-1][move.get(2).y];
                         }
+                        this._grid[i][move.get(2).y] = this._grid[i-1][move.get(2).y];
+
                     } else {
                         this._grid[i][move.get(2).y] = this._grid[i-1][move.get(2).y];
                     }
                 }
                 this._grid[0][move.get(2).y] = tmp;
             }
+        }
+        //Tchek du plateau pour enlever les billes qui sont sur le but
+        int playerNum = 0;
+        for(Point p: getStartingPoint()){
+            //bille sur le but d'un joueur
+            if(getGrid()[Math.abs(4-p.x)][Math.abs(4-p.y)] == playerNum){
+                this._playerMarble.get(playerNum).remove(new Point(Math.abs(4-p.x),Math.abs(4-p.y)));
+                getGrid()[Math.abs(4-p.x)][Math.abs(4-p.y)] = -1;
+            }
+            playerNum++;
         }
     }
 
@@ -626,6 +643,32 @@ public class AIEnvironnement {
                     point.y = move.get(1).y;
                 }
             }
+        }
+    }
+
+    public boolean playerWinGiven(int player){
+        //test if 4 or 2 players
+        if(getPlayers().size() == 2) {
+            if (getOnePlayerMarble(player).size() == 2) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            //joue à 4
+            if (getOnePlayerMarble(player).size() == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public boolean playerWin(){
+        if(getOnePlayerMarble(getCurrentPlayer()).size() == 2){
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -816,6 +859,9 @@ public class AIEnvironnement {
     public void printBoard(){
         for(int i = 0; i < getGridLength(); i++){
             for(int j = 0; j < this._grid[i].length; j++){
+                if(this._grid[i][j] != -1){
+                    System.out.print(" ");
+                }
                 System.out.print(this._grid[i][j] + " ");
             }
             System.out.println("");
@@ -823,12 +869,5 @@ public class AIEnvironnement {
         System.out.println("");
     }
 
-    public boolean playerWin(){
-        if(getOnePlayerMarble(getCurrentPlayer()).size() == 2){
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 }

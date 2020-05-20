@@ -32,9 +32,9 @@ class LecteurRedacteurTest {
             
             board.setGameMode(gm);
             
-            Player tmpPlayer0 = new AINormalPlayer(namePlayer0Test, colorPlayer0Test);
+            Player tmpPlayer0 = new AINormalPlayer(namePlayer0Test, colorPlayer0Test, board);
             tmpPlayer0.setStartPoint(Tools.Direction.SW);
-            Player tmpPlayer1 = new AINormalPlayer(namePlayer1Test, colorPlayer1Test);
+            Player tmpPlayer1 = new AINormalPlayer(namePlayer1Test, colorPlayer1Test, board);
             tmpPlayer1.setStartPoint(Tools.Direction.NE);
             
             board.addPlayer(tmpPlayer0);

@@ -100,7 +100,7 @@ public abstract class Player {
      * @param coups_possibles la liste des coups jouable par le joueur
      * @return le coup choisi par le joueur
      */
-    abstract public Move Jouer(List<Move> coups_possibles);
+    abstract public Move Jouer(List<Move> coups_possibles) throws IOException;
      
     /**
      * S'imprime dans la sortie stream
@@ -148,7 +148,7 @@ public abstract class Player {
                     tmp = new AIEasyPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
                 case "AINormalPlayer":
-                    tmp = new AINormalPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])));
+                    tmp = new AINormalPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);
                     break;
                 case "AIHardPlayer":
                     tmp = new AIHardPlayer(playerName, new Color(Integer.parseInt(dataPlayer[0])), board);

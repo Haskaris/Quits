@@ -138,4 +138,39 @@ public abstract class AI extends Player {
         }
         return false;
     }
+
+    public boolean pruningSave(int depth, Node node, float p_value) {
+        // Enlève le nullpointer exception
+        if (node.getNodeParent() == null) {
+            return false;
+        }
+
+        boolean potential_test;
+
+        float node_value = node.getNodeParent().getNodeValue();
+        Node.Node_type pruning_type = node.getNodeType();
+        Node.Node_type pruning_parent_type = node.getNodeParent().getNodeType();
+        
+        if (pruning_type == Node.Node_type.MAX_NODE) {
+            //Forcément un noeud min au dessus d'un noeud max
+            potential_test = node_value > p_value;
+        } else {
+            if(pruning_parent_type == Node.Node_type.MAX_NODE) {
+                potential_test = node_value < p_value;
+            } else {
+                //noeud Min au dessus d'un noeud min pas de condition pour élaguer
+                potential_test = false;
+
+            }
+        }
+
+        if (_max_depth - depth >= 2) {
+
+            if (node_value != -1 && potential_test) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+

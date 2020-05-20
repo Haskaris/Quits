@@ -9,6 +9,7 @@ import Controleur.Mediator;
 import View.BoardGraphic;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 /**
  *
@@ -30,9 +31,13 @@ public class MouseAction extends MouseAdapter {
         float c = ((e.getX() - (this.board.getHeightTile() / 2.0f)) / this.board.getWidthTile());
         if (l < 0) l = -1f;
         if (c < 0) c = -1f;
-        
-        
-        this.mediator.mouseClick((int) c, (int) l);
+
+
+        try {
+            this.mediator.mouseClick((int) c, (int) l);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
         this.board.repaint();
     }
 }

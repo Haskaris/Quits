@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,7 +61,7 @@ class CoupTest {
     }
 
     @Test
-    public void TestEntreeController() {
+    public void TestEntreeController() throws IOException {
         MoveCalculator mc = new MoveCalculator(board);
         List<Move> coupspossible = mc.possibleMoves();
         //LecteurRedacteur.AffichePartie(board);
@@ -73,5 +74,4 @@ class CoupTest {
 
 
 }
-
 

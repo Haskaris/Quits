@@ -113,7 +113,7 @@ public class Board {
         }
     }
 
-    public void playTurn(int column, int line) {
+    public void playTurn(int column, int line) throws IOException {
         if (getCurrentPlayer().getClass().equals(HumanPlayer.class)) {
             HumanPlayer player = (HumanPlayer) getCurrentPlayer();
 

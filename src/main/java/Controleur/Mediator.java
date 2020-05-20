@@ -107,7 +107,7 @@ public class Mediator {
      * @param c colonne où le clique a été effectué
      * @param l ligne où le clique a été effectué
      */
-    public void mouseClick(int c, int l) {
+    public void mouseClick(int c, int l) throws IOException {
         if (!this.isGameBlocked) {
             this.board.playTurn(c, l);
         }
@@ -177,10 +177,10 @@ public class Mediator {
                 this.board.addPlayer(new AIEasyPlayer(playerName, color, this.board));
                 break;
             case Hard:
-                this.board.addPlayer(new AINormalPlayer(playerName, color));
+                this.board.addPlayer(new AIHardPlayer(playerName, color, this.board));
                 break;
             case Medium:
-                this.board.addPlayer(new AIHardPlayer(playerName, color, this.board));
+                this.board.addPlayer(new AINormalPlayer(playerName, color, this.board));
                 break;
         }
     }
