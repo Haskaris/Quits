@@ -69,8 +69,8 @@ public class Board {
                 break;
             case FourPlayersFiveBalls:
                 this.players.get(0).setStartPoint(Tools.Direction.SW);
-                this.players.get(1).setStartPoint(Tools.Direction.NE);
-                this.players.get(2).setStartPoint(Tools.Direction.NW);
+                this.players.get(1).setStartPoint(Tools.Direction.NW);
+                this.players.get(2).setStartPoint(Tools.Direction.NE);
                 this.players.get(3).setStartPoint(Tools.Direction.SE);
                 break;
         }
