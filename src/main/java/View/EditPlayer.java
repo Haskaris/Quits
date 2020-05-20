@@ -9,6 +9,12 @@ package View;
 import View.ColorPicker.ColorPicker;
 import Global.Tools;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Insets;
+import javax.swing.ImageIcon;
+import javax.swing.border.Border;
 
 /**
  *
@@ -32,7 +38,23 @@ public class EditPlayer extends javax.swing.JPanel {
         this.colorPicker = new ColorPicker(this.playerColor);
         initComponents();
     }
+    private static class RoundedBorder implements Border {
 
+        private int radius;
+
+        RoundedBorder(int radius) {
+            this.radius = radius;
+        }
+        public Insets getBorderInsets(Component c) {
+            return new Insets(this.radius+1, this.radius+1, this.radius+2, this.radius);
+        }
+        public boolean isBorderOpaque() {
+            return true;
+        }
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            g.drawRoundRect(x, y, width-1, height-1, radius, radius);
+        }
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -46,6 +68,12 @@ public class EditPlayer extends javax.swing.JPanel {
         aiLevelList = new javax.swing.JComboBox<>();
         jButton = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 0, 0));
+        setForeground(new java.awt.Color(255, 255, 102));
+        setOpaque(false);
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTextField1.setBackground(new java.awt.Color(224, 224, 224));
         jTextField1.setText(this.playerName);
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -60,6 +88,7 @@ public class EditPlayer extends javax.swing.JPanel {
                 jTextField1KeyTyped(evt);
             }
         });
+        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 200, -1));
 
         aiLevelList.setMaximumRowCount(4);
         aiLevelList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Humain", "Ordinateur facile", "Ordinateur normal", "Ordinateur difficile" }));
@@ -68,36 +97,19 @@ public class EditPlayer extends javax.swing.JPanel {
                 aiLevelListItemStateChanged(evt);
             }
         });
+        add(aiLevelList, new org.netbeans.lib.awtextra.AbsoluteConstraints(218, 13, -1, -1));
 
         jButton.setBackground(this.playerColor);
+        jButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton.setFocusPainted(false);
         jButton.setMargin(new java.awt.Insets(14, 14, 14, 14));
+        jButton.setPreferredSize(new java.awt.Dimension(33, 33));
         jButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(aiLevelList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(aiLevelList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
+        add(jButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActionPerformed

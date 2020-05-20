@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.OverlayLayout;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 /**
  *
@@ -113,6 +115,9 @@ public class GraphicInterface implements Runnable, Observateur {
     private void createMenu() {
         
         JMenuBar menuBar = new JMenuBar();
+        JMenuBar menu3Buttons = new JMenuBar();
+        menu3Buttons.setMargin(new java.awt.Insets(0,100,0,0));
+        JMenu menuFileF = new JMenu("<html><p style='margin-left:20'>File");
 
         JMenu fileMenu = new JMenu("Menu");
         fileMenu.setMnemonic(KeyEvent.VK_F);
@@ -176,7 +181,7 @@ public class GraphicInterface implements Runnable, Observateur {
 
         
         Box boxMenu = Box.createHorizontalBox();
-        
+        Border emptyBorder = BorderFactory.createEmptyBorder();
         this.undo = new JButton();
         ImageIcon MyImage = new javax.swing.ImageIcon(getClass().getResource("/UndoRedoReview/test_bouton_backward_notpressed.png"));
         Image img = MyImage.getImage();
@@ -186,6 +191,9 @@ public class GraphicInterface implements Runnable, Observateur {
         this.undo.setPreferredSize(new java.awt.Dimension(50, 50));
         this.undo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.undo.setFocusable(false);
+        this.undo.setBorderPainted(false);
+        this.undo.setOpaque(false);
+        this.undo.setBorder(emptyBorder);
         this.undo.setEnabled(this.mediator.canUndo());
         this.undo.addActionListener((ActionEvent e) -> {
             this.mediator.undo();
@@ -200,6 +208,9 @@ public class GraphicInterface implements Runnable, Observateur {
         this.redo.setPreferredSize(new java.awt.Dimension(50, 50));
         this.redo.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.redo.setFocusable(false);
+        this.redo.setBorderPainted(false);
+        this.redo.setOpaque(false);
+        this.redo.setBorder(emptyBorder);
         this.redo.setEnabled(this.mediator.canRedo());
         this.redo.addActionListener((ActionEvent e) -> {
             this.mediator.redo();
@@ -214,16 +225,23 @@ public class GraphicInterface implements Runnable, Observateur {
         this.oneMoveBefore.setPreferredSize(new java.awt.Dimension(50, 50));
         this.oneMoveBefore.setAlignmentX(Component.LEFT_ALIGNMENT);
         this.oneMoveBefore.setFocusable(false);
+        this.oneMoveBefore.setBorderPainted(false);
+        this.oneMoveBefore.setOpaque(false);
+        this.oneMoveBefore.setBorder(emptyBorder);
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.oneMoveBefore.addActionListener((ActionEvent e) -> {
+            
             this.mediator.seeOneMoveBefore(this.oneMoveBefore.isSelected());
         });
         
+        menuBar.add(Box.createHorizontalStrut(60));
         menuBar.add(undo);
         menuBar.add(redo);
         menuBar.add(oneMoveBefore);
         
         this.frame.setJMenuBar(menuBar);
+        //this.frame.setJMenuBar(menu3Buttons);
+        
       
     }
     
