@@ -52,6 +52,8 @@ public class GraphicInterface implements Runnable, Observateur {
     JButton undo, redo;
     JPanel inGameMenu;
     
+    JMenu fileMenu;
+    
     ArrayList<JLabel> names;
     
     JLabel nameLabel;
@@ -105,7 +107,7 @@ public class GraphicInterface implements Runnable, Observateur {
         frame.add(boxPlayerAndBoard);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 600);
+        frame.setSize(1100, 950);
         frame.setMinimumSize(new Dimension(500, 600));
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
@@ -115,11 +117,8 @@ public class GraphicInterface implements Runnable, Observateur {
     private void createMenu() {
         
         JMenuBar menuBar = new JMenuBar();
-        JMenuBar menu3Buttons = new JMenuBar();
-        menu3Buttons.setMargin(new java.awt.Insets(0,100,0,0));
-        JMenu menuFileF = new JMenu("<html><p style='margin-left:20'>File");
 
-        JMenu fileMenu = new JMenu("Menu");
+        fileMenu = new JMenu("Menu");
         fileMenu.setMnemonic(KeyEvent.VK_F);
         
         JMenuItem saveItem = new JMenuItem("Sauvegarder");
@@ -245,9 +244,9 @@ public class GraphicInterface implements Runnable, Observateur {
         this.oneMoveBefore.setPressedIcon(image30);
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.oneMoveBefore.addActionListener((ActionEvent e) -> {
-            
             this.mediator.seeOneMoveBefore(this.oneMoveBefore.isSelected());
         });
+        this.fileMenu.setEnabled(true);
         
         menuBar.add(Box.createHorizontalStrut(60));
         menuBar.add(undo);
@@ -255,7 +254,6 @@ public class GraphicInterface implements Runnable, Observateur {
         menuBar.add(oneMoveBefore);
         
         this.frame.setJMenuBar(menuBar);
-        //this.frame.setJMenuBar(menu3Buttons);
         
       
     }
@@ -282,6 +280,7 @@ public class GraphicInterface implements Runnable, Observateur {
         this.undo.setEnabled(this.mediator.canUndo());
         this.oneMoveBefore.setEnabled(this.mediator.canUndo());
         this.redo.setEnabled(this.mediator.canRedo());
+        this.fileMenu.setEnabled(this.mediator.canUndo());
         /*this.names.forEach((name) -> {
             name.setForeground(Color.black);
         });
@@ -298,6 +297,7 @@ public class GraphicInterface implements Runnable, Observateur {
     public void blockUndoRedo() {
         this.undo.setEnabled(false);
         this.redo.setEnabled(false);
+        this.fileMenu.setEnabled(false);
         this.oneMoveBefore.setEnabled(true);
     }
 
